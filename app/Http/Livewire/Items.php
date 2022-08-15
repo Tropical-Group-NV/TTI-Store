@@ -21,7 +21,7 @@ class Items extends Component
         $items = DB::connection('epas')->table('item')->where('IsActive', '0')->orderBy('TimeModified', 'DESC')->limit(10)->get();
         if (isset($_REQUEST['search']))
         {
-            return view('livewire.items', ['items' =>  DB::connection('epas')->table('item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $request->search . '%')->whereNot('BarCodeValue', '')->orderBy('TimeModified', 'DESC')->paginate(10)]);
+            return view('livewire.items', ['items' =>  DB::connection('epas')->table('item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $request->search . '%')->orderBy('TimeModified', 'DESC')->paginate(10)]);
         }
         else
         {
