@@ -70,6 +70,7 @@
                 @endif
 
                 <!-- Settings Dropdown -->
+                @if(\Illuminate\Support\Facades\Auth::user() != null)
                 <div class="ml-3 relative">
                     <x-jet-dropdown align="right" width="48">
                         <x-slot name="trigger">
@@ -121,6 +122,14 @@
                     </x-jet-dropdown>
                 </div>
             </div>
+            @else
+                <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
+                    <div @click="open = ! open">
+{{--                        <a href="{{ route('login') }}"><p>Log in</p></a>--}}
+                    </div>
+                </div>
+            @endif
+
 
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
@@ -143,6 +152,7 @@
         </div>
 
         <!-- Responsive Settings Options -->
+        @if(\Illuminate\Support\Facades\Auth::user() != null)
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="flex items-center px-4">
                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
@@ -211,5 +221,6 @@
                 @endif
             </div>
         </div>
+            @endif
     </div>
 </nav>

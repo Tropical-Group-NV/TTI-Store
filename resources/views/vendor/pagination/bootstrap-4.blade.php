@@ -1,3 +1,4 @@
+
 @if ($paginator->hasPages())
     <nav>
         <ul class="pagination">
@@ -25,7 +26,12 @@
                         @if ($page == $paginator->currentPage())
                             <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
                         @else
-                            <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                            @if(isset($_REQUEST['search']))
+                                <li class="page-item"><a class="page-link" href="{{ $url . '&search=' . $_REQUEST['search'] }}">{{ $page }}</a></li>
+                            @else
+                                <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
+                                @endif
+
                         @endif
                     @endforeach
                 @endif
@@ -34,7 +40,11 @@
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
                 <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+                    @if(isset($_REQUEST['search']))
+                        <a class="page-link" href="{{ $paginator->nextPageUrl() . '&search=' . $_REQUEST['search'] }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+                    @else
+                        <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+                    @endif
                 </li>
             @else
                 <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">

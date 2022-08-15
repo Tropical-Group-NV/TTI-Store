@@ -1,10 +1,16 @@
-<input class="form-control" type="text" wire:model="value">
-<h1> {{ $value }}</h1>
-{{ print_r($_REQUEST) }}
+<br><br>
 
-<div wire:offline>
-        You are now offline.
-</div>
+<form action="">
+    @if(isset($_REQUEST['search']))
+        <input value="{{ $_REQUEST['search'] }}" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full" type="text">
+
+    @else
+        <input value="" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full" type="text">
+
+    @endif
+</form>
+{{--{{ print_r($_REQUEST) }}--}}
+<br><br>
 
 
 <div class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-3">
