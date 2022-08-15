@@ -1,0 +1,8 @@
+{
+    "app.css": {
+        "file": "../css/app.css"
+    },
+    "app.js": {
+        "file": "../js/app.js"
+    }
+}
