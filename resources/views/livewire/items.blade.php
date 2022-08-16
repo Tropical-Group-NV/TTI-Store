@@ -83,12 +83,14 @@
 {{--        <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 500px; margin: 5px;">--}}
     </div>
 
+    @if($search_str != '')
     <div>
         <span style="padding-left: 10px">
             Search results for: "<b>{{ $search_str }}</b>"
         </span>
     </div>
     <br>
+    @endif
 
     <div style="padding-left: 25px; padding-right: 25px" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-3">
 
