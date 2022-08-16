@@ -84,7 +84,7 @@
     </div>
 
     @if($search_str != '')
-    <div>
+    <div style="padding-left: 100px; padding-right: 100px">
         <span style="padding-left: 10px">
             Search results for: "<b>{{ $search_str }}</b>"
         </span>
