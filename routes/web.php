@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,3 +37,12 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
+
+Route::get('items/{id}', function( Request $request)
+{
+    $id = $request->id;
+    return view('item' , compact('id'));
+})->name('item');
+
+
+

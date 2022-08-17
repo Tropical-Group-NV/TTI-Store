@@ -1,40 +1,48 @@
+@php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())
 <div>
+    {{ $search_str }}
 
 
 
-    <form action="">
-
-
-{{--        @if(isset($_REQUEST['search']))--}}
-{{--            <input value="{{ $_REQUEST['search'] }}" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full" type="search" autocomplete="false">--}}
-
-{{--        @else--}}
+    <form id="searchform" action="">
         <br>
+
             <div>
-                <div  style="padding-left: 100px; padding-right: 100px">
-                    <input wire:keydown.debounce.250ms="sug_search" wire:model.debounce.250ms="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full form-control btn-group" autocomplete="false" type="search">
-{{--                    <select class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full form-control btn-group" name="" id=""></select>--}}
+                <div  style="padding-left: 50px; padding-right: 50px">
+                    <div>
+                        <select onchange="document.getElementById('searchform').submit()" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full form-control btn-group" name="brand" id="">
+                            <option value="">Select Brand</option>
+                            @foreach($brands as $brand)
+                                @if($brand_srch != '' or $brand_srch != null)
+                                    @if($brand_srch == $brand->name)
+                                        <option selected value="{{ $brand->name }}">{{ $brand->name }}</option>
+                                    @else
+                                        <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+                                    @endif
+                                @else
+                                    <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+                                @endif
+                            @endforeach
+                        </select>
+                    </div>
+                    <input id=search_input wire:keydown="sug_search" wire:model="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full form-control btn-group" autocomplete="false" type="search">
                 </div>
-{{--                <h1>{{ $search }}</h1>--}}
-{{--                <h1>{{ $search_sw }}</h1>--}}
-{{--                {{ print_r($list) }}--}}
-                <div style="padding-left: 100px; padding-right: 100px;z-index: 100; position: center" style="position: absolute; z-index: 100; max-width: 1200px; width: auto" class="collapse @if(strlen($search2) > 0 and $search_sw == 1 and !empty($list)) show @endif">
+                <div id="list_search" style="padding-left: 50px; padding-right: 50px;z-index: 100; position: absolute; max-height: 200px" class="collapse @if(strlen($search2) > 0 and $search_sw == 1 and !empty($list)) show @endif">
                     <div class="card card-body">
                         <div style="border-radius: 50px" wire:loading>
                             <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">
                         </div>
-                        <div  wire:loading.remove>
+                        <div style="overflow-y: auto"  wire:loading.remove>
                             @if(strlen($search2) > 0 and $search_sw == 1)
                                 @foreach($list as $itm)
                                     @if(is_array($itm))
                                         @if($itm != null)
                                             @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $itm['ListID'])->get()->first())
                                             @if($image != null)
-                                                <a href="/?search={{ $itm['Description'] }}">
+{{--                                                <a href="#" onclick="document.getElementById('searchform').value = '{{ $itm['Description'] }} }}';document.getElementById('searchform').submit()">--}}
+                                                <a href="{{ route('item', $itm['ListID']) }}" >
                                                 <ul class="flex hover:bg-gray-50 cursor-pointer">
-
                                                     <img src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px" alt="">
-
                                                     <h1>{{ $itm['Description'] }}</h1>
                                                 </ul>
                                                 </a>
@@ -47,7 +55,8 @@
 
                                         @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $itm->ListID)->get()->first())
                                         @if($image != null)
-                                            <a href="/?search={{ $itm->Description }}">
+{{--                                            <a href="#" onclick="document.getElementById('searchform').value = '{{ $itm->Description }}';document.getElementById('searchform').submit()">--}}
+                                            <a href="{{ route('item', $itm->ListID) }}">
                                                 <ul class="flex hover:bg-gray-50 cursor-pointer">
                                                     <img src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px" alt="">
 
@@ -78,10 +87,10 @@
     </form>
     <br><br>
 
-    <div style="border-radius: 50px" wire:loading>
+{{--    <div style="border-radius: 50px" wire:loading>--}}
 {{--        <img src="{{ asset('TGN_HD.png') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 500px; margin: 5px; animation-name: spin;animation-duration: 5000ms;animation-iteration-count: infinite;">--}}
 {{--        <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 500px; margin: 5px;">--}}
-    </div>
+{{--    </div>--}}
 
     @if($search_str != '')
     <div style="padding-left: 100px; padding-right: 100px">
@@ -93,17 +102,17 @@
     @endif
 
     <div style="padding-left: 25px; padding-right: 25px" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-3">
-
+{{--        {{ print_r($items) }}--}}
         @foreach($items as $item)
+            @if($items == '1')
+                {{ 'null' }}
+                @endif
+{{--            {{ print_r($item) }}--}}
             @php($itemDesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->get()->first())
             @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
             @if($image != null)
-            <div class="card" style="width: auto;">
-
-
-
+            <div onclick="location.href = '{{ route('item', $item->ListID) }}'" class="card" style="width: auto; cursor: pointer">
                     <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="width: 250px" alt="Card image cap">
-
                 <div class="card-body" style="position: relative">
                     <h5 class="card-title">{{ $item->Description }}</h5>
                     @if($itemDesc != null)
@@ -151,9 +160,6 @@
                 }
             }
         </script>
-
-        <div></div>
-
     </div>
     <div class="p-6 sm:px-20 bg-white border-b border-gray-200" style="text-align: center">
         <div style="left: 50%; right: 50%">
@@ -161,6 +167,11 @@
         </div>
 
     </div>
-
+    <script>
+        document.body.addEventListener('click', function ()
+        {
+            document.getElementById('list_search').classList.remove('show');
+        });
+    </script>
 
 </div>

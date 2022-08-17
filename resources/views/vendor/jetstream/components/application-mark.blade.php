@@ -1,1 +1,1 @@
-<img src="{{ asset('TGN_HD.png') }}" alt="" style="height: 40px">
+<img src="{{ asset('tti.png') }}" alt="" style="height: 40px">

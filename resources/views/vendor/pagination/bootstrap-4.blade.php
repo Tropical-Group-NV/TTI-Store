@@ -1,3 +1,5 @@
+@php($item = new \App\Http\Livewire\Items())
+
 
 @if ($paginator->hasPages())
     <nav>
@@ -26,8 +28,8 @@
                         @if ($page == $paginator->currentPage())
                             <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
                         @else
-                            @if(isset($_REQUEST['search']))
-                                <li class="page-item"><a class="page-link" href="{{ $url . '&search=' . $_REQUEST['search'] }}">{{ $page }}</a></li>
+                            @if($item->search_str != null)
+                                <li class="page-item"><a class="page-link" href="{{ $url . '&search=' . $item->search_str }}">{{ $page }}</a></li>
                             @else
                                 <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
                                 @endif
@@ -40,10 +42,20 @@
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
                 <li class="page-item">
-                    @if(isset($_REQUEST['search']))
-                        <a class="page-link" href="{{ $paginator->nextPageUrl() . '&search=' . $_REQUEST['search'] }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+                    @if($item->search_str != null)
+                        @if($item->brand_srch != null)
+                            <a class="page-link" href="{{ $paginator->nextPageUrl() . '&search=' . $item->search_str . '&brand=' . $item->brand_srch}}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+                        @else
+                            <a class="page-link" href="{{ $paginator->nextPageUrl() . '&search=' . $item->search_str }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+                        @endif
                     @else
-                        <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+                        @if($item->brand_srch != null)
+
+                            <a class="page-link" href="{{ $paginator->nextPageUrl() . '&brand=11' . $item->brand_srch}}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+                        @else
+{{--                            {{ $item->brand_srch }}--}}
+                            <a class="page-link" href="{{ $paginator->nextPageUrl() . '&brand=11' . $item->brand_srch}}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
+                        @endif
                     @endif
                 </li>
             @else
