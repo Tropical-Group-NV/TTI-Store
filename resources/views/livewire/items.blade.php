@@ -111,13 +111,19 @@
             @php($itemDesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->get()->first())
             @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
             @if($image != null)
-            <div onclick="location.href = '{{ route('item', $item->ListID) }}'" class="card" style="width: auto; cursor: pointer">
+            <div class="card" style="width: auto; cursor: pointer">
+                <a href="{{ route('item', $item->ListID) }}">
                     <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="width: 250px" alt="Card image cap">
+                </a>
+
                 <div class="card-body" style="position: relative">
-                    <h5 class="card-title">{{ $item->Description }}</h5>
-                    @if($itemDesc != null)
-                        <span id="item:{{ $item->ListID }}" class="card-text">{{ strip_tags($itemDesc->description)  }}</span>
-                    @endif
+                    <a href="{{ route('item', $item->ListID) }}">
+                        <h5 class="card-title">{{ $item->Description }}</h5>
+                        @if($itemDesc != null)
+                            <span id="item:{{ $item->ListID }}" class="card-text">{{ strip_tags($itemDesc->description)  }}</span>
+                        @endif
+                    </a>
+
                     <br>
                     <br>
                     <ul class="border-top flex justify-between" style="bottom: 0; padding: 20px">
@@ -129,10 +135,34 @@
                                 Quantity: <b>0 PCS</b>
                             @endif
                         </li>
+                    </ul>
 
-                        {{--                <button class="btn btn-primary" id="add:{{ $item->ListID }}" onclick="added('add:{{ $item->ListID }}')">Add to Cart</button>--}}
+                        {{--                <button class="btn btn-primary" id="add:{{ $item->ListID }}" onclick="added('add:{{ $item->ListID }}')">Add to CartItem</button>--}}
                         <div>
-                            <button class="btn btn-primary" id="add:{{ $item->ListID }}" onclick="added('add:{{ $item->ListID }}')">Add to Cart</button>
+                            @if(\Illuminate\Support\Facades\Auth::user() != null)
+                                @if(\App\Models\CartItem::query()->where('prod_id', $item->ListID)->where('uid', \Illuminate\Support\Facades\Auth::user()->id)->exists())
+                                    @php($inCart = \App\Models\CartItem::query()->where('prod_id', $item->ListID)->where('uid', \Illuminate\Support\Facades\Auth::user()->id)->first())
+                                    <div>
+                                        <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                        <span class="input-group-btn input-group-prepend">
+                                            <button wire:click="addLess('{{$inCart->id}}')" class="btn btn-danger">-</button>
+                                        </span>
+                                            <input readonly class="Tspin text-center form-control" id="T80000E2A-1545930873" type="text" value="{{ $inCart->qty }}" name="qty">
+                                            <span class="input-group-btn input-group-append">
+                                            <button wire:click="addMore('{{$inCart->id}}')" class="btn btn-primary">+</button>
+                                        </span>
+                                        </div>
+                                    </div>
+                                @else
+                                    <button class="btn btn-primary" wire:click="addToCart('{{$item->ListID}}', {{ '1' }})" id="add:{{ $item->ListID }}">
+                                        {{--                                    {{$item->ListID}}--}}
+                                        <span>Add to Cart</span>
+                                    </button>
+
+                                @endif
+                                @endif
+
+
                             {{--                    <button onclick="added()" class="btn btn-primary"><p>Add to cart</p>--}}
                             {{--                    <div style="display: none" wire:loading.show wire:target="increment">--}}
                             {{--                        <img wire:loading.show style="width: 20px;display: none" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">--}}
@@ -140,12 +170,16 @@
                             {{--                    </button>--}}
                         </div>
 
-                    </ul>
+
                 </div>
 
             </div>
             @endif
         @endforeach
+        <div wire:loading="addToCart('{{$item->ListID}}" id="defaultModal" tabindex="-1" style="position: fixed; left: 30%; top: 15%; z-index: 5">
+            <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" alt="">
+        </div>
+
         <script>
             function added(id)
             {

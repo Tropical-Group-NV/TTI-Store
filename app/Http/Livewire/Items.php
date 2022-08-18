@@ -1,8 +1,10 @@
 <?php
 
 namespace App\Http\Livewire;
+use App\Models\CartItem;
 use http\Params;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -30,12 +32,6 @@ class Items extends Component
             if (strlen($this->search2) > 0)
             {
                 $this->search_sw = 1;
-                if ($this->brand_srch != '' or $this->brand_srch != null)
-                {
-                    $this->list = DB::connection('epas')->table('item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('TimeModified', 'DESC')->limit(10)->get();
-
-                }
-                else
                 {
                     $this->list = DB::connection('epas')->table('item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->orderBy('TimeModified', 'DESC')->limit(10)->get();
                 }
@@ -46,12 +42,6 @@ class Items extends Component
         {
             if (strlen($this->search2) > 0)
             {
-                if ($this->brand_srch != '' or $this->brand_srch != null)
-                {
-                    $this->list = DB::connection('epas')->table('item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('TimeModified', 'DESC')->limit(10)->get();
-
-                }
-                else
                 {
                     $this->list = DB::connection('epas')->table('item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->orderBy('TimeModified', 'DESC')->limit(10)->get();
                 }
@@ -117,6 +107,41 @@ class Items extends Component
 
                 return view('livewire.items', ['items' => DB::connection('epas')->table('item')->where('IsActive', '1')->orderBy('TimeModified', 'DESC')->paginate(10)]);
         }
+
+    }
+
+    public function addToCart($prod, $qty)
+    {
+        $item = new CartItem();
+        $item->prod_id = $prod;
+        $item->qty = $qty;
+        $item->uid = Auth::user()->id;
+        $item->save();
+//        return 'Done';
+    }
+
+    public function addMore($cartItemID)
+    {
+        $item = CartItem::query()->where('id', $cartItemID)->first();
+        $item->qty++;
+        $item->save();
+    }
+    public function addLess($cartItemID)
+    {
+        if (CartItem::query()->where('id', $cartItemID)->exists())
+        {
+            $item = CartItem::query()->where('id', $cartItemID)->first();
+            if ($item->qty == 1)
+            {
+                $item->delete();
+            }
+            else
+            {
+                $item->qty--;
+                $item->save();
+            }
+        }
+
 
     }
 

@@ -1,5 +1,5 @@
 <?php
-
+use Illuminate\Database\Capsule\Manager as DB;
 return [
 
     /*
@@ -38,6 +38,8 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
+
+//            'provider' => 'ldap',
             'provider' => 'users',
         ],
     ],
@@ -60,6 +62,21 @@ return [
     */
 
     'providers' => [
+        'ldap' =>  [
+            'driver' => 'ldap',
+            'model' => LdapRecord\Models\ActiveDirectory\User::class,
+            'rules' => [],
+            'database' => [
+                'model' => \App\Models\User::class,
+                'sync_passwords' => true,
+                'sync_attributes' => [
+                    'username'=>'sAMAccountname' ,
+                    'name' => 'givenName',
+                    'last_name' => 'sn',
+                ],
+            ],
+        ],
+//
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,

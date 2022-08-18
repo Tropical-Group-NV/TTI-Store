@@ -18,16 +18,25 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
+    protected $connection = 'qb_sales';
+    protected $table = 'users';
     /**
      * The attributes that are mass assignable.
      *
      * @var string[]
      */
     protected $fillable = [
-        'name',
-        'email',
+        'id',
+        'username',
         'password',
+        'name',
+        'last_name',
+        'user_type_id',
+        'active',
+        'auth_key',
+        'password_reset',
     ];
+
 
     /**
      * The attributes that should be hidden for serialization.
@@ -36,26 +45,42 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
-        'two_factor_recovery_codes',
-        'two_factor_secret',
+//        'remember_token',
+//        'two_factor_recovery_codes',
+//        'two_factor_secret',
     ];
+
+    public $timestamps = false;
 
     /**
      * The attributes that should be cast.
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+//    protected $casts = [
+//        'email_verified_at' => 'datetime',
+//    ];
 
     /**
      * The accessors to append to the model's array form.
      *
      * @var array
      */
-    protected $appends = [
-        'profile_photo_url',
-    ];
+//    protected $appends = [
+//        'profile_photo_url',
+//    ];
+
+    public function getLdapGuidColumn()
+    {
+        return 'auth_key';
+    }
+    public function setLdapGuid($guid)
+    {
+        // TODO: Implement setLdapGuid() method.
+    }
+
+    public function setLdapDomain($domain)
+    {
+        // TODO: Implement setLdapDomain() method.
+    }
 }

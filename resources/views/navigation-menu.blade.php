@@ -125,7 +125,7 @@
             @else
                 <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
                     <div @click="open = ! open">
-{{--                        <a href="{{ route('login') }}"><p>Log in</p></a>--}}
+                        <a href="{{ route('login') }}"><p>Log in</p></a>
                     </div>
                 </div>
             @endif
