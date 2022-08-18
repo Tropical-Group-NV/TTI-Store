@@ -14,7 +14,9 @@
                 </div>
             </div>
             <div style="height: 300px">
+                @if(\Illuminate\Support\Facades\Auth::user() != null)
                 @livewire('sidebar')
+                    @endif
             </div>
 
         </ul>
