@@ -1,7 +1,10 @@
 <x-guest-layout>
     <x-jet-authentication-card>
         <x-slot name="logo">
-            <x-jet-authentication-card-logo />
+            <div style=" border-radius: 15px;" class="w-full">
+                <h1 style="font-family: sfsemibold; font-size: 50px; color: dodgerblue" class="text-blue-700">www.ttistore.com</h1
+            </div>
+{{--            <x-jet-authentication-card-logo />--}}
         </x-slot>
 
         <x-jet-validation-errors class="mb-4" />

@@ -1,0 +1,28 @@
+@font-face
+{
+    font-family: sflight;
+    src: url("sanfranciscodisplay-light-webfont.woff");
+}
+@font-face
+{
+    font-family: sfsemibold;
+    src: url("sanfranciscodisplay-semibold-webfont.woff");
+}
+@font-face
+{
+    font-family: sfthin;
+    src: url("sanfranciscodisplay-thin-webfont.woff");
+}
+
+.sfl
+{
+    font-family: sflight;
+}
+.sfsb
+{
+    font-family: sfsemibold;
+}
+.sft
+{
+    font-family: sfthin;
+}

@@ -20,6 +20,12 @@ class Items extends Component
     public $list;
     public $readyToLoad = false;
 
+    protected $listeners =
+        [
+            'updateCart' => 'render'
+        ]
+    ;
+
   public function loadPosts()
     {
          $this->readyToLoad = true;
@@ -112,13 +118,42 @@ class Items extends Component
 
     public function addToCart($prod, $qty)
     {
-        $item = new CartItem();
-        $item->prod_id = $prod;
-        $item->qty = $qty;
-        $item->uid = Auth::user()->id;
-        $item->save();
-//        return 'Done';
+        if ($qty <= 0 or is_int($qty))
+        {
+            return 'no vAlue';
+        }
+        else
+        {
+            $item = new CartItem();
+            $item->prod_id = $prod;
+            $item->qty = $qty;
+            $item->uid = Auth::user()->id;
+            $item->save();
+            $this->emit('updateCart');
+        }
     }
+    public function removeFromCart($cartItemID)
+    {
+        $item = CartItem::query()->where('id', $cartItemID)->first();
+        $item->delete();
+        $this->emit('updateCart');
+    }
+
+
+    public function changeQuantityCart($cartItemID, $qty)
+    {
+        if ($qty <= 0 or is_int($qty))
+        {
+
+        }
+        else
+        {
+            $item = CartItem::query()->where('id', $cartItemID)->first();
+            $item->qty = $qty;
+            $item->save();
+        }
+    }
+
 
     public function addMore($cartItemID)
     {
@@ -141,8 +176,14 @@ class Items extends Component
                 $item->save();
             }
         }
-
-
+    }
+    public function load($id)
+    {
+        return null;
+    }
+    public function load2($id)
+    {
+        return null;
     }
 
 }
