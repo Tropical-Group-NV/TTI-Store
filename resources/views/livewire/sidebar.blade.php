@@ -5,7 +5,7 @@
             <button onclick="toggleCart()" data-modal-toggle="shoppingCart">
                 <img width="24" height="24" src="https://www.svgrepo.com/show/273966/close.svg">
             </button>
-            <div style="z-index: 5; overflow-y: auto;max-height: 700px;">
+            <div style="z-index: 5; overflow-y: auto;max-height: 400px;">
 
                 <table class="sm:rounded-lg table-auto border border-spacing-2">
                     <thead>
