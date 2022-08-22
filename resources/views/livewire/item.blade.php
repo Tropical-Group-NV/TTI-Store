@@ -57,7 +57,8 @@
             </div>
         </div>
         <br>
-        <di>
+        <div>
+            @if(\Illuminate\Support\Facades\Auth::user() != null)
             @if(\App\Models\CartItem::query()->where('prod_id', $item->ListID)->where('uid', \Illuminate\Support\Facades\Auth::user()->id)->exists())
                 <button disabled style="background-color: #0069AD" class="btn-primary btn dark:text-gray-900 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2  text-base flex items-center justify-center  text-white  w-full py-4 hover:bg-gray-700 ">
                     {{--                <img class="mr-3 dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/svg1.svg" alt="location">--}}
@@ -95,7 +96,8 @@
                 </button>
 
             @endif
-        </di>
+            @endif
+        </div>
 
 
 

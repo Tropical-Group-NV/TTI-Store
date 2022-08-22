@@ -1,4 +1,4 @@
-<div style="height: 300px; right: 0; position: fixed" class="w-1/4 h-full">
+<div style="height: 300px; right: 0; position: fixed" class=" h-full">
     <aside class="w-full shadow-xl sm:rounded-lg">
         <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">
 
