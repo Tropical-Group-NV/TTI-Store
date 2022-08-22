@@ -19,7 +19,7 @@ class RouteServiceProvider extends ServiceProvider
      */
 
     // Replace home page by JK
-    public const HOME = '/';
+    public const HOME = '/items';
 
     /**
      * The controller namespace for the application.
