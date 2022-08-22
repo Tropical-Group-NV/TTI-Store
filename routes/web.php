@@ -30,6 +30,10 @@ use Illuminate\Http\Request;
 //    })->name('dashboard');
 //});
 
+Route::get('/', function ()
+{
+   return redirect(\route('dashboard'));
+});
 
 Route::middleware([
 ])->group(function () {
