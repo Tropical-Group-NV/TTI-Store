@@ -125,7 +125,7 @@
             @else
                 <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
                     <div @click="open = ! open">
-                        <a href="{{ route('login') }}"><p>Log in</p></a>
+                        <a class="text-white" href="{{ route('login') }}"><p>Log in</p></a>
                     </div>
                 </div>
             @endif
@@ -147,7 +147,7 @@
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+                {{ __('Items') }}
             </x-jet-responsive-nav-link>
         </div>
 

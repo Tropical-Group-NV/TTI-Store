@@ -1,16 +1,12 @@
 @php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())
 <div>
-    {{ $search_str }}
-
-
-
     <form id="searchform" action="">
         <br>
 
             <div>
                 <div  style="padding-left: 50px; padding-right: 50px">
                     <div>
-                        <select onchange="document.getElementById('searchform').submit()" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full form-control btn-group" name="brand" id="">
+                        <select onchange="document.getElementById('searchform').submit()" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="brand" id="">
                             <option value="">Select Brand</option>
                             @foreach($brands as $brand)
                                 @if($brand_srch != '' or $brand_srch != null)
@@ -25,7 +21,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <input id=search_input wire:keydown="sug_search" wire:model="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full form-control btn-group" autocomplete="false" type="search">
+                    <input id=search_input wire:keydown="sug_search" wire:model="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" autocomplete="false" type="search">
                 </div>
                 <div id="list_search" style="padding-left: 50px; padding-right: 50px;z-index: 100; position: absolute; max-height: 200px" class="collapse @if(strlen($search2) > 0 and $search_sw == 1 and !empty($list)) show @endif">
                     <div class="card card-body">
@@ -128,6 +124,8 @@
                             @else
                                 Quantity: <b>0 PCS</b>
                             @endif
+                            <br>
+                            Barcode: <b>{{$item->BarCodeValue}}</b>
                         </li>
                     </ul>
                         {{--                <button class="btn btn-primary" id="add:{{ $item->ListID }}" onclick="added('add:{{ $item->ListID }}')">Add to CartItem</button>--}}

@@ -1,13 +1,13 @@
 <div>
-    @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $id)->get()->first())
-    @php($itemdesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->get()->first())
-    @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $id)->get()->first())
-    @php($image2 = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $id)->get())
+{{--    @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $id)->get()->first())--}}
+{{--    @php($itemdesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $id)->get()->first())--}}
+{{--    @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $id)->get()->first())--}}
+{{--    @php($image2 = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $id)->get())--}}
     <div class="xl:w-2/5 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
         <div class="md:hidden">
             {{--                                <img class="w-full" style="width: 500px" alt="image of a girl posing" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" />--}}
             <div style="overflow-x: auto" class="flex items-center justify-center mt-3 space-x-4 md:space-x-0">
-                @foreach($image2 as $i)
+                @foreach($images as $i)
                     <div class="border">
                         <img class="w-full shadow-xl sm:rounded-lg" style="width: 500px" alt="image of a girl posing" src="https://www.ttistore.com/foto/{{$i->image_id}}.dat" />
                     </div>
@@ -57,13 +57,47 @@
             </div>
         </div>
         <br>
-{{--        <button class="btn-primary btn dark:text-gray-900 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2  text-base flex items-center justify-center  text-white  w-full py-4 hover:bg-gray-700 ">--}}
-{{--            --}}{{--                                <img class="mr-3 dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/svg1.svg" alt="location">--}}
-{{--            --}}{{--                                <img class="mr-3 hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/svg1dark.svg" alt="location">--}}
-{{--            <h1>--}}
-{{--                Add to Cart--}}
-{{--            </h1>--}}
-{{--        </button>--}}
+        <di>
+            @if(\App\Models\CartItem::query()->where('prod_id', $item->ListID)->where('uid', \Illuminate\Support\Facades\Auth::user()->id)->exists())
+                <button disabled style="background-color: #0069AD" class="btn-primary btn dark:text-gray-900 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2  text-base flex items-center justify-center  text-white  w-full py-4 hover:bg-gray-700 ">
+                    {{--                <img class="mr-3 dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/svg1.svg" alt="location">--}}
+                    {{--                <img class="mr-3 hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/svg1dark.svg" alt="location">--}}
+                    <h1>
+                        Added to cart
+                    </h1>
+                </button>
+            @else
+                <h1 style="font-family: sfsemibold">Select quantity:</h1>
+                <br>
+                <div class="border-2 border-black" style="border-color: #0069AD; border-radius: 20px">
+                    <select style="border-radius: 20px" class=" btn focus:outline-none focus:ring-2 focus:ring-offset-2 outline-black text-base flex items-center justify-center  w-full" @if($item->QuantityOnHand <= 0) disabled @endif id="input-{{ $item->ListID }}" name="qty">
+                        @php($count=0)
+                        @if($item->QuantityOnHand > 0)
+                            @while($count != $item->QuantityOnHand)
+                                @php($count++ )
+                                <option value="{{ $count }}">{{ $count }}</option>
+                            @endwhile
+                        @else
+                            <option value="0">0</option>
+                        @endif
+                    </select>
+                </div>
+
+                <br>
+                <button wire:loading.attr="disabled" wire:click="addToCart( '{{ $item->ListID }}', document.getElementById('input-{{ $item->ListID }}').value)" style="background-color: #0069AD" class="btn-primary btn dark:text-gray-900 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2  text-base flex items-center justify-center  text-white  w-full py-4 hover:bg-gray-700 ">
+                    <img wire:loading style="width: 40px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
+
+                    {{--                                            <img class="mr-3 dark:hidden" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/svg1.svg" alt="location">--}}
+                    {{--                                            <img class="mr-3 hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/svg1dark.svg" alt="location">--}}
+                    <h1  wire:loading.remove>
+                        Add to Cart
+                    </h1>
+                </button>
+
+            @endif
+        </di>
+
+
 
     </div>
 

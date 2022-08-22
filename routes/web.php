@@ -33,7 +33,7 @@ use Illuminate\Http\Request;
 
 Route::middleware([
 ])->group(function () {
-    Route::get('/', function () {
+    Route::get('/items', function () {
         return view('dashboard');
     })->name('dashboard');
 });
