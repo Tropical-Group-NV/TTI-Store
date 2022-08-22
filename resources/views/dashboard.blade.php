@@ -15,7 +15,7 @@
             </div>
 
                 @if(\Illuminate\Support\Facades\Auth::user() != null)
-                <div class="" id="toggleCart" style="position: fixed;right: 0;z-index: 100">
+                <div  class="" id="toggleCart" style="position: fixed;right: 0;z-index: 100">
                     <aside class="w-full shadow-xl sm:rounded-lg outline-amber-300 outline-8">
                         <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">
                     <button  onclick="toggleCart()" data-modal-toggle="shoppingCart">

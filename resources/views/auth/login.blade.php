@@ -2,7 +2,8 @@
     <x-jet-authentication-card>
         <x-slot name="logo">
             <div style=" border-radius: 15px;" class="w-full">
-                <h1 style="font-family: sfsemibold; font-size: 50px; color: dodgerblue" class="text-blue-700">www.ttistore.com</h1
+{{--                <h1 style="font-family: sfsemibold; font-size: 50px; color: dodgerblue" class="text-blue-700">www.ttistore.com</h1>--}}
+                <img src="{{ asset('Logo-04.png') }}" style="" class="sm:max-w-md mt-6 px-6 py-4" alt="">
             </div>
 {{--            <x-jet-authentication-card-logo />--}}
         </x-slot>

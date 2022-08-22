@@ -30,7 +30,8 @@
                 <div id="list_search" style="padding-left: 50px; padding-right: 50px;z-index: 100; position: absolute; max-height: 200px" class="collapse @if(strlen($search2) > 0 and $search_sw == 1 and !empty($list)) show @endif">
                     <div class="card card-body">
                         <div style="border-radius: 50px" wire:loading>
-                            <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">
+                            <img src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">
+{{--                            <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">--}}
                         </div>
                         <div style="overflow-y: auto"  wire:loading.remove>
                             @if(strlen($search2) > 0 and $search_sw == 1)
@@ -94,7 +95,7 @@
     </div>
     <br>
     @endif
-    <div style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-3">
+    <div style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4">
 {{--        {{ print_r($items) }}--}}
         @foreach($items as $item)
             @if($items == '1')
@@ -104,7 +105,7 @@
             @php($itemDesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->get()->first())
             @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
             @if($image != null)
-            <div class="card" style="width: auto; cursor: pointer">
+            <div class="card" style="width: auto;">
                 <div style="height: 20rem">
                     <a href="{{ route('item', $item->ListID) }}">
                         <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="width: 250px" alt="Card image cap">
@@ -139,7 +140,7 @@
 {{--                                            <button wire:loading.attr="disabled"  wire:click="removeFromCart('{{$inCart->id}}')" class="btn btn-danger  w-full items-center">--}}
 {{--                                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.46-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.211-3.015c-.699-.03-1.368-.171-1.992-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-5v-1h5v1z"/></svg>--}}
 {{--                                            </button>--}}
-                                            <button disabled class="btn btn-success  w-full items-center">
+                                            <button style="font-family: sfsemibold; font-size: 20px; background-color: #0069AD; color: white" disabled class="btn w-full items-center">
                                                 Added to cart
                                             </button>
                                         </span>
@@ -180,7 +181,7 @@
                                                     @endif
                                             </select>
                                             <span wire:click="load('add{{ $item->ListID }}')" class="input-group-btn input-group-append">
-                                            <button @if($item->QuantityOnHand <= 0) disabled @endif @if($item->QuantityOnHand > 0) wire:loading.attr="disabled" wire:click="addToCart( '{{ $item->ListID }}', document.getElementById('input-{{ $item->ListID }}').value)" @endif   class="btn btn-primary">
+                                            <button style="background-color: #0069AD" @if($item->QuantityOnHand <= 0) disabled @endif @if($item->QuantityOnHand > 0) wire:loading.attr="disabled" wire:click="addToCart( '{{ $item->ListID }}', document.getElementById('input-{{ $item->ListID }}').value)" @endif   class="btn">
                                                 <img wire:loading wire:target="load('add{{ $item->ListID }}')" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
                                                 <svg wire:loading.remove  wire:target="load('add{{ $item->ListID }}')" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.459-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.21-3.015c-.698-.03-1.367-.171-1.991-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-2v2h-1v-2h-2v-1h2v-2h1v2h2v1z"/></svg>
                                             </button>
@@ -197,8 +198,9 @@
             </div>
             @endif
         @endforeach
-{{--        <div wire:target="addToCart, removeFromCart" wire:loading="addToCart('{{$item->ListID}}" id="defaultModal" tabindex="-1" style="position: fixed; left: 30%; top: 15%; z-index: 5">--}}
+{{--        <div wire:target="addToCart, removeFromCart" wire:loading="addToCart('{{$item->ListID}}" id="defaultModal" tabindex="-1" style="position: fixed; left: 50%; top: 15%; z-index: 5">--}}
 {{--            <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" alt="">--}}
+{{--            <img src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb"  data-noaft="1" style="height: 100%; margin: 0px;">--}}
 {{--        </div>--}}
 
         <script>

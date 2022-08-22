@@ -1,4 +1,4 @@
-<div style="height: 300px; right: 0; position: fixed">
+<div style="height: 300px; right: 0; position: fixed" class="w-1/4 h-full">
     <aside class="w-full shadow-xl sm:rounded-lg">
         <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">
 
@@ -14,14 +14,14 @@
                             Qty
                         </th>
                         <th class="border-collapse: separate  border border-slate-600">
-                            Name
+                            Item
                         </th>
                         <th class="border-collapse: separate border border-slate-600">
                             Price
                         </th>
                     </tr>
                     </thead>
-                    <tbody style="overflow-y: auto">
+                    <tbody style="overflow-y: auto; height: 300px">
                     @php($subTotal = 0)
                     @foreach($cartItems as $cartItem)
                         @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $cartItem->prod_id)->get()->first())
@@ -58,6 +58,8 @@
                             </td>
                         </tr>
                     @endforeach
+                    </tbody>
+                    <tfoot>
                     <tr>
                         <td>
                             Total
@@ -69,14 +71,13 @@
                             SRD {{ $subTotal }}
                         </td>
                     </tr>
-
-                    </tbody>
+                    </tfoot>
                 </table>
                 <br>
             </div>
             <br>
             @if($cartItemExist)
-            <button style="right: 0" class="btn btn-primary">
+            <button style="right: 0; background-color: #0069AD; color: white" class="btn">
                 Checkout
             </button >
             <button wire:loading.attr="disabled" wire:click="clearCart" class="btn btn-danger">
