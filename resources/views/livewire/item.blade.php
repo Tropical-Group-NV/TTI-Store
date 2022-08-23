@@ -6,17 +6,20 @@
     <div class="xl:w-2/5 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
         <div class="md:hidden">
             {{--                                <img class="w-full" style="width: 500px" alt="image of a girl posing" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" />--}}
-            <div style="overflow-x: auto" class="flex items-center justify-center mt-3 space-x-4 md:space-x-0">
-                @foreach($images as $i)
-                    <div class="border">
-                        <img class="w-full shadow-xl sm:rounded-lg" style="height:500px;width: auto " alt="image of a girl posing" src="https://www.ttistore.com/foto/{{$i->image_id}}.dat" />
-                    </div>
-                    {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/cYDrVGh/Rectangle-245.png" />--}}
-                    {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/f17NXrW/Rectangle-244.png" />--}}
-                    {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/cYDrVGh/Rectangle-245.png" />--}}
-                    {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/f17NXrW/Rectangle-244.png" />--}}
-                @endforeach
+            <div style="overflow-x: auto">
+                <div style="overflow-x: auto" class="flex items-center justify-center mt-3 space-x-4 md:space-x-0">
+                    @foreach($images as $i)
+                        <div class="border">
+                            <img class="w-full shadow-xl sm:rounded-lg" style="max-height:800px;width: auto " alt="image of a girl posing" src="https://www.ttistore.com/foto/{{$i->image_id}}.dat" />
+                        </div>
+                        {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/cYDrVGh/Rectangle-245.png" />--}}
+                        {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/f17NXrW/Rectangle-244.png" />--}}
+                        {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/cYDrVGh/Rectangle-245.png" />--}}
+                        {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/f17NXrW/Rectangle-244.png" />--}}
+                    @endforeach
+                </div>
             </div>
+
         </div>
         <br>
         <div class="border" style="border-radius: 10px">
