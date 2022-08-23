@@ -1,5 +1,6 @@
 <?php return array (
   'addto-cart' => 'App\\Http\\Livewire\\AddtoCart',
+  'cart' => 'App\\Http\\Livewire\\Cart',
   'checkout' => 'App\\Http\\Livewire\\Checkout',
   'counter' => 'App\\Http\\Livewire\\Counter',
   'item' => 'App\\Http\\Livewire\\Item',

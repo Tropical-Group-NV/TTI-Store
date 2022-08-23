@@ -103,18 +103,23 @@
 {{--            {{ print_r($item) }}--}}
             @php($itemDesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->get()->first())
             @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
-            @if($image != null)
             <div class="card" style="width: auto;">
-                <div style="height: 20rem">
+                <div style="height: 20rem; margin: auto">
                     <a href="{{ route('item', $item->ListID) }}">
-                        <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="width: 250px" alt="Card image cap">
+                        @if($image!=null)
+                        <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="width: 350px" alt="Card image cap">
+                        @else
+                            <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 350px" alt="Card image cap">
+                        @endif
+
                     </a>
                 </div>
                 <div class="card-body" style="position: relative">
                     <a href="{{ route('item', $item->ListID) }}">
-                        <div class="h-20">
+                        <div style="height: 100px" class="">
                             <h5  style="font-family: sfsemibold" class="card-title">{{ $item->Description }}</h5>
                             <h5><b>{{$item->BarCodeValue}}</b></h5>
+                            <br>
                         </div>
                         @if($itemDesc != null)
 {{--                            <span id="item:{{ $item->ListID }}" class="card-text">{{ strip_tags($itemDesc->description)  }}</span>--}}
@@ -173,7 +178,7 @@
 {{--                                            </button>--}}
                                         </span>
 {{--                                            <input class="" id="input-{{ $item->ListID }}" type="number" value="0" name="qty">--}}
-                                            <select @if($item->QuantityOnHand <= 0) disabled @endif class="form-control" id="input-{{ $item->ListID }}" name="qty">
+                                            <select @if($item->QuantityOnHand <= 0) disabled @endif id="input-{{ $item->ListID }}" class="block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
                                                 @php($count=0)
                                                 @if($item->QuantityOnHand > 0)
                                                 @while($count != $item->QuantityOnHand)
@@ -201,7 +206,6 @@
                 </div>
 
             </div>
-            @endif
         @endforeach
 {{--        <div wire:target="addToCart, removeFromCart" wire:loading="addToCart('{{$item->ListID}}" id="defaultModal" tabindex="-1" style="position: fixed; left: 50%; top: 15%; z-index: 5">--}}
 {{--            <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" alt="">--}}

@@ -23,6 +23,7 @@
                     </thead>
                     <tbody style="overflow-y: auto; height: 300px">
                     @php($subTotal = 0)
+                    @if($cartItemExist)
                     @foreach($cartItems as $cartItem)
                         @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $cartItem->prod_id)->get()->first())
                         @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
@@ -36,7 +37,12 @@
                             </td>
                             <td class="border-collapse: separate border border-slate-600">
                                 <a href="{{ route('item', $cartItem->prod_id) }}">
+                                    @if($image != null)
                                     <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="width: 150px" alt="Card image cap">
+                                    @else
+                                        <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 150px" alt="Card image cap">
+
+                                        @endif
                                 </a>
                                 <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
                                             <span class="input-group-btn input-group-prepend">
@@ -58,6 +64,7 @@
                             </td>
                         </tr>
                     @endforeach
+                        @endif
                     </tbody>
                     <tfoot>
                     <tr>
@@ -77,9 +84,11 @@
             </div>
             <br>
             @if($cartItemExist)
-            <button style="right: 0; background-color: #0069AD; color: white" class="btn">
-                Checkout
-            </button >
+                <a href="{{ route('checkout') }}">
+                    <button style="right: 0; background-color: #0069AD; color: white" class="btn">
+                        Checkout
+                    </button >
+                </a>
             <button wire:loading.attr="disabled" wire:click="clearCart" class="btn btn-danger">
                 Clear cart
             </button>

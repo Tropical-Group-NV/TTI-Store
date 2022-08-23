@@ -48,5 +48,10 @@ Route::get('items/{id}', function( Request $request)
     return view('item' , compact('id'));
 })->name('item');
 
+Route::get('checkout', function( Request $request)
+{
+    return view('checkout' );
+})->name('checkout')->middleware('auth');
+
 
 
