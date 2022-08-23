@@ -9,7 +9,7 @@
             <div style="overflow-x: auto" class="flex items-center justify-center mt-3 space-x-4 md:space-x-0">
                 @foreach($images as $i)
                     <div class="border">
-                        <img class="w-full shadow-xl sm:rounded-lg" style="width: 500px" alt="image of a girl posing" src="https://www.ttistore.com/foto/{{$i->image_id}}.dat" />
+                        <img class="w-full shadow-xl sm:rounded-lg" style="height:500px;width: auto " alt="image of a girl posing" src="https://www.ttistore.com/foto/{{$i->image_id}}.dat" />
                     </div>
                     {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/cYDrVGh/Rectangle-245.png" />--}}
                     {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/f17NXrW/Rectangle-244.png" />--}}
