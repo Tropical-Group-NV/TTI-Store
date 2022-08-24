@@ -3,7 +3,11 @@
 namespace App\Http\Livewire;
 
 use App\Models\CartItem;
+use App\Models\CustomerMessage;
+use App\Models\SalesOrderItem;
+use Illuminate\Http\Request;
 use App\Models\Customer;
+use App\Models\SalesOrder;
 use App\Models\Term;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,10 +16,16 @@ use phpDocumentor\Reflection\Types\This;
 
 class Checkout extends Component
 {
+    public $customer_id;
+    public $term_id;
+    public $msg_id;
+    public $memo;
+    public $date;
     public $customers;
     public $search_customer;
     public $search_sw;
     public $terms;
+    public $status_msg;
 
     public function mount()
     {
@@ -75,5 +85,50 @@ class Checkout extends Component
     {
             $this->search_sw = 1;
             $this->customers = DB::connection('epas')->table('QB_Customer')->where('ISActive', 1)->where('Name', 'LIKE', '%' . $this->search_customer . '%')->orderBy('Name', 'ASC')->limit(10)->get();
+    }
+
+    public function createSalesOrder(Request $request)
+    {
+        $cartItems = CartItem::query()->where('uid', Auth::user()->id)->get();
+        $customer = DB::connection('epas')->table('QB_Customer')->where('ListID', '80001417-1633477470')->first();
+        $cst_msg = CustomerMessage::query()->where('ListID', $this->msg_id)->get()->first();
+        $term = Term::query()->where('ListID', $this->term_id)->get()->first();
+        $sale = new SalesOrder();
+        $sale->CustomerRefListID = '80001417-1633477470';
+        $sale->TxnDate = date("Y/m/d");
+        $sale->BillAddressAddr1 = $customer->BillAddressBlockAddr1;
+        $sale->BillAddressAddr2 = $customer->BillAddressBlockAddr2;
+        $sale->BillAddressAddr3 = $customer->BillAddressBlockAddr3;
+        $sale->BillAddressAddr4 = $customer->BillAddressBlockAddr4;
+        $sale->BillAddressAddr5 = $customer->BillAddressBlockAddr5;
+        $sale->ShipAddressAddr1 = $customer->BillAddressBlockAddr1;
+        $sale->ShipAddressAddr2 = $customer->BillAddressBlockAddr2;
+        $sale->ShipAddressAddr3 = $customer->BillAddressBlockAddr3;
+        $sale->ShipAddressAddr4 = $customer->BillAddressBlockAddr4;
+        $sale->ShipAddressAddr5 = $customer->BillAddressBlockAddr5;
+        $sale->CustomerMsgRefListID = $cst_msg->ListID;
+        $sale->CustomerMsgRefFullName = $cst_msg->Name;
+        $sale->uid = Auth::user()->id;
+        $sale->TermsRefListID = $term->ListID;
+        $sale->TermsRefFullName = $term->Name;
+        $sale->ShipDate = $this->date;
+        $sale->Memo = $this->memo;
+        $sale->save();
+        foreach ($cartItems as $cartItem)
+        {
+            $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first();
+            $saleItem = new SalesOrderItem();
+            $saleItem->sales_order_id = $sale->id;
+            $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+            $saleItem->SalesOrderLineDesc = $item->Description;
+            $saleItem->SalesOrderLineQuantity = $cartItem->qty;
+            $saleItem->SalesOrderLineRate = $item->SalesPrice;
+            $saleItem->SalesOrderLineRatePercent =null;
+            $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
+            $saleItem->save();
+        }
+        CartItem::query()->where('uid', Auth::user()->id)->delete();
+        $this->status_msg = 'You`re order has been submitted';
+
     }
 }

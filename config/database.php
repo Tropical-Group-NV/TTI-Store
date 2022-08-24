@@ -95,6 +95,7 @@ return [
         'qb_sales' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL'),
+//            'host' => env('DB_HOST2', 'localhost'),
             'host' => env('DB_HOST2', 'localhost'),
             'port' => env('DB_PORT2', '1433'),
             'database' => env('DB_DATABASE2', 'forge'),
