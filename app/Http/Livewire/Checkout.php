@@ -3,11 +3,26 @@
 namespace App\Http\Livewire;
 
 use App\Models\CartItem;
+use App\Models\Customer;
+use App\Models\Term;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use phpDocumentor\Reflection\Types\This;
 
 class Checkout extends Component
 {
+    public $customers;
+    public $search_customer;
+    public $search_sw;
+    public $terms;
+
+    public function mount()
+    {
+//        $this->terms = Term::all();
+//        $this->customers = Customer::query()->orderBy('text', 'ASC')->get();
+    }
+
     protected $listeners =
         [
             'updateCart' => 'render'
@@ -54,5 +69,11 @@ class Checkout extends Component
         $item = CartItem::query()->where('uid', Auth::user()->id)->delete();
         $this->emit('updateCart');
 
+    }
+
+    public function search()
+    {
+            $this->search_sw = 1;
+            $this->customers = DB::connection('epas')->table('QB_Customer')->where('ISActive', 1)->where('Name', 'LIKE', '%' . $this->search_customer . '%')->orderBy('Name', 'ASC')->limit(10)->get();
     }
 }

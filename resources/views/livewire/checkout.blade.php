@@ -1,95 +1,191 @@
 <div>
-    <table class="sm:rounded-lg w-full">
-        <thead>
-        <tr class="">
-{{--            <th class=" ">--}}
-{{--                Qty--}}
-{{--            </th>--}}
-            <th class="">
-                Item
-            </th>
-            <th class="">
-                Price
-            </th>
-        </tr>
-        </thead>
-        <tbody style="overflow-y: auto; height: 300px">
-        @php($subTotal = 0)
-        @if($cartItemExist)
-            @foreach($cartItems as $cartItem)
-                @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $cartItem->prod_id)->get()->first())
-                @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
-                @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
-                <tr class="border-b">
-{{--                    <td class="border border-slate-600 sfsb">--}}
-{{--                                <span style="font-family: sflight" class="sfl">--}}
-{{--                                    <select wire:loading.attr="disabled" wire:change="changeQuantity( '{{ $cartItem->id }}', document.getElementById('{{ $cartItem->id }}').value)" class="form-control" id="{{ $cartItem->id }}" name="qty">--}}
-{{--                                @php($count=0)--}}
-{{--                                        @while($count != $item->QuantityOnHand + 1)--}}
-{{--                                            @php($count++ )--}}
-{{--                                            <option @if($count ==  $cartItem->qty ) selected @endif value="{{ $count }}">{{ $count }}</option>--}}
-{{--                                        @endwhile--}}
-{{--                            </select>--}}
-{{--                                    {{ $cartItem->qty }}--}}
-{{--                                </span>--}}
-
-{{--                    </td>--}}
-                    <td class="">
-                        <a href="{{ route('item', $cartItem->prod_id) }}">
-                            <div class="flex">
-                                @if($image != null)
-                                    <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="width: 150px" alt="Card image cap">
-                                <div style="margin: auto; text-align: left" class="">
-                                    <h1 style="top: 50%" class="">
-                                        <b>
-                                            {{ $item->Description }}
-                                        </b>
-                                    </h1>
+    @php($terms = \App\Models\Term::all())
+    @php($messages = \App\Models\CustomerMessage::query()->where('IsActive', 1)->get())
+    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+        <div style="overflow-x: auto" class="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
+            <div style="overflow-x: auto">
+                <div class="grid md:grid-cols-3">
+                    <div>
+                        <label style="font-family: sflight; font-size: 20px" for="">Customer(please type in atleast 3 characters to search)
+                            <br>
+                            <input wire:keydown="search" wire:model="search_customer"  style="width: 500px" class="ring-2 ring-blue-500 form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"/>
+                            <div id="searchWrap" style="position: absolute; width: 500px;overflow-y: auto; max-height: 400px; z-index: 10" class="block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none bg-gray-50 focus:border-gray-500">
+                                <div wire:loading style="border-radius: 50px">
+                                    <img src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">
                                 </div>
-                                @else
-                                    <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 150px" alt="Card image cap">
+                                <div wire:loading.remove>
+                                    @if($search_sw == 1)
+                                        @foreach($customers as $customer)
+                                            @if(is_array($customer))
+                                                <a onclick="addAddress('{{$customer['ShipAddressAddr1']}}', '{{$customer['ShipAddressAddr2']}}', '{{$customer['ShipAddressAddr3']}}', '{{$customer['ShipAddressAddr4']}}', '{{$customer['ShipAddressAddr5']}}')" href="#">
+                                                    <br>
+                                                    <div class="border-b">
+                                                        <span>{{ $customer['Name'] }}</span>
+                                                    </div>
+                                                </a>
+                                            @else
+                                                <a href="#" onclick="addAddress('{{$customer->ShipAddressAddr1}}', '{{$customer->ShipAddressAddr2}}', '{{$customer->ShipAddressAddr3}}', '{{$customer->ShipAddressAddr4}}', '{{$customer->ShipAddressAddr4}}')">
+                                                    <br>
+                                                    <div class="border-b">
+                                                        <span>{{ $customer->Name }}</span>
+                                                    </div>
+                                                </a>
+                                            @endif
 
-                                @endif
+                                        @endforeach
+                                    @endif
+                                </div>
                             </div>
-
-                        </a>
-                        <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
-                                            <span class="input-group-btn input-group-prepend">
-                                            <button onclick="Livewire.emit('updateCart')" wire:loading.attr="disabled" wire:click="removeFromCart('{{$cartItem->id}}')" class="btn btn-danger">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.46-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.211-3.015c-.699-.03-1.368-.171-1.992-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-5v-1h5v1z"/></svg>
-                                            </button>
-                                        </span>
-                            <select wire:loading.attr="disabled" wire:change="changeQuantity( '{{ $cartItem->id }}', document.getElementById('{{ $cartItem->id }}').value)" class="block appearance-none  border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="{{ $cartItem->id }}" name="qty">
-                                @php($count=0)
-                                @while($count != $item->QuantityOnHand + 1)
-                                    @php($count++ )
-                                    <option @if($count ==  $cartItem->qty ) selected @endif value="{{ $count }}">{{ $count }}</option>
-                                @endwhile
+                        </label>
+                    </div>
+                    <div style="width: 600px">
+                        <label style="font-family: sflight; font-size: 20px" for="">Date
+                            <br>
+                            <input style="width: 500px" type="date" class=" border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
+                        </label>
+                    </div>
+                    <div>
+                        <label style="font-family: sflight; font-size: 20px" for="">Term
+                            <br>
+                            <select style="width: 500px" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
+                                <option value="">Select term</option>
+                                @foreach($terms as $term)
+                                <option value="{{ $term->ListID }}">{{ $term->Name }}</option>
+                                    @endforeach
                             </select>
-                        </div>
-                    </td>
-                    <td class="">
-                        <div style="margin: auto">
-                            SRD {{ $cartItem->qty * $item->SalesPrice }}
-                        </div>
+                        </label>
+                    </div>
+                </div>
+                <br>
+                <div class="grid grid-cols-3 md:grid-cols-3">
+                    <div>
+                        <label  style="font-family: sflight; font-size: 20px" for="">Adress
+                            <br>
+                            <textarea readonly style="width: 500px" class="w-full block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="adress" id="adress" cols="30" rows="10"></textarea>
+                        </label>
+                    </div>
+                    <div>
+                        <label style="font-family: sflight; font-size: 20px" for="">Ship to
+                            <br>
+                            <textarea style="width: 500px" class="w-full block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="" id="" cols="30" rows="10"></textarea>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                    </td>
-                </tr>
-            @endforeach
-        @endif
-        </tbody>
-        <tfoot>
-        <tr>
-            <td>
-                Total
-            </td>
-{{--            <td>--}}
+    <br>
 
-{{--            </td>--}}
-            <td class="">
-                SRD {{ $subTotal }}
-            </td>
-        </tr>
-        </tfoot>
-    </table>
+    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+        <div style="overflow-x: auto" class="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
+            <div style="overflow-x: auto">
+                <table  style="overflow-x: auto" class=" sm:rounded-lg w-full">
+                    <thead>
+                    <tr class="">
+                        <th class="">
+                            Item
+                        </th>
+                        <th class="">
+                            Description
+                        </th>
+                        <th class="">
+                            Ordered
+                        </th>
+                        <th class="">
+                            Rate
+                        </th>
+                        <th class="">
+                            Amount
+                        </th>
+                        {{--                    <th class="">--}}
+                        {{--                        Delete--}}
+                        {{--                    </th>--}}
+                    </tr>
+                    </thead>
+                    <tbody class="border" style="overflow-y: auto; height: 300px">
+                    @php($subTotal = 0)
+                    @if($cartItemExist)
+                        @foreach($cartItems as $cartItem)
+                            @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $cartItem->prod_id)->get()->first())
+                            @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
+                            @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
+                            <tr class="border-b">
+                                <td>
+                                    {{ $item->BarCodeValue }}
+                                </td>
+                                <td class="flex">
+                                    @if($image != null)
+                                        <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px; width: auto" alt="Card image cap">
+                                    @else
+                                        <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 150px" alt="Card image cap">
+                                    @endif
+                                    {{ $item->Description }}
+                                </td>
+                                <td>
+                                    {{ $cartItem->qty }}
+                                </td>
+                                <td>
+                                    SRD {{ substr($item->SalesPrice, 0, -3) }}
+                                </td>
+                                <td>
+                                    SRD {{ $cartItem->qty * $item->SalesPrice  }}
+                                </td>
+                            </tr>
+                        @endforeach
+                    @endif
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td>
+                            Total
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            SRD {{ $subTotal }}
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+        <div style="overflow-x: auto" class="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
+            <div style="overflow-x: auto">
+                <div>
+                    <h2 style="font-family: sflight; font-size: 20px">Customer message</h2>
+                    <select class="w-full block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="" id="">
+                        <option value="">Select message</option>
+                        @foreach($messages as $message)
+                            <option value="">
+                                {{ $message->Name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <br>
+                <div>
+                    <h2 style="font-family: sflight; font-size: 20px">Memo</h2>
+                    <input class="w-full block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function addAddress(adr1, adr2, adr3, adr4, adr5)
+        {
+            document.getElementById('adress').value = adr1 + '\r\n' +adr2 + '\r\n' +adr3 + '\r\n' + adr4 + '\r\n' +adr5;
+            document.getElementById('searchWrap').style.display = 'none';
+
+        }
+    </script>
+
+
 </div>

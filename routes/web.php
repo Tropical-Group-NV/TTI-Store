@@ -14,22 +14,6 @@ use Illuminate\Http\Request;
 |
 */
 
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
-
-
-//Route::middleware([
-//    'auth:sanctum',
-//    config('jetstream.auth_session'),
-//    'verified'
-//])->group(function () {
-//    Route::get('/', function () {
-//        return view('dashboard');
-//    })->name('dashboard');
-//});
-
 Route::get('/', function ()
 {
    return redirect(\route('dashboard'));
@@ -52,6 +36,12 @@ Route::get('checkout', function( Request $request)
 {
     return view('checkout' );
 })->name('checkout')->middleware('auth');
+
+Route::get('api/customers', function ()
+{
+
+}
+);
 
 
 

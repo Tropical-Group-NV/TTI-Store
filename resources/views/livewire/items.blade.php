@@ -122,7 +122,7 @@
                             <br>
                         </div>
                         @if($itemDesc != null)
-{{--                            <span id="item:{{ $item->ListID }}" class="card-text">{{ strip_tags($itemDesc->description)  }}</span>--}}
+{{--                            <span id="item:{{ $item->ListID }}" class="card-text">{{ strip_tags($itemDesc->descriptio  n)  }}</span>--}}
                         @endif
                     </a>
                     <ul class="border-top flex justify-between" style="bottom: 0; padding: 20px">
