@@ -51,8 +51,8 @@
                         <p class="text-sm leading-none text-gray-600 dark:text-gray-300 mr-3"></p>
                     </div>
                 </div>
-                <div class="py-4 border-b border-gray-200 flex items-center justify-between">
-                    <p class="text-base leading-4 text-gray-800 dark:text-gray-300">Description: {{ strip_tags($itemdesc->description) }}</p>
+                <div class="py-4 border-b border-gray-200 ">
+                    <p class="text-base leading-4 text-gray-800 dark:text-gray-300">{!! $itemdesc->description !!}  </p>
                     <div class="flex items-center justify-center">
                         <p class="text-sm leading-none text-gray-600 dark:text-gray-300 mr-3"></p>
                     </div>

@@ -24,7 +24,7 @@ class Import_Sales_Order_To_QB implements ShouldQueue
      */
     public function __construct($order_id)
     {
-        DB::connection('qb_sales')->select( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $order_id);
+        $this->sales_order_id = $order_id;
     }
 
     /**
@@ -34,6 +34,7 @@ class Import_Sales_Order_To_QB implements ShouldQueue
      */
     public function handle()
     {
+        DB::connection('qb_sales')->select( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $this->sales_order_id);
 
     }
 }
