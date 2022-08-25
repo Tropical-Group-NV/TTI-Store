@@ -1,11 +1,11 @@
-<div style="height: 600px; right: 0; position: fixed" class=" h-full">
+<div style="max-height: 700px; right: 0; position: fixed" class=" h-full">
     <aside class="w-full shadow-xl sm:rounded-lg">
         <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">
 
             <button onclick="toggleCart()" data-modal-toggle="shoppingCart">
                 <img width="24" height="24" src="https://www.svgrepo.com/show/273966/close.svg">
             </button>
-            <div style="z-index: 5; overflow-y: auto;max-height: 400px;">
+            <div style="z-index: 5; overflow-y: auto;max-height: 700px;">
 
                 <table class="sm:rounded-lg table-auto border border-spacing-2">
                     <thead>
