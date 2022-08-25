@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Jobs\Import_Sales_Order_To_QB;
 use App\Models\CartItem;
 use App\Models\CustomerMessage;
 use App\Models\SalesOrderItem;
@@ -16,6 +17,7 @@ use phpDocumentor\Reflection\Types\This;
 
 class Checkout extends Component
 {
+    public $srch_sw;
     public $customer_id;
     public $term_id;
     public $msg_id;
@@ -29,6 +31,8 @@ class Checkout extends Component
 
     public function mount()
     {
+        $this->date= date('Y-m-d');
+        $this->srch_sw= 'dewfwqfqf';
 //        $this->terms = Term::all();
 //        $this->customers = Customer::query()->orderBy('text', 'ASC')->get();
     }
@@ -90,11 +94,15 @@ class Checkout extends Component
     public function createSalesOrder(Request $request)
     {
         $cartItems = CartItem::query()->where('uid', Auth::user()->id)->get();
-        $customer = DB::connection('epas')->table('QB_Customer')->where('ListID', '80001417-1633477470')->first();
-        $cst_msg = CustomerMessage::query()->where('ListID', $this->msg_id)->get()->first();
+//        $customer = DB::connection('epas')->table('QB_Customer')->where('ListID', '80001417-1633477470')->first();
+        $customer = DB::connection('epas')->table('QB_Customer')->where('ListID', $this->customer_id)->first();
+        if ($this->msg_id != '')
+        {
+            $cst_msg = CustomerMessage::query()->where('ListID', $this->msg_id)->get()->first();
+        }
         $term = Term::query()->where('ListID', $this->term_id)->get()->first();
         $sale = new SalesOrder();
-        $sale->CustomerRefListID = '80001417-1633477470';
+        $sale->CustomerRefListID = $customer->ListID;
         $sale->TxnDate = date("Y/m/d");
         $sale->BillAddressAddr1 = $customer->BillAddressBlockAddr1;
         $sale->BillAddressAddr2 = $customer->BillAddressBlockAddr2;
@@ -106,8 +114,12 @@ class Checkout extends Component
         $sale->ShipAddressAddr3 = $customer->BillAddressBlockAddr3;
         $sale->ShipAddressAddr4 = $customer->BillAddressBlockAddr4;
         $sale->ShipAddressAddr5 = $customer->BillAddressBlockAddr5;
-        $sale->CustomerMsgRefListID = $cst_msg->ListID;
-        $sale->CustomerMsgRefFullName = $cst_msg->Name;
+        if ($this->msg_id != '')
+        {
+            $sale->CustomerMsgRefListID = $cst_msg->ListID;
+            $sale->CustomerMsgRefFullName = $cst_msg->Name;
+        }
+
         $sale->uid = Auth::user()->id;
         $sale->TermsRefListID = $term->ListID;
         $sale->TermsRefFullName = $term->Name;
@@ -128,7 +140,16 @@ class Checkout extends Component
             $saleItem->save();
         }
         CartItem::query()->where('uid', Auth::user()->id)->delete();
-        $this->status_msg = 'You`re order has been submitted';
+        $this->status_msg = 'Your order has been submitted.✅';
+        Import_Sales_Order_To_QB::dispatch($sale->id)->delay(now());
+        $msg = 'Your order has been submitted.✅';
+//                exit();
+//
+//        DB::connection('qb_sales')->select( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $sale->id);
+
+        return redirect()->to(route('dashboard') . '?order=' . $sale->id);
+
+
 
     }
 }

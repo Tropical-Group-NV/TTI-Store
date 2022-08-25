@@ -43,5 +43,11 @@ Route::get('api/customers', function ()
 }
 );
 
+Route::get('orders', function( Request $request)
+{
+    return view('orders');
+})->name('orders');
+
+
 
 

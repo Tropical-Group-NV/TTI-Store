@@ -1,10 +1,17 @@
 <x-app-layout>
-{{--    @livewire('counter')--}}
-{{--    <x-slot name="header">--}}
-{{--        <h2 class="font-semibold text-xl text-gray-800 leading-tight">--}}
-{{--            {{ __('Items') }}--}}
-{{--        </h2>--}}
-{{--    </x-slot>--}}
+
+
+    @if(isset($_REQUEST['order']))
+    <x-slot name="header">
+        <span  style="font-family: sfsemibold; font-size: 40px">
+            <span class="text-green-600">
+{{--                Your order has been submitted.✅ <a style="color: #0069AD; font-size: 20px" href="#">Go to Order.</a>--}}
+                Your order has been submitted.✅
+            </span>
+
+        </span>
+    </x-slot>
+    @endif
 
     <div class="py-12">
         <ul class="flex">
