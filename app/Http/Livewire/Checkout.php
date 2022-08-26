@@ -141,11 +141,11 @@ class Checkout extends Component
         }
         CartItem::query()->where('uid', Auth::user()->id)->delete();
         $this->status_msg = 'Your order has been submitted.✅';
-//        Import_Sales_Order_To_QB::dispatch($sale->id);
+        Import_Sales_Order_To_QB::dispatch($sale->id);
         $msg = 'Your order has been submitted.✅';
 //                exit();
 //
-        DB::connection('qb_sales')->select( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $sale->id);
+//        DB::connection('qb_sales')->select( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $sale->id);
 
         return redirect()->to(route('dashboard') . '?order=' . $sale->id);
 
