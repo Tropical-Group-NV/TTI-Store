@@ -8,9 +8,6 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Fortify;
 use LdapRecord\LdapRecordException;
-use mysql_xdevapi\Exception;
-use LdapRecord\Models\ActiveDirectory\User;
-use App\Models\User as users;
 
 
 class AuthServiceProvider extends ServiceProvider
