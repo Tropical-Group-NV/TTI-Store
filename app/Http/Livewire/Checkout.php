@@ -141,7 +141,7 @@ class Checkout extends Component
         }
         CartItem::query()->where('uid', Auth::user()->id)->delete();
         $this->status_msg = 'Your order has been submitted.✅';
-        Import_Sales_Order_To_QB::dispatch($sale->id);
+//        Import_Sales_Order_To_QB::dispatch($sale->id);
         $msg = 'Your order has been submitted.✅';
 //                exit();
 //
