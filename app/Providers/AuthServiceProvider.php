@@ -3,11 +3,15 @@
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Fortify\Fortify;
 use LdapRecord\LdapRecordException;
 use mysql_xdevapi\Exception;
+use LdapRecord\Models\ActiveDirectory\User;
+use App\Models\User as users;
+
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -28,24 +32,27 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-//        try
-//        {
-//            Fortify::authenticateUsing(
-//                function ($request)
-//                {
-//                $validated = Auth::validate([
-//                    'samaccountname' => $request->username,
-//                    'password' => $request->password
-//                ]);
-//
-//                return $validated ? Auth::getLastAttempted() : null;
-//            });
-//        }
-//        catch (LdapRecordException $exception)
-//        {
-//
-//        }
+        try
+        {
 
-        //
+            Fortify::authenticateUsing(
+                function ($request)
+                {
+                    $getGUID = DB::connection('tgncloud')->table('users')->where('username', $request->username)->get()->first();
+                    DB::connection('qb_sales')->table('users')->where('username', $request->username)->update(['auth_key' => $getGUID->guid]);
+                    $validated = Auth::validate([
+                    'samaccountname' => $request->username,
+                    'password' => $request->password
+                ]);
+
+                return $validated ? Auth::getLastAttempted() : null;
+            });
+        }
+        catch (LdapRecordException $exception)
+        {
+
+        }
+
+
     }
 }

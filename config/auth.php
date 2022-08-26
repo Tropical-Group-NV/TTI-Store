@@ -39,8 +39,8 @@ return [
         'web' => [
             'driver' => 'session',
 
-//            'provider' => 'ldap',
-            'provider' => 'users',
+            'provider' => 'ldap',
+//            'provider' => 'users',
         ],
     ],
 
@@ -65,9 +65,11 @@ return [
         'ldap' =>  [
             'driver' => 'ldap',
             'model' => LdapRecord\Models\ActiveDirectory\User::class,
+//            'model' => \App\Ldap\User::class,
             'rules' => [],
             'database' => [
                 'model' => \App\Models\User::class,
+//                'model' => \App\Ldap\User::class,
                 'sync_passwords' => true,
                 'sync_attributes' => [
                     'username'=>'sAMAccountname' ,

@@ -119,6 +119,19 @@ return [
             'prefix_indexes' => true,
             'trust_server_certificate' => true
         ],
+        'tgncloud' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => '192.168.2.223',
+            'port' => env('DB_PORT2', '1433'),
+            'database' => 'test',
+            'username' => env('DB_USERNAME2', 'forge'),
+            'password' => env('DB_PASSWORD2', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'trust_server_certificate' => true
+        ],
 
 
 
