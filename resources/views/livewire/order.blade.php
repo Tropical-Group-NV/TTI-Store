@@ -1,7 +1,7 @@
 <div>
     <div>
-        <h1>
-            Your Order
+        <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">
+            Your Order <span style="color: #0069AD">{{ $order->RefNumber }}</span>
         </h1>
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div style="overflow-x: auto" class="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
@@ -49,11 +49,7 @@
         <div class="bg-white shadow-xl sm:rounded-lg">
             <div style="overflow-x: auto" class="  py-12 2xl:px-20 md:px-6 px-4">
                 <div style="overflow-x: auto">
-                    <div class="p-6" style="margin-left: auto; margin-right: 0">
-                        <button style="margin-left: auto; margin-right: 0; float: right; font-family: sfsemibold" class="btn btn-primary">
-                            Reorder
-                        </button>
-                    </div>
+
                     <br>
                     <table  style="overflow-x: auto" class=" sm:rounded-lg w-full">
                         <thead>
@@ -93,7 +89,7 @@
                                             @else
                                                 <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 150px" alt="Card image cap">
                                             @endif
-                                            <span style="margin-top: auto;margin-bottom: auto; margin-left: 0; font-family: sfsemibold">{{ $item->Description }}</span>
+                                            <span class="hidemobile" style="margin-top: auto;margin-bottom: auto; margin-left: 0; font-family: sfsemibold">{{ $item->Description }}</span>
                                         </div>
                                     </td>
                                     <td>
@@ -128,6 +124,11 @@
                         </tr>
                         </tfoot>
                     </table>
+                    <div class="p-6" style="margin-left: auto; margin-right: 0">
+                        <button style="margin-left: auto; margin-right: 0; float: right; font-family: sfsemibold" class="btn btn-primary">
+                            Reorder
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

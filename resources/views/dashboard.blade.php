@@ -5,8 +5,8 @@
     <x-slot name="header">
         <span  style="font-family: sfsemibold; font-size: 40px">
             <span class="text-green-600">
-{{--                Your order has been submitted.✅ <a style="color: #0069AD; font-size: 20px" href="#">Go to Order.</a>--}}
-                Your order has been submitted.✅
+                Your order has been submitted✅ <a style="color: #0069AD; font-size: 20px" href="{{ route('order', $_REQUEST['order']) }}">Go to Order.</a>
+{{--                Your order has been submitted✅--}}
             </span>
 
         </span>
