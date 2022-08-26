@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\CartItem;
 use App\Models\SalesOrder;
 use App\Models\SalesOrderItem;
 use Illuminate\Support\Facades\Auth;
@@ -32,9 +33,9 @@ class Order extends Component
         $items = SalesOrderItem::query()->where('sales_order_id', $this->order_id)->get();
         foreach ($items as $item)
         {
-            $cartItem = new Cart();
+            $cartItem = new CartItem();
             $cartItem->prod_id = $item->SalesOrderLineItemRefListID;
-            $cartItem->qty = $item->SalesOrderLineQuantity;
+            $cartItem->qty = round($item->SalesOrderLineQuantity, 0) ;
             $cartItem->uid = Auth::user()->id;
             $cartItem->save();
         }

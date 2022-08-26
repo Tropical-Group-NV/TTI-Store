@@ -125,7 +125,7 @@
                         </tfoot>
                     </table>
                     <div class="p-6" style="margin-left: auto; margin-right: 0">
-                        <button style="margin-left: auto; margin-right: 0; float: right; font-family: sfsemibold" class="btn btn-primary">
+                        <button wire:click="reorder" style="margin-left: auto; margin-right: 0; float: right; font-family: sfsemibold" class="btn btn-primary">
                             Reorder
                         </button>
                     </div>

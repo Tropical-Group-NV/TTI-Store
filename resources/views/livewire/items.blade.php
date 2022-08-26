@@ -1,5 +1,6 @@
 @php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())
 <div>
+
     <form id="searchform" action="">
         <br>
 
@@ -107,7 +108,7 @@
                 <div style="height: 20rem; margin: auto">
                     <a href="{{ route('item', $item->ListID) }}">
                         @if($image!=null)
-                        <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="width: 350px" alt="Card image cap">
+                        <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="width: 350px;" alt="Card image cap">
                         @else
                             <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 350px" alt="Card image cap">
                         @endif
@@ -132,11 +133,15 @@
                             @endif
                             <span style="padding-top: 10px">Retail price: SRD <b>{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
                             <br>
+                                <span style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
+                                <br>
                             @if($item->QuantityOnHand > 0)
-                                In stock: <b>{{  substr($item->QuantityOnHand, 0, -6) }} PCs</b>
+                                In stock: <b>{{  substr($item->QuantityOnHand, 0, -6) }}</b>
                             @else
-                                In stock: <b>0 PCS</b>
+                                <span style="color: red">Out of stock</span>
                             @endif
+
+
                         </li>
                     </ul>
                         {{--                <button class="btn btn-primary" id="add:{{ $item->ListID }}" onclick="added('add:{{ $item->ListID }}')">Add to CartItem</button>--}}

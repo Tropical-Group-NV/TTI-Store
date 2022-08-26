@@ -6,7 +6,10 @@
                 <img width="24" height="24" src="https://www.svgrepo.com/show/273966/close.svg">
             </button>
             <div style="z-index: 5; overflow-y: auto;max-height: 700px;">
-
+                <span style="font-family: sfsemibold; font-size: 35px" class="p-6">
+                   Shopping Cart
+                </span>
+                <br>
                 <table class="sm:rounded-lg table-auto border border-spacing-2">
                     <thead>
                     <tr class="border border-slate-600 border-spacing-2">

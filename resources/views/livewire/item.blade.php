@@ -1,38 +1,58 @@
-<div>
-{{--    @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $id)->get()->first())--}}
-{{--    @php($itemdesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $id)->get()->first())--}}
-{{--    @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $id)->get()->first())--}}
-{{--    @php($image2 = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $id)->get())--}}
-    <div class="xl:w-2/5 md:w-1/2 lg:ml-8 md:ml-6 md:mt-0 mt-6">
-        <div class="md:hidden">
-            {{--                                <img class="w-full" style="width: 500px" alt="image of a girl posing" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" />--}}
+<div>}
+    <div class="">
+        <div class="">
             <div style="overflow-x: auto">
-                <div style="overflow-x: auto" class="flex items-center justify-center mt-3 space-x-4 md:space-x-0">
-                    @foreach($images as $i)
-                        <div class="border">
-                            <img class="w-full shadow-xl sm:rounded-lg" style="max-height:800px;width: auto " alt="image of a girl posing" src="https://www.ttistore.com/foto/{{$i->image_id}}.dat" />
+                <div style="overflow-x: auto" class="">
+                <div class="product">
+                    <div class="product__images">
+                        <img
+                            src="https://www.ttistore.com/foto/{{ $images->first()->image_id }}.dat"
+                            alt="google pixel 6"
+                            class="product__main-image"
+                            id="main-image"
+                        />
+                        <div class="product__slider-wrap">
+                            <div class="product__slider">
+                                @foreach($images as $i)
+                                <img
+                                    src="https://www.ttistore.com/foto/{{$i->image_id}}.dat"
+                                    class="product__image"
+                                />
+                                @endforeach
+                            </div>
                         </div>
-                        {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/cYDrVGh/Rectangle-245.png" />--}}
-                        {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/f17NXrW/Rectangle-244.png" />--}}
-                        {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/cYDrVGh/Rectangle-245.png" />--}}
-                        {{--                                    <img alt="image-tag-one" class="md:w-48 md:h-48 w-full" src="https://i.ibb.co/f17NXrW/Rectangle-244.png" />--}}
-                    @endforeach
+                    </div>
                 </div>
-            </div>
+                </div>
+                <script>
+                    const mainImage = document.getElementById("main-image");
+                    const images = document.querySelectorAll(".product__image");
 
+                    images.forEach((image) => {
+                        image.addEventListener("click", (event) => {
+                            mainImage.src = event.target.src;
+
+                            document
+                                .querySelector(".product__image--active")
+                                .classList.remove("product__image--active");
+
+                            event.target.classList.add("product__image--active");
+                        });
+                    });
+                </script>
         </div>
         <br>
         <div class="border" style="border-radius: 10px">
             <div style="padding-left: 15px">
                 <div class="py-4 border-b border-gray-200 flex items-center justify-between">
-                    <p class="text-base leading-4 text-gray-800 dark:text-gray-300">Name: {{ $item->Description }}</p>
+                    <p class="text-base leading-4 text-gray-800 dark:text-gray-300"> <b>{{ $item->Description }}</b></p>
                     <div class="flex items-center justify-center">
                         <p class="text-sm leading-none text-gray-600 dark:text-gray-300"></p>
                         <img class="hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/productDetail3-svg2dark.svg" alt="next">
                     </div>
                 </div>
                 <div class="py-4 border-b border-gray-200 flex items-center justify-between">
-                    <p class="text-base leading-4 text-gray-800 dark:text-gray-300">Barcode: {{ $item->BarCodeValue }}</p>
+                    <p class="text-base leading-4 text-gray-800 dark:text-gray-300"><b>{{ $item->BarCodeValue }}</b></p>
                     <div class="flex items-center justify-center">
                         <p class="text-sm leading-none text-gray-600 dark:text-gray-300"></p>
                         <img class="hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/productDetail3-svg2dark.svg" alt="next">
