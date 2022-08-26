@@ -10,4 +10,11 @@ class Customer extends Model
     use HasFactory;
     protected $connection='epas';
     protected $table= 'QB_Customer';
+
+    protected $primaryKey = 'ListID';
+
+    public function findById($id)
+    {
+        return Customer::query()->where('ListID', $id)->first();
+    }
 }

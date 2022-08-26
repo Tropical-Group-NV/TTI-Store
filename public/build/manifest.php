@@ -5,6 +5,7 @@
   'counter' => 'App\\Http\\Livewire\\Counter',
   'item' => 'App\\Http\\Livewire\\Item',
   'items' => 'App\\Http\\Livewire\\Items',
+  'order' => 'App\\Http\\Livewire\\Order',
   'orders' => 'App\\Http\\Livewire\\Orders',
   'show-test' => 'App\\Http\\Livewire\\ShowTest',
   'sidebar' => 'App\\Http\\Livewire\\Sidebar',

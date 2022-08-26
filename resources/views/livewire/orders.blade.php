@@ -2,126 +2,78 @@
         <div class="bg-white shadow-xl sm:rounded-lg">
             <div style="overflow-x: auto" class="  py-12 2xl:px-20 md:px-6 px-4">
                 <div style="overflow-x: auto">
-                    <table class="divide-y divide-gray-300 w-full" id="dataTable">
+                    <table class="border-separate border border-slate-500 w-full table" id="dataTable">
                         <thead class="bg-gray-100">
                         <tr>
-                            <th class="px-6 py-4 text-xs text-gray-500">
-                                ID
+                            <th class="border border-slate-600">
+                                Date
                             </th>
-                            <th class="px-6 py-4 text-xs text-gray-500">
-                                Name
+                            <th class="border border-slate-600">
+                                Customer
                             </th>
-                            <th class="px-6 py-4 text-xs text-gray-500">
-                                Email
+                            <th class="border border-slate-600">
+                                Adres
                             </th>
-                            <th class="px-6 py-4 text-xs text-gray-500">
-                                Created_at
+                            <th class="border border-slate-600">
+                                Terms
                             </th>
-                            <th class="px-6 py-4 text-xs text-gray-500">
-                                Edit
+                            <th class="border border-slate-600">
+                                Total Items
                             </th>
-                            <th class="px-6 py-4 text-xs text-gray-500">
-                                Deletesaasa
+                            <th class="border border-slate-600">
+                                Amount
+                            </th>
+                            <th class="border border-slate-600">
+                                Reorder
+                            </th>
+                            <th class="border border-slate-600">
+                                View
                             </th>
                         </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-500">
-                        <tr class="whitespace-nowrap">
-                            <td class="text-sm text-center text-gray-500">
-                                1
+                        <tbody class="">
+                        @foreach($orders as $order)
+                            @php($customer = \App\Models\Customer::query()->where('ListID', $order->CustomerRefListID)->first())
+                            @php($items = \App\Models\SalesOrderItem::query()->where('sales_order_id', $order->id)->get())
+                        <tr class="bg-gray-50">
+                            <td class="border border-slate-700">
+                                {{ $order->TxnDate }}
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="text-sm text-gray-900">
-                                    Jon doe
-                                </div>
+                            <td class="border border-slate-700">
+                                {{ $customer->Name }}
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="text-sm text-gray-500">jhondoe@example.com</div>
+                            <td class="border border-slate-700">
+                                {{ $customer->BillAddressBlockAddr1 . ' ' .  $customer->BillAddressBlockAddr2 . ' ' . $customer->BillAddressBlockAddr3 . ' ' . $customer->BillAddressBlockAddr4 . ' ' . $customer->BillAddressBlockAddr5}}
                             </td>
-                            <td class="px-6 py-4 text-sm text-center text-gray-500">
-                                2021-1-12
+                            <td class="border border-slate-700">
+                                {{ $order->TermsRefFullName }}
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <a href="#"
-                                   class="px-4 py-1 text-sm text-blue-600 bg-blue-200 rounded-full">Edit</a>
+                            <td class="border border-slate-700">
+                                @php($itemQty = 0)
+                                @php($subTotal = 0)
+                                @foreach($items as $item)
+                                    @php($itemQty = $itemQty + $item->SalesOrderLineQuantity)
+                                    @php($subTotal = $subTotal + $item->SalesOrderLineAmount)
+                                @endforeach
+                                {{ $itemQty }}
                             </td>
-                            <td class="px-6 py-4 text-center">
-                                <a href="#"
-                                   class="px-4 py-1 text-sm text-red-400 bg-red-200 rounded-full">Delete</a>
+                            <td class="border border-slate-700">
+                                SRD {{ $subTotal }}
                             </td>
-                        </tr>
-                        <tr class="bg-gray-50 whitespace-nowrap">
-                            <td class="px-6 py-4 text-sm text-center text-gray-500">
-                                2
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="text-sm text-gray-900">
-                                    Jon doe 2
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="text-sm text-gray-500">jhondoe2@example.com</div>
-                            </td>
-                            <td class="px-6 py-4 text-sm text-center text-gray-500">
-                                2021-1-12
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <a href="#"
-                                   class="px-4 py-1 text-sm text-blue-600 bg-blue-200 rounded-full">Edit</a>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <a href="#" class="px-4 py-1 text-sm text-red-400 rounded-full">Delete</a>
-                            </td>
-                        </tr>
-                        <tr class="whitespace-nowrap">
-                            <td class="px-6 py-4 text-sm text-center text-gray-500">
-                                3
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="text-sm text-gray-900">
-                                    Jon doe 3
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="text-sm text-gray-500">jhondoe3@example.com</div>
-                            </td>
-                            <td class="px-6 py-4 text-sm text-center text-gray-500">
-                                2021-1-12
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <a href="#"
-                                   class="px-4 py-1 text-sm text-blue-600 bg-blue-200 rounded-full">Edit</a>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <a href="#"
-                                   class="px-4 py-1 text-sm text-red-400 bg-red-200 rounded-full">Delete</a>
-                            </td>
-                        </tr>
+                            <td class="border border-indigo-400">
 
+                            </td>
+                            <td class="border" style="margin: auto">
+                                <a href="{{ route('order', $order->id) }}">
+                                    <button style="background-color: #0069AD; color: white" class="btn ">
+                                        View
+                                    </button>
+                                </a>
 
-                        <tr class="bg-gray-50 whitespace-nowrap">
-                            <td class="px-6 py-4 text-sm text-center text-gray-500">
-                                4
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="text-sm text-gray-900">
-                                    Jon doe 4
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <div class="text-sm text-gray-500">jhondoe4@example.com</div>
-                            </td>
-                            <td class="px-6 py-4 text-sm text-center text-gray-500">
-                                2021-1-12
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <a href="#"
-                                   class="px-4 py-1 text-sm text-blue-600 bg-blue-200 rounded-full">Edit</a>
-                            </td>
-                            <td class="px-6 py-4 text-center">
-                                <a href="#" class="px-4 py-1 text-sm text-red-400 rounded-full">Delete</a>
                             </td>
                         </tr>
+                        @endforeach
+
 
 
                         </tbody>

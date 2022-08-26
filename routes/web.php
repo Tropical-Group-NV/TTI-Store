@@ -47,6 +47,11 @@ Route::get('orders', function( Request $request)
 {
     return view('orders');
 })->name('orders');
+Route::get('orders/{id}', function( Request $request)
+{
+    $id = $request->id;
+    return view('order', compact('id'));
+})->name('order');
 
 
 
