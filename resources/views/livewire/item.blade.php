@@ -29,7 +29,7 @@
                     const images = document.querySelectorAll(".product__image");
 
                     images.forEach((image) => {
-                        image.addEventListener("click", (event) => {
+                        image.addEventListener("mouseover", (event) => {
                             mainImage.src = event.target.src;
 
                             document

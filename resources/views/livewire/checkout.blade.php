@@ -1,6 +1,9 @@
 <div>
     @php($terms = \App\Models\Term::all())
     @php($messages = \App\Models\CustomerMessage::query()->where('IsActive', 1)->get())
+    <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">
+        Your Order
+    </h1>
     <form wire:submit.prevent="createSalesOrder">
 
 
@@ -15,7 +18,7 @@
                             <input id="search" onclick="@this.srch_sw= 1" wire:keydown="search" wire:model="search_customer"  style="width: 500px" class="ring-2 ring-blue-500 form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"/>
                             <div id="searchWrap" style="position: absolute; width: 500px;overflow-y: auto; max-height: 400px; z-index: 10;@if($srch_sw == 0) display: none @endif" class="block appearance-none  border border-blue-500 text-gray-700 rounded leading-tight focus:outline-none bg-gray-50 focus:border-gray-500">
                                 <div wire:loading="search" wire:target="search" style="border-radius: 50px">
-                                    <img src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">
+                                    <img src="{{ asset('ttistore_loading.gif') }}" style="height: 100px; margin: 0px;">
                                 </div>
                                 <div wire:loading.remove>
                                     @if($search_sw == 1)

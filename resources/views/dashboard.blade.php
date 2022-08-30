@@ -1,18 +1,13 @@
 <x-app-layout>
-
-
     @if(isset($_REQUEST['order']))
     <x-slot name="header">
         <span  style="font-family: sfsemibold; font-size: 40px">
             <span class="text-green-600">
                 Your order has been submitted✅ <a style="color: #0069AD; font-size: 20px" href="{{ route('order', $_REQUEST['order']) }}">Go to Order.</a>
-{{--                Your order has been submitted✅--}}
             </span>
-
         </span>
     </x-slot>
     @endif
-
     <div class="py-12">
         <ul class="flex">
             <div  class="max-w-7xl  w-full mx-auto sm:px-6 lg:px-8">
@@ -20,7 +15,6 @@
                     @livewire('items')
                 </div>
             </div>
-
                 @if(\Illuminate\Support\Facades\Auth::user() != null)
                 <div  class="" id="toggleCart" style="position: fixed;right: 0;z-index: 100">
                     <aside class="w-full shadow-xl sm:rounded-lg outline-amber-300 outline-8">
@@ -31,22 +25,32 @@
                         </div>
                     </aside>
                 </div>
-            <div style="z-index: 100" id="shoppingCart">
-
+            <div style="z-index: 100" id="shoppingCart" class="">
                 @livewire('sidebar')
             </div>
-
                     @endif
             </div>
-
         </ul>
-
-
     </div>
 </x-app-layout>
 <script>
     function toggleCart()
     {
+        if (window.screen.width < 600)
+        {
+            document.getElementById('shoppingCart').classList.add('hidden');
+            document.getElementById('toggleCart').classList.remove('hidden');
+            if (document.getElementById('shoppingCart').classList.contains('hidden'))
+            {
+                document.getElementById('shoppingCart').classList.remove('hidden');
+                document.getElementById('toggleCart').classList.add('hidden');
+            }
+            else
+            {
+                document.getElementById('shoppingCart').classList.add('hidden');
+                document.getElementById('toggleCart').classList.remove('hidden');
+            }
+        }
         if (document.getElementById('shoppingCart').classList.contains('hidden'))
         {
             document.getElementById('shoppingCart').classList.remove('hidden');
