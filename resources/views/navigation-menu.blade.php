@@ -15,6 +15,12 @@
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Items') }}
                     </x-jet-nav-link>
+{{--                    <x-jet-nav-link  href="{{ route('checkout') }}" :active="request()->routeIs('checkout')">--}}
+{{--                        {{ __('Checkout') }}--}}
+{{--                    </x-jet-nav-link>--}}
+                    <x-jet-nav-link  href="{{ route('orders') }}" :active="request()->routeIs('orders')">
+                        {{ __('Orders') }}
+                    </x-jet-nav-link>
                 </div>
             </div>
 
@@ -121,24 +127,32 @@
                         </x-slot>
                     </x-jet-dropdown>
                 </div>
-            </div>
-            @else
-                <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
-                    <div @click="open = ! open">
-                        <a class="text-white" href="{{ route('login') }}"><p>Log in</p></a>
+                @else
+                    <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
+                        <div @click="open = ! open">
+                            <a class="text-white" href="{{ route('login') }}"><p>Log in</p></a>
+                        </div>
                     </div>
-                </div>
-            @endif
+                @endif
+
+            </div>
+
 
 
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
+                @if(\Illuminate\Support\Facades\Auth::user() != null)
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">
                     <svg class="h-6 w-6" stroke="currentColor" fill="white" viewBox="0 0 24 24">
                         <path fill="white" :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path fill="white" :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
+                @else
+                    <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">
+                        <a class="text-white" href="{{ route('login') }}"><p>Log in</p></a>
+                    </button>
+                @endif
             </div>
         </div>
     </div>
@@ -148,6 +162,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Items') }}
+            </x-jet-responsive-nav-link>
+            <x-jet-responsive-nav-link href="{{ route('orders') }}" :active="request()->routeIs('orders')">
+                {{ __('Orders') }}
             </x-jet-responsive-nav-link>
         </div>
 

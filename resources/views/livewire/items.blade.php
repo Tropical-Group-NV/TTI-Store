@@ -1,4 +1,6 @@
 @php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())
+<div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+
 <div>
 
     <form id="searchform" action="">
@@ -7,22 +9,25 @@
             <div>
                 <div  style="padding-left: 50px; padding-right: 50px">
                     <div>
-                        <ul class="flex justify-center">
-                            <input id=search_input wire:keydown="sug_search" wire:model="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" autocomplete="false" type="search">
-                            <select onchange="document.getElementById('searchform').submit()" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="brand" id="">
-                                <option value="">Select Brand</option>
-                                @foreach($brands as $brand)
-                                    @if($brand_srch != '' or $brand_srch != null)
-                                        @if($brand_srch == $brand->name)
-                                            <option selected value="{{ $brand->name }}">{{ $brand->name }}</option>
-                                        @else
-                                            <option value="{{ $brand->name }}">{{ $brand->name }}</option>
-                                        @endif
-                                    @else
-                                        <option value="{{ $brand->name }}">{{ $brand->name }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
+                        <ul class="flex btn-group">
+                            <input style="height:50px" id=search_input wire:keydown="sug_search" wire:model="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block form-control" autocomplete="false" type="search">
+                            <button class="btn " style="background-color: #0069AD; height: 50px">
+                                <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
+                            </button>
+{{--                            <select onchange="document.getElementById('searchform').submit()" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="brand" id="">--}}
+{{--                                <option value="">Select Brand</option>--}}
+{{--                                @foreach($brands as $brand)--}}
+{{--                                    @if($brand_srch != '' or $brand_srch != null)--}}
+{{--                                        @if($brand_srch == $brand->name)--}}
+{{--                                            <option selected value="{{ $brand->name }}">{{ $brand->name }}</option>--}}
+{{--                                        @else--}}
+{{--                                            <option value="{{ $brand->name }}">{{ $brand->name }}</option>--}}
+{{--                                        @endif--}}
+{{--                                    @else--}}
+{{--                                        <option value="{{ $brand->name }}">{{ $brand->name }}</option>--}}
+{{--                                    @endif--}}
+{{--                                @endforeach--}}
+{{--                            </select>--}}
                         </ul>
 
                     </div>
@@ -119,7 +124,7 @@
                     <a href="{{ route('item', $item->ListID) }}">
                         <div style="height: 100px" class="">
                             <h5  style="font-family: sfsemibold" class="card-title">{{ $item->Description }}</h5>
-                            <h5><b>{{$item->BarCodeValue}}</b></h5>
+                            <h5><b>{{$item->FullName}}</b></h5>
                             <br>
                         </div>
                         @if($itemDesc != null)
@@ -130,6 +135,7 @@
                         <li>
                             @if(\Illuminate\Support\Facades\Auth::user() != null)
                             <span style="padding-top: 10px">Sales price: SRD <b>{{ substr($item->SalesPrice, 0, -3) }}</b></span>
+                                <br>
                             @endif
                             <span style="padding-top: 10px">Retail price: SRD <b>{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
                             <br>
@@ -245,4 +251,5 @@
         });
     </script>
 
+</div>
 </div>

@@ -90,8 +90,8 @@
         /*border: 1px solid #070707;*/
     }
 
-    /*.sidebar*/
-    /*{*/
-    /*    !*display: none;*!*/
-    /*}*/
+    .sidebar
+    {
+        display: none;
+    }
 }

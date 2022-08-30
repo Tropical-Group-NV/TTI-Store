@@ -9,12 +9,14 @@
     </x-slot>
     @endif
     <div class="py-12">
-        <ul class="flex">
-            <div  class="max-w-7xl  w-full mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+        <div class="flex ">
+            <div class="hidemobile" style="position: absolute;z-index: 100">
+                @livewire('filter')
+            </div>
+
+            <div style="max-width: 110rem" class="w-full mx-auto sm:px-6 lg:px-8">
                     @livewire('items')
                 </div>
-            </div>
                 @if(\Illuminate\Support\Facades\Auth::user() != null)
                 <div  class="" id="toggleCart" style="position: fixed;right: 0;z-index: 100">
                     <aside class="w-full shadow-xl sm:rounded-lg outline-amber-300 outline-8">
@@ -25,32 +27,32 @@
                         </div>
                     </aside>
                 </div>
-            <div style="z-index: 100" id="shoppingCart" class="">
+            <div style="z-index: 100" id="shoppingCart" class="sidebar">
                 @livewire('sidebar')
             </div>
                     @endif
             </div>
-        </ul>
+        </div>
     </div>
 </x-app-layout>
 <script>
     function toggleCart()
     {
-        if (window.screen.width < 600)
-        {
-            document.getElementById('shoppingCart').classList.add('hidden');
-            document.getElementById('toggleCart').classList.remove('hidden');
-            if (document.getElementById('shoppingCart').classList.contains('hidden'))
-            {
-                document.getElementById('shoppingCart').classList.remove('hidden');
-                document.getElementById('toggleCart').classList.add('hidden');
-            }
-            else
-            {
-                document.getElementById('shoppingCart').classList.add('hidden');
-                document.getElementById('toggleCart').classList.remove('hidden');
-            }
-        }
+        // if (window.screen.width < 600)
+        // {
+        //     document.getElementById('shoppingCart').classList.add('hidden');
+        //     document.getElementById('toggleCart').classList.remove('hidden');
+        //     if (document.getElementById('shoppingCart').classList.contains('hidden'))
+        //     {
+        //         document.getElementById('shoppingCart').classList.remove('hidden');
+        //         document.getElementById('toggleCart').classList.add('hidden');
+        //     }
+        //     else
+        //     {
+        //         document.getElementById('shoppingCart').classList.add('hidden');
+        //         document.getElementById('toggleCart').classList.remove('hidden');
+        //     }
+        // }
         if (document.getElementById('shoppingCart').classList.contains('hidden'))
         {
             document.getElementById('shoppingCart').classList.remove('hidden');
@@ -60,6 +62,14 @@
         {
             document.getElementById('shoppingCart').classList.add('hidden');
             document.getElementById('toggleCart').classList.remove('hidden');
+
         }
+        if (document.getElementById('shoppingCart').classList.contains('sidebar'))
+        {
+            document.getElementById('shoppingCart').classList.remove('sidebar');
+            document.getElementById('shoppingCart').classList.remove('hidden');
+            document.getElementById('toggleCart').classList.add('hidden');
+        }
+
     }
 </script>

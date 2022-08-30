@@ -3,6 +3,7 @@
   'cart' => 'App\\Http\\Livewire\\Cart',
   'checkout' => 'App\\Http\\Livewire\\Checkout',
   'counter' => 'App\\Http\\Livewire\\Counter',
+  'filter' => 'App\\Http\\Livewire\\Filter',
   'item' => 'App\\Http\\Livewire\\Item',
   'items' => 'App\\Http\\Livewire\\Items',
   'order' => 'App\\Http\\Livewire\\Order',

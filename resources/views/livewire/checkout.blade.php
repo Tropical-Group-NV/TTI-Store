@@ -2,9 +2,9 @@
     @php($terms = \App\Models\Term::all())
     @php($messages = \App\Models\CustomerMessage::query()->where('IsActive', 1)->get())
     <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">
-        Your Order
+        Your Cart
     </h1>
-    <form wire:submit.prevent="createSalesOrder">
+    <form onkeydown="return event.key != 'Enter';" wire:submit.prevent="createSalesOrder">
 
 
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
@@ -94,7 +94,7 @@
                         <th class="">
                             Item
                         </th>
-                        <th class="">
+                        <th class="hidemobile">
                             Description
                         </th>
                         <th class="">
@@ -117,8 +117,11 @@
                             @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
                             @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
                             <tr class="border-b">
-                                <td class="p-6" style="font-family: sfsemibold">
-                                    {{ $item->BarCodeValue }}
+                                <td class="p-6 hidemobile"  style="font-family: sfsemibold">
+                                    <span>
+                                        {{ $item->BarCodeValue }}
+                                    </span>
+
                                 </td>
                                 <td>
                                     <div class="flex">
@@ -127,7 +130,7 @@
                                         @else
                                             <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 150px" alt="Card image cap">
                                         @endif
-                                        <span style="margin-top: auto;margin-bottom: auto; margin-left: 0; font-family: sfsemibold">{{ $item->Description }}</span>
+                                        <span class="hidemobile" style="margin-top: auto;margin-bottom: auto; margin-left: 0; font-family: sfsemibold">{{ $item->Description }}</span>
                                     </div>
                                 </td>
                                 <td>
@@ -140,10 +143,10 @@
 
                                 </td>
                                 <td>
-                                    SRD {{ substr($item->SalesPrice, 0, -3) }}
+                                    <span class="hidemobile">SRD</span> {{ substr($item->SalesPrice, 0, -3) }}
                                 </td>
                                 <td class="p-6">
-                                    SRD {{ $cartItem->qty * $item->SalesPrice  }}
+                                    <span class="hidemobile">SRD</span> {{ $cartItem->qty * $item->SalesPrice  }}
                                 </td>
                                 <td>
 
@@ -161,10 +164,10 @@
                         </td>
                         <td>
                         </td>
-                        <td>
+                        <td class="hidemobile">
                         </td>
                         <td class="p-6">
-                            SRD {{ $subTotal }}
+                            <span class="hidemobile">SRD</span> {{ $subTotal }}
                         </td>
                     </tr>
                     </tfoot>
