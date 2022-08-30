@@ -1,4 +1,4 @@
-<div style="min-width: 400px; max-width: 800px">
+<div style="min-width: 300px; max-width: 800px">
     @php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())
     @php($brand_srch= 1)
     <aside class="w-full shadow-xl sm:rounded-lg">

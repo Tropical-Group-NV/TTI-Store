@@ -1,4 +1,4 @@
-<div style="min-width: 400px; right: 0; position: absolute" class=" h-full">
+<div style="min-width: 300px; right: 0; position: absolute" class=" h-full">
     <aside class="w-full shadow-xl sm:rounded-lg">
         <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">
 
