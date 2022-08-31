@@ -19,12 +19,26 @@ Route::get('/', function ()
    return redirect(\route('dashboard'));
 });
 
+Route::get('/home', function ()
+{
+   return view('home');
+});
+
 Route::middleware([
 ])->group(function () {
     Route::get('/items', function () {
         return view('dashboard');
     })->name('dashboard');
 });
+
+//Route::middleware([
+//])->group(function () {
+//    Route::get('/items', function () {
+//        return view('dashboard');
+//    })->name('items');
+//});
+
+
 
 Route::get('items/{id}', function( Request $request)
 {

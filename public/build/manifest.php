@@ -4,6 +4,7 @@
   'checkout' => 'App\\Http\\Livewire\\Checkout',
   'counter' => 'App\\Http\\Livewire\\Counter',
   'filter' => 'App\\Http\\Livewire\\Filter',
+  'home' => 'App\\Http\\Livewire\\Home',
   'item' => 'App\\Http\\Livewire\\Item',
   'items' => 'App\\Http\\Livewire\\Items',
   'order' => 'App\\Http\\Livewire\\Order',
