@@ -10,30 +10,30 @@
     @endif
     <div class="py-12">
         <div class="flex ">
-            <div>
-                <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">
-                    Locations
-                </h1>
-                <div style="min-width: 350px;">
+{{--            <div>--}}
+{{--                <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">--}}
+{{--                    Locations--}}
+{{--                </h1>--}}
+{{--                <div style="min-width: 350px;">--}}
 
-                        <aside class="w-full shadow-xl sm:rounded-lg">
-                            <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">
-                                <div style="z-index: 5; overflow-y: auto;max-height: 700px;">
-                                    <div>
-                                        @if(isset($_REQUEST['search']))
-                                            {{ $_REQUEST['search'] }}
-                                            <input name="search" style="display: none" type="text" value="{{ $_REQUEST['search'] }}">
-                                        @endif
+{{--                        <aside class="w-full shadow-xl sm:rounded-lg">--}}
+{{--                            <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">--}}
+{{--                                <div style="z-index: 5; overflow-y: auto;max-height: 700px;">--}}
+{{--                                    <div>--}}
+{{--                                        @if(isset($_REQUEST['search']))--}}
+{{--                                            {{ $_REQUEST['search'] }}--}}
+{{--                                            <input name="search" style="display: none" type="text" value="{{ $_REQUEST['search'] }}">--}}
+{{--                                        @endif--}}
 
-                                    </div>
-                                </div>
-                            </div>
-                        </aside>
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </aside>--}}
 
-                    </form>
-                </div>
+{{--                    </form>--}}
+{{--                </div>--}}
 
-            </div>
+{{--            </div>--}}
             <div style="max-width: 110rem" class="w-full mx-auto sm:px-6 lg:px-8">
                 @livewire('home')
             </div>
