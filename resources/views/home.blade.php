@@ -1,4 +1,7 @@
 <x-app-layout>
+    <h1 style="font-family: sfsemibold; font-size: 35px">
+{{--        <img style="opacity: 1; padding-left: 20%; padd" src="{{ asset('Logo-05.png') }}" alt="">--}}
+    </h1>
     @if(isset($_REQUEST['order']))
         <x-slot name="header">
         <span  style="font-family: sfsemibold; font-size: 40px">
@@ -8,32 +11,9 @@
         </span>
         </x-slot>
     @endif
+
     <div class="py-12">
-        <div class="flex ">
-{{--            <div>--}}
-{{--                <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">--}}
-{{--                    Locations--}}
-{{--                </h1>--}}
-{{--                <div style="min-width: 350px;">--}}
-
-{{--                        <aside class="w-full shadow-xl sm:rounded-lg">--}}
-{{--                            <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">--}}
-{{--                                <div style="z-index: 5; overflow-y: auto;max-height: 700px;">--}}
-{{--                                    <div>--}}
-{{--                                        @if(isset($_REQUEST['search']))--}}
-{{--                                            {{ $_REQUEST['search'] }}--}}
-{{--                                            <input name="search" style="display: none" type="text" value="{{ $_REQUEST['search'] }}">--}}
-{{--                                        @endif--}}
-
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </aside>--}}
-
-{{--                    </form>--}}
-{{--                </div>--}}
-
-{{--            </div>--}}
+        <div class="flex">
             <div style="max-width: 110rem" class="w-full mx-auto sm:px-6 lg:px-8">
                 @livewire('home')
             </div>
@@ -48,9 +28,7 @@
                     </aside>
                 </div>
                 <div style="z-index: 100" id="shoppingCart" class="sidebar">
-                    <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">
-                        Shopping Cart
-                    </h1>
+
                     @livewire('sidebar')
                 </div>
             @endif

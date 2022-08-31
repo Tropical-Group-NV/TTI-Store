@@ -1,7 +1,10 @@
-@php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())
+{{--@php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())--}}
 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+{{--    <link rel="stylesheet" href="{{ asset('css/custom.css?v=').time() }}">--}}
 
-<div>
+
+
+    <div>
 
     <form id="searchform" action="">
         <br>
@@ -100,7 +103,14 @@
     </div>
     <br>
     @endif
-    <div style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4">
+    <div id="itemwrapper" style="" class="bg-gray-200 bg-opacity-25 grid col4">
+        <script>
+            console.log(console)
+            if(screen.availWidth > 700 && screen.availWidth < 800)
+            {
+                document.getElementById('itemwrapper'). classList.remove('md:grid-cols-4')
+            }
+        </script>
 {{--        {{ print_r($items) }}--}}
         @foreach($items as $item)
             @if($items == '1')

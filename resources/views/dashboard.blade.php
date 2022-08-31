@@ -10,7 +10,7 @@
     @endif
     <div class="py-12">
         <div class="flex ">
-            <div class="hidemobile" style="position: ;z-index: 100">
+            <div class="hidemobile" style=";z-index: 100">
                 @livewire('filter')
             </div>
 

@@ -1,8 +1,5 @@
 <div>
     @php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())
-    <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">
-        Home
-    </h1>
     <div style="height: 100px" class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
         <div>
             <form id="searchform" action="{{ route('dashboard') }}">
@@ -74,7 +71,7 @@
         </div>
 
         <div>
-            <div style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4">
+            <div style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4 md:grid-rows-1">
                 @foreach($onSale as $sale_item)
                     @if(!is_array($sale_item))
                     @if($sale_item->onsale == 1)
