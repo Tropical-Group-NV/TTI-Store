@@ -73,6 +73,15 @@
 
 @media only screen and (max-width: 600px)
 {
+    .mobile-float-absolute
+    {
+        position: absolute;
+    }
+
+    .mobile-float-fixed
+    {
+        position: fixed;
+    }
     .hidemobile
     {
         display: none;
@@ -91,6 +100,13 @@
     }
 
     .sidebar
+    {
+        display: none;
+    }
+}
+@media only screen and (min-width: 600px)
+{
+    .hidepc
     {
         display: none;
     }

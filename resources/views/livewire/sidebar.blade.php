@@ -1,16 +1,18 @@
-<div style="min-width: 300px; right: 0; position: absolute" class=" h-full">
+<div style="min-width: 400px; right: 0;" class=" h-full mobile-float-fixed">
     <aside class="w-full shadow-xl sm:rounded-lg">
         <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">
 
-            <button onclick="toggleCart()" data-modal-toggle="shoppingCart">
+            <button class="hidepc" style="position: absolute" onclick="toggleCart()" data-modal-toggle="shoppingCart">
                 <img width="24" height="24" src="https://www.svgrepo.com/show/273966/close.svg">
             </button>
-            <div style="z-index: 5; overflow-y: auto;height: auto;">
+            <div style="z-index: 5; overflow-y: auto;max-height: 800px;">
                 <span style="font-family: sfsemibold; font-size: 35px" class="p-6">
                    Shopping Cart
                 </span>
                 <br>
-                <table class="sm:rounded-lg table-auto border border-spacing-2">
+                <hr>
+                <br>
+                <table class="sm:rounded-lg table-auto border border-spacing-2 w-full">
                     <thead>
                     <tr class="border border-slate-600 border-spacing-2">
                         <th class=" border-collapse: separate border border-slate-600">
@@ -86,16 +88,19 @@
                 <br>
             </div>
             <br>
-            @if($cartItemExist)
-                <a href="{{ route('checkout') }}">
-                    <button style="right: 0; background-color: #0069AD; color: white" class="btn">
-                        Checkout
-                    </button >
-                </a>
-            <button wire:loading.attr="disabled" wire:click="clearCart" class="btn btn-danger">
-                Clear cart
-            </button>
-            @endif
+            <div style="float: right">
+                @if($cartItemExist)
+                    <a href="{{ route('checkout') }}">
+                        <button style="right: 0; background-color: #0069AD; color: white" class="btn">
+                            Checkout
+                        </button >
+                    </a>
+                    <button wire:loading.attr="disabled" wire:click="clearCart" class="btn btn-danger">
+                        Clear cart
+                    </button>
+                @endif
+            </div>
+
 
 
         </div>
