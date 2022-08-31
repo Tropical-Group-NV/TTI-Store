@@ -16,13 +16,13 @@ use Illuminate\Http\Request;
 
 Route::get('/', function ()
 {
-   return redirect(\route('dashboard'));
+   return redirect(\route('home'));
 });
 
 Route::get('/home', function ()
 {
    return view('home');
-});
+})->name('home');
 
 Route::middleware([
 ])->group(function () {

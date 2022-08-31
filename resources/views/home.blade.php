@@ -49,7 +49,7 @@
                 </div>
                 <div style="z-index: 100" id="shoppingCart" class="sidebar">
                     <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">
-                        Cart
+                        Shopping Cart
                     </h1>
                     @livewire('sidebar')
                 </div>
