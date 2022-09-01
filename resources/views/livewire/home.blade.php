@@ -93,7 +93,7 @@
                         <div class="card-body" style="position: relative">
                             <a href="{{ route('item', $item->ListID) }}">
                                 <div style="height: 100px" class="">
-                                    <h5  style="font-family: sfsemibold" class="card-title">{{ $item->Description }}</h5>
+                                    <h5  style="font-family: sfsemibold; font-size: 20px" class="card-title">{{ $item->Description }}</h5>
                                     <h5><b>{{$item->FullName}}</b></h5>
                                     <br>
                                 </div>
