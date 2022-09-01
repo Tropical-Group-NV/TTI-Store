@@ -2,6 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Mail\OrderNew;
+use App\Models\QbCustomer;
+use App\Models\SalesOrder;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -10,6 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use App\Http\Livewire\Orders;
+use Illuminate\Support\Facades\Mail;
 
 class Import_Sales_Order_To_QB implements ShouldQueue
 {
@@ -34,7 +38,14 @@ class Import_Sales_Order_To_QB implements ShouldQueue
      */
     public function handle()
     {
-        DB::connection('qb_sales')->select( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $this->sales_order_id);
+        $model = SalesOrder::query()->where('id', $this->sales_order_id)->first();
+        $c = QbCustomer::query()->where('ListID', $model->CustomerRefListID)->first();
+        $logo = asset('tti-new_email');
+        $qrLogo = asset('tti-email-qr');
+        $currency = 'SRD';
+        DB::connection('qb_sales')->update( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $this->sales_order_id. '; SET NOCOUNT ON;');
+        Mail::to($c->Email)->send(new OrderNew($this->sales_order_id));
+
 
     }
 }

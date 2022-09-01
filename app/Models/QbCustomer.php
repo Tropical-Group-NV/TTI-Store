@@ -5,14 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class QbCustomer extends Model
 {
     use HasFactory;
+    use HasFactory;
     protected $connection='qb_sales';
-    protected $table= 'view_item';
-    public $primaryKey = 'ListID';
+    protected $table= 'view_qb_customer';
+    protected $primaryKey = 'ListID';
     public $incrementing = false;
-
-    public $timestamps= false;
-
 }

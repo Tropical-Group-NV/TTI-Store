@@ -3,8 +3,10 @@
 namespace App\Http\Livewire;
 
 use App\Jobs\Import_Sales_Order_To_QB;
+use App\Jobs\SendFirstOrderMail;
 use App\Models\CartItem;
 use App\Models\CustomerMessage;
+use App\Models\QbCustomer;
 use App\Models\SalesOrderItem;
 use Illuminate\Http\Request;
 use App\Models\Customer;
@@ -12,6 +14,7 @@ use App\Models\SalesOrder;
 use App\Models\Term;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use phpDocumentor\Reflection\Types\This;
 
@@ -33,8 +36,6 @@ class Checkout extends Component
     {
         $this->date= date('Y-m-d');
         $this->srch_sw= 'dewfwqfqf';
-//        $this->terms = Term::all();
-//        $this->customers = Customer::query()->orderBy('text', 'ASC')->get();
     }
 
     protected $listeners =
@@ -94,7 +95,6 @@ class Checkout extends Component
     public function createSalesOrder(Request $request)
     {
         $cartItems = CartItem::query()->where('uid', Auth::user()->id)->get();
-//        $customer = DB::connection('epas')->table('QB_Customer')->where('ListID', '80001417-1633477470')->first();
         $customer = DB::connection('epas')->table('QB_Customer')->where('ListID', $this->customer_id)->first();
         if ($this->msg_id != '')
         {
@@ -140,16 +140,8 @@ class Checkout extends Component
             $saleItem->save();
         }
         CartItem::query()->where('uid', Auth::user()->id)->delete();
-        $this->status_msg = 'Your order has been submitted.✅';
-//        Import_Sales_Order_To_QB::dispatch($sale->id);
-        $msg = 'Your order has been submitted.✅';
-//                exit();
-//
-//        DB::connection('qb_sales')->select( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $sale->id);
-
+        SendFirstOrderMail::dispatch($this->customer_id);
+        Import_Sales_Order_To_QB::dispatch($sale->id);
         return redirect()->to(route('dashboard') . '?order=' . $sale->id);
-
-
-
     }
 }

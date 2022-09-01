@@ -11,6 +11,8 @@ use Livewire\Component;
 class Items extends Component
 {
 
+    public $srch_sw;
+    public $search_customer;
     public $brand_srch;
     public $search2;
     public $search_str;
@@ -176,6 +178,11 @@ class Items extends Component
                 $item->save();
             }
         }
+    }
+    public function search()
+    {
+        $this->search_sw = 1;
+        $this->customers = DB::connection('epas')->table('QB_Customer')->where('ISActive', 1)->where('Name', 'LIKE', '%' . $this->search_customer . '%')->orderBy('Name', 'ASC')->limit(10)->get();
     }
     public function load($id)
     {

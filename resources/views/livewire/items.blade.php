@@ -1,10 +1,8 @@
-{{--@php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())--}}
+@php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())
+{{--@php(\Illuminate\Support\Facades\Mail::to('jamil.kasan@tropicalgroupnv.com')->send(new \App\Mail\OrderNew('77825')))--}}
 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-{{--    <link rel="stylesheet" href="{{ asset('css/custom.css?v=').time() }}">--}}
 
-
-
-    <div>
+<div>
 
     <form id="searchform" action="">
         <br>
@@ -72,18 +70,12 @@
                                                     <h1>{{ $itm->Description }}</h1>
                                                 </ul>
                                             </a>
-
                                             <hr>
                                         @endif
-
                                     @endif
                                 @endforeach
                             @endif
                         </div>
-
-
-
-
                     </div>
                 </div>
 
@@ -103,14 +95,7 @@
     </div>
     <br>
     @endif
-    <div id="itemwrapper" style="" class="bg-gray-200 bg-opacity-25 grid col4">
-        <script>
-            console.log(console)
-            if(screen.availWidth > 700 && screen.availWidth < 800)
-            {
-                document.getElementById('itemwrapper'). classList.remove('md:grid-cols-4')
-            }
-        </script>
+    <div style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4">
 {{--        {{ print_r($items) }}--}}
         @foreach($items as $item)
             @if($items == '1')
@@ -133,7 +118,7 @@
                 <div class="card-body" style="position: relative">
                     <a href="{{ route('item', $item->ListID) }}">
                         <div style="height: 100px" class="">
-                            <h5  style="font-family: sfsemibold" class="card-title">{{ $item->Description }}</h5>
+                            <h5  style="font-family: sfsemibold; font-size: 20px" class="card-title">{{ $item->Description }}</h5>
                             <h5><b>{{$item->FullName}}</b></h5>
                             <br>
                         </div>
@@ -199,23 +184,45 @@
 {{--                                            </button>--}}
                                         </span>
 {{--                                            <input class="" id="input-{{ $item->ListID }}" type="number" value="0" name="qty">--}}
-                                            <select @if($item->QuantityOnHand <= 0) disabled @endif id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
-                                                @php($count=0)
-                                                @if($item->QuantityOnHand > 0)
-                                                @while($count != $item->QuantityOnHand)
-                                                    @php($count++ )
-                                                    <option value="{{ $count }}">{{ $count }}</option>
-                                                @endwhile
-                                                @else
-                                                    <option value="0">0</option>
-                                                    @endif
-                                            </select>
-                                            <span wire:click="load('add{{ $item->ListID }}')" class="input-group-btn input-group-append">
+                                            @if($item->QuantityOnHand <= 0)
+                                                <input type="hidden" name="customer-id-{{ $item->ListID }}" id="customer-id-{{ $item->ListID }}">
+                                                <input placeholder="Search Customer" id="customer-search-{{ $item->ListID }}" onkeydown="searchCustomer('{{ $item->ListID }}')" style="width: 500px" class="ring-2 ring-blue-500 form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"/>
+                                                <div id="searchWrap" style="position:relative; width: 400px;overflow-y: auto; max-height: 400px; z-index: 10;" class="block appearance-none  border border-blue-500 text-gray-700 rounded leading-tight focus:outline-none bg-gray-50 focus:border-gray-500">
+{{--                                                    <div wire:loading="search" wire:target="search({{ $item->ListID }})" style="border-radius: 50px">--}}
+{{--                                                        <img src="{{ asset('ttistore_loading.gif') }}" style="height: 100px; margin: 0px;">--}}
+{{--                                                    </div>--}}
+                                                    <div id="customer-wrap-{{ $item->ListID }}">
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                <select id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
+                                                    @php($count=0)
+                                                    @while($count != 1000)
+                                                        @php($count++ )
+                                                        <option value="{{ $count }}">{{ $count }}</option>
+                                                    @endwhile
+                                                </select>
+                                                <span wire:click="load('add{{ $item->ListID }}')" class="input-group-btn input-group-append">
+                                            <button style="background-color: #0069AD; font-family: sfsemibold"  wire:loading.attr="disabled" wire:click="addToCart( '{{ $item->ListID }}', document.getElementById('input-{{ $item->ListID }}').value)" class="btn">
+                                                <img wire:loading wire:target="load('add{{ $item->ListID }}')" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
+                                                <span class="text-white" wire:loading.remove  wire:target="load('add{{ $item->ListID }}')">Add Backorder</span>
+{{--                                                <svg wire:loading.remove  wire:target="load('add{{ $item->ListID }}')" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.459-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.21-3.015c-.698-.03-1.367-.171-1.991-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-2v2h-1v-2h-2v-1h2v-2h1v2h2v1z"/></svg>--}}
+                                            </button>
+                                            @else
+                                                <select id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
+                                                    @php($count=0)
+                                                    @while($count != 1000)
+                                                        @php($count++ )
+                                                        <option value="{{ $count }}">{{ $count }}</option>
+                                                    @endwhile
+                                                </select>
+                                                <span wire:click="load('add{{ $item->ListID }}')" class="input-group-btn input-group-append">
                                             <button style="background-color: #0069AD; font-family: sfsemibold" @if($item->QuantityOnHand <= 0) disabled @endif @if($item->QuantityOnHand > 0) wire:loading.attr="disabled" wire:click="addToCart( '{{ $item->ListID }}', document.getElementById('input-{{ $item->ListID }}').value)" @endif   class="btn">
                                                 <img wire:loading wire:target="load('add{{ $item->ListID }}')" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
                                                 <span class="text-white" wire:loading.remove  wire:target="load('add{{ $item->ListID }}')">Add to cart</span>
 {{--                                                <svg wire:loading.remove  wire:target="load('add{{ $item->ListID }}')" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.459-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.21-3.015c-.698-.03-1.367-.171-1.991-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-2v2h-1v-2h-2v-1h2v-2h1v2h2v1z"/></svg>--}}
                                             </button>
+                                            @endif
                                         </span>
                                         </div>
                                     </div>
@@ -232,6 +239,20 @@
 {{--            <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" alt="">--}}
 {{--            <img src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb"  data-noaft="1" style="height: 100%; margin: 0px;">--}}
 {{--        </div>--}}
+
+
+        <script>
+            function searchCustomer(elID)
+            {
+                const customers = new XMLHttpRequest();
+                customers.onload = function()
+                {
+                    document.getElementById("customer-wrap-" + elID).innerHTML = this.responseText;
+                }
+                customers.open("GET", '{{ route('getCustomers') }}?id=' + elID + '&search=' + document.getElementById('customer-search-' + elID).value , true);
+                customers.send();
+            }
+        </script>
 
         <script>
             function added(id)
