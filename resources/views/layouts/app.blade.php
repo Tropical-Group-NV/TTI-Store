@@ -42,9 +42,9 @@
 <x-jet-banner />
 
 <div class="min-h-screen bg-gray-100">
-    {{--            @if ($_SERVER['REQUEST_URI'] != '/home')--}}
+                @if ($_SERVER['REQUEST_URI'] != '/home')
     @livewire('navigation-menu')
-    {{--            @endif--}}
+                @endif
 
 
     <!-- Page Heading -->

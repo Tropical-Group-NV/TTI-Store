@@ -95,7 +95,14 @@
     </div>
     <br>
     @endif
-    <div style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4">
+    <div id="itemWrap" style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4">
+        <script>
+            if (screen.width < 800)
+            {
+
+                document.getElementById('itemWrap').classList.remove('md:grid-cols-4');
+            }
+        </script>
 {{--        {{ print_r($items) }}--}}
         @foreach($items as $item)
             @if($items == '1')

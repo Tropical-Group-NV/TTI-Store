@@ -22,7 +22,7 @@ class Checkout extends Component
 {
     public $srch_sw;
     public $customer_id;
-    public $term_id;
+    public $term_id = 'E0000-1129212579';
     public $msg_id;
     public $memo;
     public $date;

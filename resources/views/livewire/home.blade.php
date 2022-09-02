@@ -16,7 +16,7 @@
 
                         </div>
                     </div>
-                    <div id="list_search" style="padding-left: 50px; padding-right: 50px;z-index: 100; position: absolute; max-height: 200px" class="collapse @if(strlen($search2) > 0 and $search_sw == 1 and !empty($list)) show @endif">
+                    <div id="list_search" style="padding-left: 50px; padding-right: 50px;z-index: 100; position: absolute; max-height: 200px" class="collapse @if(strlen($search2) > 0 and $search_sw == 1 and !empty($list) or $search_sw == 1) show @endif">
                         <div class="card card-body">
                             <div style="border-radius: 50px" wire:loading>
                                 <img src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">
@@ -71,7 +71,14 @@
         </div>
 
         <div>
-            <div style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4 md:grid-rows-1">
+            <div id="itemWrap" style="overflow-x: auto" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4 md:grid-rows-1 flex">
+                <script>
+                    if (screen.width < 800)
+                    {
+
+                        document.getElementById('itemWrap').classList.remove('md:grid-cols-4');
+                    }
+                </script>
                 @foreach($onSale as $sale_item)
                     @if(!is_array($sale_item))
                     @if($sale_item->onsale == 1)

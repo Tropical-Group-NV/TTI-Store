@@ -11,11 +11,11 @@
         <div style="overflow-x: auto" class="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
             <div style="overflow-x: auto">
                 <div class="grid md:grid-cols-3">
-                    <div>
-                        <label style="font-family: sflight; font-size: 20px" for="">Customer(please type in atleast 3 characters to search)
+                    <div  >
+                        <label style="font-family: sflight; font-size: 20px" for="">Search Customers
                             <br>
                             <input wire:model="customer_id" type="hidden" name="customer_id" id="customer_id">
-                            <input id="search" onclick="@this.srch_sw= 1" wire:keydown="search" wire:model="search_customer"  style="width: 500px" class="ring-2 ring-blue-500 form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"/>
+                            <input id="search" onclick="@this.srch_sw= 1" wire:keydown="search" wire:model="search_customer"  style="width: 300px" class="ring-2 ring-blue-500 form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"/>
                             <div id="searchWrap" style="position: absolute; width: 500px;overflow-y: auto; max-height: 400px; z-index: 10;@if($srch_sw == 0) display: none @endif" class="block appearance-none  border border-blue-500 text-gray-700 rounded leading-tight focus:outline-none bg-gray-50 focus:border-gray-500">
                                 <div wire:loading="search" wire:target="search" style="border-radius: 50px">
                                     <img src="{{ asset('ttistore_loading.gif') }}" style="height: 100px; margin: 0px;">
@@ -45,17 +45,18 @@
                             </div>
                         </label>
                     </div>
+
                     <div style="width: 600px">
                         <label style="font-family: sflight; font-size: 20px" for="">Date
                             <br>
-                            <input wire:model="date" name="date" id="date" style="width: 500px" type="date" class=" border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
+                            <input wire:model="date" name="date" id="date" style="width: 300px" type="date" class=" border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
 
                         </label>
                     </div>
                     <div>
                         <label style="font-family: sflight; font-size: 20px" for="">Term
                             <br>
-                            <select wire:model="term_id" name="term" id="term" style="width: 500px" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
+                            <select required wire:model="term_id" name="term" id="term" style="width: 300px" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
                                 <option value="">Select term</option>
                                 @foreach($terms as $term)
                                 <option value="{{ $term->ListID }}">{{ $term->Name }}</option>
@@ -65,7 +66,11 @@
                     </div>
                 </div>
                 <br>
+
                 <div class="grid grid-cols-3 md:grid-cols-3">
+
+                        <input type="text" required name="custname" id="custname" style="width: 300px; display: none" class=" border border-gray-200 bg-gray-50 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+
                     <div>
                         <label  style="font-family: sflight; font-size: 20px" for="">Adress
                             <br>
@@ -204,7 +209,7 @@
                     </div>
                     <div style="" class="p-6">
                         <a href="{{ route('dashboard') }}">
-                            <button type="button"  style="right: 0; background-color: #0069AD; color: white;" class="btn">
+                            <button onclick="checkCustomers()" type="button"  style="right: 0; background-color: #0069AD; color: white;" class="btn">
                                 Keep shopping
                             </button>
                         </a>
@@ -213,6 +218,17 @@
             </div>
         </div>
     </div>
+        <script>
+            function checkCustomers()
+            {
+                if (document.getElementById('customer_id').value === '')
+                {
+                    alert('Please Select Customer')
+                }
+            }
+
+        </script>
+
     <script>
         // document.getElementById('searchWrap').style.display = 'none';
         document.getElementById('date').value = {{ date('Y-m-d') }};
@@ -222,6 +238,7 @@
             document.getElementById('shipto').value = adr1 + '\r\n' +adr2 + '\r\n' +adr3 + '\r\n' + adr4 + '\r\n' +adr5;
             document.getElementById('shipto').value = adr1 + '\r\n' +adr2 + '\r\n' +adr3 + '\r\n' + adr4 + '\r\n' +adr5;
             document.getElementById('customer_id').value = id;
+            document.getElementById('custname').value = name;
             document.getElementById('search').value = name;
             @this.search_customer = name;
             @this.customer_id = id;
