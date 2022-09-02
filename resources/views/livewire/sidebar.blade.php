@@ -1,6 +1,6 @@
-<div style="position:relative;">
-    <div style="min-width: 400px; right: 0; position: sticky; position: -webkit-sticky; top: 0" class="mobile-float-fixed">
-        <aside class="w-full shadow-xl sm:rounded-lg">
+<div>
+    <div style="; right: 0; position: sticky; position: -webkit-sticky;" class="mobile-float-fixed">
+        <aside class="shadow-xl sm:rounded-lg">
             <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">
 
                 <button class="hidepc" style="position: absolute" onclick="toggleCart()" data-modal-toggle="shoppingCart">

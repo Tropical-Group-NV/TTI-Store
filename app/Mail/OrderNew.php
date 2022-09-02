@@ -36,6 +36,6 @@ class OrderNew extends Mailable
         $logo = public_path('tti-new_email.jpg');
         $qrLogo = public_path('tti-email-qr.png');
         $currency = 'SRD';
-        return $this->view('emails.orders.ordernew', compact('model', 'customer', 'logo', 'qrLogo', 'currency'));
+        return $this->view('emails.orders.ordernew', compact('model', 'customer', 'logo', 'qrLogo', 'currency'))->subject('Uw bestelling via TTIStore - S.O. '. $model->RefNumber);
     }
 }

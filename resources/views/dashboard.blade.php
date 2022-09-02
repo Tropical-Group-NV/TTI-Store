@@ -27,7 +27,7 @@
                         </div>
                     </aside>
                 </div>
-            <div style="z-index: 100" id="shoppingCart" class="sidebar">
+            <div style="z-index: 100; right: 0" id="shoppingCart" class="sidebar mobile-float-fixed">
                 @livewire('sidebar')
             </div>
                     @endif

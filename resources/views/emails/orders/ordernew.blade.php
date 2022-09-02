@@ -37,7 +37,7 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                         </tr>
                                         <tr>
                                             <td style="width: 80px"><?=$currency=='USD'?'Date':'Datum'?></td>
-                                            <td><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?php date('Y-M-D')?></div></td>
+                                            <td><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?php echo $model->TxnDate ?></div></td>
                                         </tr>
                                     </table>
                                     <hr>
@@ -112,7 +112,7 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                         <tbody>
                                         <tr>
                                             <td><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$model->PONumber?:'&nbsp;'?></div></td>
-                                            <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?php date('Y-M-D')?></div></td>
+                                            <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?php echo $model->ShipDate?></div></td>
                                             <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$model->TermsRefFullName?:'&nbsp;'?></div></td>
                                             <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->SalesRepRefFullName?:'&nbsp;'?></div></td>
                                             <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->CustomFieldKlanttype?:'&nbsp;'?></div></td>

@@ -1,5 +1,8 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
+use Illuminate\Http\Request;
+
+
 return [
 
     /*
@@ -13,10 +16,11 @@ return [
     |
     */
 
-    'defaults' => [
-        'guard' => 'web',
-        'passwords' => 'users',
-    ],
+    'defaults' =>
+        [
+            'guard' => 'web',
+            'passwords' => 'users',
+        ],
 
     /*
     |--------------------------------------------------------------------------
@@ -35,14 +39,19 @@ return [
     |
     */
 
-    'guards' => [
-        'web' => [
-            'driver' => 'session',
-
-            'provider' => 'ldap',
-//            'provider' => 'users',
+    'guards' =>
+        [
+            'eloquent' =>
+                [
+                    'driver' => 'session',
+                    'provider' => 'users',
+                ],
+            'web' =>
+            [
+                'driver' => 'session',
+                'provider' => 'ldap',
+            ],
         ],
-    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -65,11 +74,9 @@ return [
         'ldap' =>  [
             'driver' => 'ldap',
             'model' => LdapRecord\Models\ActiveDirectory\User::class,
-//            'model' => \App\Ldap\User::class,
             'rules' => [],
             'database' => [
                 'model' => \App\Models\User::class,
-//                'model' => \App\Ldap\User::class,
                 'sync_passwords' => true,
                 'sync_attributes' => [
                     'username'=>'sAMAccountname' ,
