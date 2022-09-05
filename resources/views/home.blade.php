@@ -20,8 +20,14 @@
                 <div  class="" >
                     <aside class="w-full shadow-xl sm:rounded-lg outline-amber-300 outline-8">
                         <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">
-                            <img style="width: 400px; padding-bottom: 30px" src="{{ asset('ex1.jpg') }}" alt="">
-                            <img src="{{ asset('ex2.jpg') }}" alt="">
+                            <a href="{{ route('dashboard') }}">Items</a>
+                            <br>
+                            @if(\Illuminate\Support\Facades\Auth::user() != null)
+                            <a href="{{ route('orders') }}">Orders</a>
+                            <br>
+                            <a href="{{ route('backorders') }}">Backorders</a>
+                            <br>
+                            @endif
                         </div>
                     </aside>
                 </div>

@@ -13,16 +13,19 @@
                 slide: function( event, ui ) {
                     // $( "#amount" ).val( "SRD" + ui.values[ 0 ] + " - SRD" + ui.values[ 1 ] );
                     $( "#min" ).text( "SRD " + ui.values[ 0 ]);
+                    $( "#min-value" ).val(ui.values[ 0 ]);
                     $( "#max" ).text( "SRD " + ui.values[ 1 ]);
+                    $( "#max-value" ).val( ui.values[ 1 ]);
                 }
             });
             $( "#min" ).text( "SRD " + $( "#slider-range" ).slider( "values", 0 )  );
+            $( "#min-value" ).val( $( "#slider-range" ).slider( "values", 0 )  );
             $( "#max" ).text( "SRD " + $( "#slider-range" ).slider( "values", 1 )  );
+            $( "#max-value" ).val( $( "#slider-range" ).slider( "values", 1 )  );
             // $( "#min" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ));
         } );
     </script>
 
-    @php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())
     @php($brand_srch= 1)
     <form method="GET" action="">
 
@@ -35,10 +38,10 @@
                     <hr>
                     <br>
                     <div>
-                        @if(isset($_REQUEST['search']))
-                            {{ $_REQUEST['search'] }}
-                            <input name="search" style="display: none" type="text" value="{{ $_REQUEST['search'] }}">
-                        @endif
+{{--                        @if(isset($_REQUEST['search']))--}}
+{{--                            {{ $_REQUEST['search'] }}--}}
+{{--                            <input name="search" style="display: none" type="text" value="{{ $_REQUEST['search'] }}">--}}
+{{--                        @endif--}}
                         <h1 style="font-family: sflight; font-size: 20px">
                             Brand
                         </h1>
@@ -64,18 +67,10 @@
                         <h1 style="font-family: sflight; font-size: 20px">
                             Branch
                         </h1>
-                        <select onchange="document.getElementById('searchform').submit()" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="branch" id="">
+                        <select class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="branch" id="">
                             <option value="">Select Branch</option>
-                            @foreach($brands as $brand)
-                                @if($brand_srch != '' or $brand_srch != null)
-                                    @if($brand_srch == $brand->name)
-                                        <option selected value="{{ $brand->name }}">{{ $brand->name }}</option>
-                                    @else
-                                        <option value="{{ $brand->name }}">{{ $brand->name }}</option>
-                                    @endif
-                                @else
-                                    <option value="{{ $brand->name }}">{{ $brand->name }}</option>
-                                @endif
+                            @foreach($branches as $branch)
+                                <option value="{{ $branch->CustomFieldBranch }}">{{ $branch->CustomFieldBranch }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -95,8 +90,10 @@
                         </div>
                         <div style="padding-left: 20px; padding-right: 20px" class="flex">
                             <span id="min" style="border:0; font-weight:bold; padding-right: 20px; width: 120px"></span>
+                            <input type="hidden" id="min-value" name="min">
                             <span style="border:0; font-weight:bold; padding-right: 20px; width: 50px">-</span>
                             <span  id="max" style="border:0; font-weight:bold; padding-right: 20px; width: 120px"></span>
+                            <input type="hidden" id="max-value" name="max">
                         </div>
 
 
@@ -109,7 +106,7 @@
                             Unit
                         </h1>
                         <br>
-                        <select class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="" id="">
+                        <select class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="unit" id="unit">
                             <option value="Tray á 6 stuks">Tray á 6 stuks</option>
                             <option value="Tray á 12 stuks">Tray á 12 stuks</option>
                             <option value="Stuks">Stuks</option>

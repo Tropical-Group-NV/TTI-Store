@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Livewire;
+use App\Models\BackOrders;
 use App\Models\CartItem;
+use App\Models\Customer;
 use http\Params;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +13,7 @@ use Livewire\Component;
 class Items extends Component
 {
 
+    public $notification_sw;
     public $srch_sw;
     public $search_customer;
     public $brand_srch;
@@ -79,6 +82,16 @@ class Items extends Component
     public function render(Request $request)
     {
 //        $items = DB::connection('epas')->table('item')->where('IsActive', '0')->orderBy('TimeModified', 'DESC')->limit(10)->get();
+        if (isset($_REQUEST['brand']))
+        {
+            return view('livewire.items',
+                [
+                    'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $_REQUEST['brand'] . '%')->where('CustomFieldBranch', 'LIKE', '%' . $_REQUEST['branch'] . '%')->where('UnitOfMeasureSetRefFullName', 'LIKE', '%' . $_REQUEST['unit'] . '%')->where('SalesPrice', '>',   $_REQUEST['min'] )->where('SalesPrice', '<',   $_REQUEST['max'] )->orderBy('TimeModified', 'DESC')->paginate(12)
+                ]
+            );
+        }
+
+
         if ($this->search_str != null or $this->search_str != '')
         {
             if ($this->brand_srch != '' or $this->brand_srch != null)
@@ -132,6 +145,8 @@ class Items extends Component
             $item->uid = Auth::user()->id;
             $item->save();
             $this->emit('updateCart');
+            $this->dispatchBrowserEvent('addedcart', ['message' => 'Added to cart']);
+            $this->notification_sw = 1;
         }
     }
     public function removeFromCart($cartItemID)
@@ -179,6 +194,33 @@ class Items extends Component
             }
         }
     }
+
+    public function addBackorder($itm, $qty, $cID)
+    {
+        $customer = Customer::query()->where('ListID', $cID)->first();
+        $bo = new BackOrders();
+        $bo->CustomerRefListID = $cID;
+        $bo->ListID = $itm;
+        $bo->OrderQuantity = 0;
+        $bo->BackOrderQuantity = $qty;
+        $bo->uid = Auth::user()->id;
+        $bo->email = $customer->Email;
+        $bo->mail_is_send = 0;
+        $bo->mail_send_date_time = null;
+        $bo->QuantityOnHandOnCreated = 0;
+        $bo->QuantityOnHandOnMailSend = null;
+        $bo->first_mail_is_send = 0;
+        $bo->save();
+        if ($bo->save())
+        {
+            $this->dispatchBrowserEvent('addedbo', ['message' => 'Added to backorder']);
+        }
+        else
+        {
+            $this->dispatchBrowserEvent('update', ['message' => 'Failed']);
+        }
+    }
+
     public function search()
     {
         $this->search_sw = 1;

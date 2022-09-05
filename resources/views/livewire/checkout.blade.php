@@ -232,6 +232,13 @@
     <script>
         // document.getElementById('searchWrap').style.display = 'none';
         document.getElementById('date').value = {{ date('Y-m-d') }};
+
+        @if(isset($_REQUEST['customerid']))
+        @php($customerBO = \Illuminate\Support\Facades\DB::connection('epas')->table('QB_Customer')->first())
+        document.getElementById('adress').value = '{{ $customerBO->ShipAddressBlockAddr1 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr2 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr3 }}' + '\r\n' + '{{ $customerBO->ShipAddressBlockAddr4 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr5 }}';
+        document.getElementById('shipto').value = '{{ $customerBO->ShipAddressBlockAddr1 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr2 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr3 }}' + '\r\n' + '{{ $customerBO->ShipAddressBlockAddr4 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr5 }}';
+        @endif
+
         function addAddress(adr1, adr2, adr3, adr4, adr5, id, name)
         {
             document.getElementById('adress').value = adr1 + '\r\n' +adr2 + '\r\n' +adr3 + '\r\n' + adr4 + '\r\n' +adr5;

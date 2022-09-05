@@ -79,7 +79,12 @@ Route::get('orders/{id}', function( Request $request)
 {
     $id = $request->id;
     return view('order', compact('id'));
-})->name('order');
+})->middleware('auth')->name('order');
+
+Route::get('backorders', function( Request $request)
+{
+    return view('backorders');
+})->middleware('auth')->name('backorders');
 
 
 

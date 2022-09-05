@@ -46,10 +46,11 @@ class AuthServiceProvider extends ServiceProvider
                         if ($findCustomer)
                         {
                             Auth::guard('eloquent');
-                            $validated = Auth::guard('eloquent')->attempt([
-                                'username' => $request->username,
-                                'password' => $request->password
-                            ]);
+                            $validated = Auth::guard('eloquent')->attempt(['username' => $request->username, 'password' => $request->password]);
+                            if ($validated)
+                            {
+                                Auth::loginUsingId($user->id);
+                            }
                         }
                         else
                         {
@@ -59,14 +60,6 @@ class AuthServiceProvider extends ServiceProvider
                                 'sAMAccountname' => $request->username,
                                 'password' => $request->password
                             ]);
-//                            if ($validated)
-//                            {
-//                                die('Result1');
-//                            }
-//                            else
-//                            {
-//                                die('result2');
-//                            }
                         }
                     }
                     else

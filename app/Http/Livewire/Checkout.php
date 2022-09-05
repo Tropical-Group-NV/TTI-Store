@@ -36,6 +36,13 @@ class Checkout extends Component
     {
         $this->date= date('Y-m-d');
         $this->srch_sw= 'dewfwqfqf';
+
+        if (isset($_REQUEST['customerid']))
+        {
+            $customer = Customer::query()->where('ListID', $_REQUEST['customerid'])->get()->first();
+            $this->customer_id = $_REQUEST['customerid'];
+            $this->search_customer = $customer->Name;
+        }
     }
 
     protected $listeners =

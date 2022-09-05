@@ -72,6 +72,9 @@
 
         <div>
             <div id="itemWrap" style="overflow-x: auto" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4 md:grid-rows-1 flex">
+                <img src="" alt="">
+            </div>
+            <div id="itemWrap" style="overflow-x: auto" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4 md:grid-rows-1 flex">
                 <script>
                     if (screen.width < 800)
                     {

@@ -1,4 +1,7 @@
 <div>
+    <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">
+        Your Orders
+    </h1>
         <div class="bg-white shadow-xl sm:rounded-lg">
             <div style="overflow-x: auto" class="  py-12 2xl:px-20 md:px-6 px-4">
                 <div style="overflow-x: auto">
