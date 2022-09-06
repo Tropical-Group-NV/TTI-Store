@@ -9,19 +9,47 @@
                 range: true,
                 min: 0,
                 max: 10000,
+                @if(isset($_REQUEST['brand']))
+                values: [ '{{ $_REQUEST['min'] }}', '{{ $_REQUEST['max'] }}' ],
+                @else
                 values: [ 0, 10000 ],
+                @endif
                 slide: function( event, ui ) {
                     // $( "#amount" ).val( "SRD" + ui.values[ 0 ] + " - SRD" + ui.values[ 1 ] );
                     $( "#min" ).text( "SRD " + ui.values[ 0 ]);
                     $( "#min-value" ).val(ui.values[ 0 ]);
                     $( "#max" ).text( "SRD " + ui.values[ 1 ]);
                     $( "#max-value" ).val( ui.values[ 1 ]);
+{{--                    @if(isset($_REQUEST['brand']))--}}
+{{--                    $( "#min" ).text( "SRD " + '{{ $_REQUEST['min'] }}');--}}
+{{--                    $( "#min-value" ).val('{{ $_REQUEST['min'] }}');--}}
+{{--                    $( "#max" ).text( "SRD " + '{{ $_REQUEST['max'] }}');--}}
+{{--                    $( "#max-value" ).val( '{{ $_REQUEST['max'] }}');--}}
+{{--                    @else--}}
+{{--                    $( "#min" ).text( "SRD " + ui.values[ 0 ]);--}}
+{{--                    $( "#min-value" ).val(ui.values[ 0 ]);--}}
+{{--                    $( "#max" ).text( "SRD " + ui.values[ 1 ]);--}}
+{{--                    $( "#max-value" ).val( ui.values[ 1 ]);--}}
+{{--                    @endif--}}
+
                 }
             });
+            // $( "#min" ).text( "SRD " + $( "#slider-range" ).slider( "values", 0 )  );
+            // $( "#min-value" ).val( $( "#slider-range" ).slider( "values", 0 )  );
+            // $( "#max" ).text( "SRD " + $( "#slider-range" ).slider( "values", 1 )  );
+            // $( "#max-value" ).val( $( "#slider-range" ).slider( "values", 1 )  );
+            @if(isset($_REQUEST['brand']))
+            $( "#min" ).text( "SRD " + '{{ $_REQUEST['min'] }}'  );
+            $( "#min-value" ).val( '{{ $_REQUEST['min'] }} ' );
+            $( "#max" ).text( "SRD " + '{{ $_REQUEST['max'] }}'   );
+            $( "#max-value" ).val( '{{ $_REQUEST['max'] }}'  );
+            @else
             $( "#min" ).text( "SRD " + $( "#slider-range" ).slider( "values", 0 )  );
             $( "#min-value" ).val( $( "#slider-range" ).slider( "values", 0 )  );
             $( "#max" ).text( "SRD " + $( "#slider-range" ).slider( "values", 1 )  );
             $( "#max-value" ).val( $( "#slider-range" ).slider( "values", 1 )  );
+            @endif
+
             // $( "#min" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ));
         } );
     </script>
@@ -31,10 +59,11 @@
 
         <aside class="w-full shadow-xl sm:rounded-lg">
             <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">
-                <div style="z-index: 5; overflow-y: auto;max-height: 700px;">
+                <div style="z-index: 5;max-height: 700px;">
                 <span style="font-family: sfsemibold; font-size: 35px" class="p-6">
                    Filters
                 </span>
+                    <br>
                     <hr>
                     <br>
                     <div>
@@ -42,21 +71,17 @@
 {{--                            {{ $_REQUEST['search'] }}--}}
 {{--                            <input name="search" style="display: none" type="text" value="{{ $_REQUEST['search'] }}">--}}
 {{--                        @endif--}}
-                        <h1 style="font-family: sflight; font-size: 20px">
+                        <h1  style="font-family: sflight; font-size: 20px">
                             Brand
                         </h1>
-                        <select class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="brand" id="">
+                        <select @if(isset($_REQUEST['brand'])) @endif class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="brand" id="brand">
                             <option value="">Select Brand</option>
                             @foreach($brands as $brand)
-                                @if($brand_srch != '' or $brand_srch != null)
-                                    @if($brand_srch == $brand->name)
+                                    @if(isset($_REQUEST['brand']) == $brand->name)
                                         <option selected value="{{ $brand->name }}">{{ $brand->name }}</option>
                                     @else
                                         <option value="{{ $brand->name }}">{{ $brand->name }}</option>
                                     @endif
-                                @else
-                                    <option value="{{ $brand->name }}">{{ $brand->name }}</option>
-                                @endif
                             @endforeach
                         </select>
                     </div>
@@ -67,8 +92,8 @@
                         <h1 style="font-family: sflight; font-size: 20px">
                             Branch
                         </h1>
-                        <select class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="branch" id="">
-                            <option value="">Select Branch</option>
+                        <select class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="branch" id="branch">
+                            <option name="branch" value="">Select Branch</option>
                             @foreach($branches as $branch)
                                 <option value="{{ $branch->CustomFieldBranch }}">{{ $branch->CustomFieldBranch }}</option>
                             @endforeach
@@ -135,4 +160,18 @@
         </aside>
 
     </form>
+    <script>
+        @if(isset($_REQUEST['unit']))
+            document.getElementById('unit').value = '{{ $_REQUEST['unit'] }}';
+        @endif
+        @if(isset($_REQUEST['brand']))
+            document.getElementById('brand').value = '{{ $_REQUEST['brand'] }}';
+        @endif
+        @if(isset($_REQUEST['branch']))
+            document.getElementById('brand').value = '{{ $_REQUEST['branch'] }}';
+        @endif
+        @if(isset($_REQUEST['search']))
+            document.getElementById('search').value = '{{ $_REQUEST['search'] }}';
+        @endif
+    </script>
     </div>

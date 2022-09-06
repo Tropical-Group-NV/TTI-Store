@@ -7,10 +7,13 @@ use App\Models\SalesOrder;
 use App\Models\SalesOrderItem;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class BackOrders extends Component
 {
-    public $backorders;
+    use WithPagination;
+
+//    public $backorders;
 
     protected $listeners =
         [
@@ -23,7 +26,7 @@ class BackOrders extends Component
     {
         if (Auth::user() != null)
         {
-            $this->backorders = \App\Models\BackOrders::query()->where('uid', Auth::user()->id)->get();
+//            $this->backorders = \App\Models\BackOrders::query()->where('uid', Auth::user()->id)->get();
 
         }
 

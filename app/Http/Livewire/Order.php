@@ -31,6 +31,7 @@ class Order extends Component
     public function reorder()
     {
         $items = SalesOrderItem::query()->where('sales_order_id', $this->order_id)->get();
+        $order = SalesOrder::query()->where('id', $this->order_id)->first();
         foreach ($items as $item)
         {
             $cartItem = new CartItem();
@@ -39,6 +40,6 @@ class Order extends Component
             $cartItem->uid = Auth::user()->id;
             $cartItem->save();
         }
-         return $this->redirect(route('checkout'));
+        return $this->redirect(route('checkout' , 'customerid=' . $order->CustomerRefListID));
     }
 }

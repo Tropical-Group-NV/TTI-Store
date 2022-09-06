@@ -25,6 +25,8 @@ class Sidebar extends Component
         $item = CartItem::query()->where('id', $cartItemID)->first();
         $item->delete();
         $this->emit('updateCart');
+        $this->dispatchBrowserEvent('removedcart', ['message' => 'Added to cart']);
+
     }
 
 
@@ -40,6 +42,8 @@ class Sidebar extends Component
             $item->qty = $qty;
             $item->save();
             $this->emit('updateCart');
+            $this->dispatchBrowserEvent('qtyupdate', ['message' => 'Added to cart']);
+
         }
     }
 
@@ -48,12 +52,16 @@ class Sidebar extends Component
         $item = CartItem::query()->where('id', $id)->first();
         $item->qty = $qty;
         $item->save();
+        $this->dispatchBrowserEvent('qtyupdate', ['message' => 'Added to cart']);
+
     }
 
     public function clearCart()
     {
         $item = CartItem::query()->where('uid', Auth::user()->id)->delete();
         $this->emit('updateCart');
+        $this->dispatchBrowserEvent('clearcart', ['message' => 'Added to cart']);
+
 
     }
 }

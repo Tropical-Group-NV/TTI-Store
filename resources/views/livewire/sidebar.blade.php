@@ -6,12 +6,10 @@
                 <button class="hidepc" style="position: absolute" onclick="toggleCart()" data-modal-toggle="shoppingCart">
                     <img width="24" height="24" src="https://www.svgrepo.com/show/273966/close.svg">
                 </button>
-                <div style="z-index: 5; overflow-y: auto;max-height: 800px;">
-                    @if (Route::current()->uri() != 'home')
+                <div style="z-index: 5; overflow-y: auto;max-height: 400px;">
                         <span style="font-family: sfsemibold; font-size: 35px" class="p-6">
                    Shopping Cart
                 </span>
-                    @endif
                     <br>
                     <hr>
                     <br>

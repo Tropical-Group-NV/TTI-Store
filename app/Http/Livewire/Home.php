@@ -10,6 +10,7 @@ use Livewire\Component;
 
 class Home extends Component
 {
+    public $saleUnlimit;
     public $onSale;
     public $brand_srch;
     public $search2;
@@ -19,17 +20,49 @@ class Home extends Component
     public $message;
     public $list;
     public $readyToLoad = false;
+    public $restocked;
+
+    protected $listeners =
+        [
+            'showMore' => 'render',
+            'updateCart' => 'render'
+        ]
+    ;
 
     public function render()
     {
-        return view('livewire.home');
+        return view('livewire.home', ['onSale' => $this->onSale]);
     }
 
     public function mount()
     {
-        $this->onSale = OnSale::query()->get();
+
+        if ($this->saleUnlimit == 1)
+        {
+            $this->onSale = OnSale::query()->get();
+
+        }
+        else
+        {
+            $this->onSale = OnSale::query()->limit(6)->get();
+
+        }
+        $this->restocked = \App\Models\Item::query()->orderBy('TimeModified' , 'DESC')->limit(8)->get();
         $this->list = DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->orderBy('TimeModified', 'DESC')->limit(12)->get();
 
+    }
+
+    public function saleUnlimited()
+    {
+        $this->saleUnlimit = 1;
+        $this->onSale = OnSale::query()->get();
+        $this->emit('showMore');
+    }
+    public function saleLimited()
+    {
+        $this->saleUnlimit = 0;
+        $this->onSale = OnSale::query()->limit(6)->get();
+        $this->emit('showMore');
     }
 
     public function sug_search()
@@ -69,6 +102,8 @@ class Home extends Component
             $item->uid = Auth::user()->id;
             $item->save();
             $this->emit('updateCart');
+            $this->dispatchBrowserEvent('addedcart', ['message' => 'Added to cart']);
+
         }
     }
 

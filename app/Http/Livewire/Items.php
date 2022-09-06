@@ -9,9 +9,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Items extends Component
 {
+    use WithPagination;
 
     public $notification_sw;
     public $srch_sw;
@@ -86,7 +88,7 @@ class Items extends Component
         {
             return view('livewire.items',
                 [
-                    'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $_REQUEST['brand'] . '%')->where('CustomFieldBranch', 'LIKE', '%' . $_REQUEST['branch'] . '%')->where('UnitOfMeasureSetRefFullName', 'LIKE', '%' . $_REQUEST['unit'] . '%')->where('SalesPrice', '>',   $_REQUEST['min'] )->where('SalesPrice', '<',   $_REQUEST['max'] )->orderBy('TimeModified', 'DESC')->paginate(12)
+                    'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $_REQUEST['brand'] . '%')->where('CustomFieldBranch', 'LIKE', '%' . $_REQUEST['branch'] . '%')->where('UnitOfMeasureSetRefFullName' ,  $_REQUEST['unit'] )->where('SalesPrice', '>',   $_REQUEST['min'] )->where('SalesPrice', '<',   $_REQUEST['max'] )->orderBy('TimeModified', 'DESC')->paginate(12)
                 ]
             );
         }
@@ -205,15 +207,16 @@ class Items extends Component
         $bo->BackOrderQuantity = $qty;
         $bo->uid = Auth::user()->id;
         $bo->email = $customer->Email;
-        $bo->mail_is_send = 0;
+        $bo->mail_is_send = null;
         $bo->mail_send_date_time = null;
         $bo->QuantityOnHandOnCreated = 0;
         $bo->QuantityOnHandOnMailSend = null;
-        $bo->first_mail_is_send = 0;
+        $bo->first_mail_is_send = null;
         $bo->save();
         if ($bo->save())
         {
             $this->dispatchBrowserEvent('addedbo', ['message' => 'Added to backorder']);
+            \App\Jobs\BackOrdersNotification::dispatch();
         }
         else
         {

@@ -1,4 +1,5 @@
 <div>
+    @php($backorders = \App\Models\BackOrders::query()->where('uid', Auth::user()->id)->orderBy('id', 'DESC')->paginate(10))
     <div>
         <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">
             Your Backorders
@@ -90,6 +91,8 @@
 
                         </tbody>
                     </table>
+
+                    {{ $backorders->links() }}
 
                 </div>
             </div>

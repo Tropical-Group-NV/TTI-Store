@@ -5,9 +5,7 @@
         Your Cart
     </h1>
     <form onkeydown="return event.key != 'Enter';" wire:submit.prevent="createSalesOrder">
-
-
-    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
         <div style="overflow-x: auto" class="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
             <div style="overflow-x: auto">
                 <div class="grid md:grid-cols-3">
@@ -202,7 +200,7 @@
                 </div>
                 <div class="flex">
                     <div class="p-6">
-                        <button  style="right: 0; background-color: #0069AD; color: white" class=" btn">
+                        <button style="right: 0; background-color: #0069AD; color: white" class=" btn">
                         <img wire:loading wire:target="createSalesOrder" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
                         Submit order
                     </button>
@@ -234,9 +232,12 @@
         document.getElementById('date').value = {{ date('Y-m-d') }};
 
         @if(isset($_REQUEST['customerid']))
-        @php($customerBO = \Illuminate\Support\Facades\DB::connection('epas')->table('QB_Customer')->first())
+        @php($customerBO = \Illuminate\Support\Facades\DB::connection('epas')->table('QB_Customer')->where('ListID', $_REQUEST['customerid'])->first())
         document.getElementById('adress').value = '{{ $customerBO->ShipAddressBlockAddr1 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr2 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr3 }}' + '\r\n' + '{{ $customerBO->ShipAddressBlockAddr4 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr5 }}';
         document.getElementById('shipto').value = '{{ $customerBO->ShipAddressBlockAddr1 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr2 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr3 }}' + '\r\n' + '{{ $customerBO->ShipAddressBlockAddr4 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr5 }}';
+        document.getElementById('customer_id').value = '{{ $_REQUEST['customerid'] }}';
+        {{--@this.customer_id = '{{ $_REQUEST['customerid'] }}';--}}
+        document.getElementById('custname').value = 'name';
         @endif
 
         function addAddress(adr1, adr2, adr3, adr4, adr5, id, name)

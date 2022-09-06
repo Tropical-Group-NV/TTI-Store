@@ -1,18 +1,19 @@
 {{--@php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())--}}
 {{--@php(\Illuminate\Support\Facades\Mail::to('jamil.kasan@tropicalgroupnv.com')->send(new \App\Mail\OrderNew('77825')))--}}
+{{--@php(\Illuminate\Support\Facades\Mail::to('jamil.kasan@tropicalgroupnv.com')->send(new \App\Mail\BackOrdersFirst('739')))--}}
 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-    {{--    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>--}}
+{{--        <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>--}}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
 
     <div>
 
+
         <form id="searchform" action="">
             <br>
-
             <div>
-                <div  style="padding-left: 50px; padding-right: 50px">
+                <div style="padding-left: 50px; padding-right: 50px">
                     <div>
                         <ul class="flex btn-group">
                             <input style="height:50px" id=search_input wire:keydown="sug_search" wire:model="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block form-control" autocomplete="false" type="search">
@@ -173,7 +174,7 @@
                                     <div>
                                             @if($item->QuantityOnHand <= 0)
                                                 <input type="hidden" id="customer-id-{{ $item->ListID }}">
-                                                <input class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" id="customer-search-{{ $item->ListID }}" onkeyup="searchCustomer('{{ $item->ListID }}')">
+                                                <input placeholder="Search Customers" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" id="customer-search-{{ $item->ListID }}" onkeyup="searchCustomer('{{ $item->ListID }}')">
                                             <div style="position: absolute; z-index: 1000; min-width: 300px; display: none" class="bg-gray-50 border" id="customer-wrap-{{ $item->ListID }}">
 
                                             </div>
@@ -273,6 +274,8 @@
         </div>
         <script>
             // alert('loaded')Z
+
+
             window.addEventListener('addedcart', (e) => {
                 toastr.success("Added to Cart")
             });

@@ -22,7 +22,7 @@
                         {{ __('Orders') }}
                     </x-jet-nav-link>
                     <x-jet-nav-link  href="{{ route('backorders') }}" :active="request()->routeIs('backorders')">
-                        {{ __('Backrders') }}
+                        {{ __('Backorders') }}
                     </x-jet-nav-link>
                 </div>
             </div>
