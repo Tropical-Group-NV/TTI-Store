@@ -273,18 +273,18 @@
 
         </div>
         <script>
-            // alert('loaded')Z
-
-
             window.addEventListener('addedcart', (e) => {
                 toastr.success("Added to Cart")
             });
-
-            window.addEventListener('addedbo', (e) => {
-                toastr.success("Backorder created")
+            window.addEventListener('removedcart', (e) => {
+                toastr.warning("Removed from Cart")
             });
-
-            @php($notification_sw = 0)
+            window.addEventListener('clearcart', (e) => {
+                toastr.warning("Cart cleared")
+            });
+            window.addEventListener('qtyupdate', (e) => {
+                toastr.info("Updated Quantity")
+            });
         </script>
         <script>
             document.body.addEventListener('click', function ()
@@ -309,6 +309,7 @@
                 }
             }
         </script>
+
 
 
     </div>
