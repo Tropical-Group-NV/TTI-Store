@@ -1,15 +1,15 @@
 <div>
-    <div style="; right: 0; position: sticky; position: -webkit-sticky;" class="mobile-float-fixed">
+    <div style="; right: 0;" class="">
         <aside class="shadow-xl sm:rounded-lg">
-            <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">
+            <div class="overflow-y-auto py-4 px-3 bg-white rounded" style="width: 310px">
 
-                <button class="hidepc" style="position: absolute" onclick="toggleCart()" data-modal-toggle="shoppingCart">
+                <button class="block 2xl:hidden" style="position: absolute" onclick="toggleCart()" data-modal-toggle="shoppingCart">
                     <img width="24" height="24" src="https://www.svgrepo.com/show/273966/close.svg">
                 </button>
                 <div style="z-index: 5; overflow-y: auto;max-height: 400px;">
                         <span style="font-family: sfsemibold; font-size: 35px" class="p-6">
-                   Shopping Cart
-                </span>
+                            Shopping Cart
+                        </span>
                     <br>
                     <hr>
                     <br>
@@ -89,21 +89,18 @@
                     <br>
                 </div>
                 <br>
-                <div style="float: right">
+                <div>
                     @if($cartItemExist)
-                        <a href="{{ route('checkout') }}">
+                        <button style="float: left" wire:loading.attr="disabled" wire:click="clearCart" class="btn btn-danger">
+                            Clear cart
+                        </button>
+                        <a style="float: right" href="{{ route('checkout') }}">
                             <button style="right: 0; background-color: #0069AD; color: white" class="btn">
                                 Checkout
                             </button >
                         </a>
-                        <button wire:loading.attr="disabled" wire:click="clearCart" class="btn btn-danger">
-                            Clear cart
-                        </button>
                     @endif
                 </div>
-
-
-
             </div>
         </aside>
     </div>

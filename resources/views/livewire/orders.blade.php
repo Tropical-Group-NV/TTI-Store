@@ -85,10 +85,9 @@
                             </tbody>
                         </table>
                     </div>
-
-
+                </div>
+                <div class="w-20">
                     {{ $orders->links() }}
-
                 </div>
             </div>
         </div>

@@ -6,11 +6,12 @@
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div style="overflow-x: auto" class="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
                 <div style="overflow-x: auto">
-                    <div class="grid md:grid-cols-3">
+                    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
                         <div>
                             <label style="font-family: sflight; font-size: 20px" for="">
+                                Customer
                                 <br>
-                                <input disabled value="{{ $order->BillAddressAddr1 }}" style="width: 500px" class="ring-2 ring-blue-500 form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"/>
+                                <input disabled value="{{ $order->BillAddressAddr1 }}" style="width: 500px" class="w-full form-control block appearance-none  border text-gray-700 rounded leading-tight focus:outline-none"/>
                             </label>
                         </div>
                         <div style="width: 600px">
@@ -23,12 +24,12 @@
                         <div>
                             <label style="font-family: sflight; font-size: 20px" for="">Term
                                 <br>
-                                <input disabled value="{{ $order->TermsRefFullName }}" type="text" style="width: 500px" class="ring-2 ring-blue-500 form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                                <input disabled value="{{ $order->TermsRefFullName }}" type="text" style="width: 500px" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
                             </label>
                         </div>
                     </div>
                     <br>
-                    <div class="grid grid-cols-3 md:grid-cols-3">
+                    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
                         <div>
                             <label  style="font-family: sflight; font-size: 20px" for="">Adress
                                 <br>
@@ -57,7 +58,7 @@
                             <th class="">
                                 Item
                             </th>
-                            <th class="">
+                            <th class="hidden md:hidden lg:block">
                                 Description
                             </th>
                             <th class="">
@@ -79,18 +80,20 @@
                                 @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
                                 @php($subTotal = $subTotal + ($order_item->SalesOrderLineAmount))
                                 <tr class="border-b">
-                                    <td class="p-6" style="font-family: sfsemibold">
+                                    <td class="p-6 hidden md:hidden lg:block" style="font-family: sfsemibold">
                                         {{ $item->BarCodeValue }}
                                     </td>
                                     <td>
-                                        <div class="flex">
-                                            @if($image != null)
-                                                <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 150px; width: auto" alt="Card image cap">
-                                            @else
-                                                <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 150px" alt="Card image cap">
-                                            @endif
-                                            <span class="hidemobile" style="margin-top: auto;margin-bottom: auto; margin-left: 0; font-family: sfsemibold">{{ $item->Description }}</span>
-                                        </div>
+                                        <a href="{{ route('item', $item->ListID) }}">
+                                            <div class="flex">
+                                                @if($image != null)
+                                                    <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 150px; width: auto" alt="Card image cap">
+                                                @else
+                                                    <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 150px" alt="Card image cap">
+                                                @endif
+                                                <span class="hidemobile" style="margin-top: auto;margin-bottom: auto; margin-left: 0; font-family: sfsemibold">{{ $item->Description }}</span>
+                                            </div>
+                                        </a>
                                     </td>
                                     <td>
                                         {{ round($order_item->SalesOrderLineQuantity, 2)  }}X
@@ -116,10 +119,10 @@
                             </td>
                             <td>
                             </td>
-                            <td>
+                            <td class="hidden md:hidden lg:block">
                             </td>
                             <td class="">
-                                SRD {{ $subTotal }}
+                                SRD {{ round($subTotal, 2)  }}
                             </td>
                         </tr>
                         </tfoot>

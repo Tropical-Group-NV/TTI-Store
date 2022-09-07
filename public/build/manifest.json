@@ -2,6 +2,9 @@
     "app.css": {
         "file": "../css/app.css"
     },
+    "app.css2": {
+        "file": "../../resources/css/app.css"
+    },
     "app.js": {
         "file": "../js/app.js"
     }

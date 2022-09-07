@@ -1,6 +1,6 @@
 <div style="min-width: 350px;">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-{{--    <link rel="stylesheet" href="{{ asset('css/jquery_ui/custom.css') }}">--}}
+    {{--    <link rel="stylesheet" href="{{ asset('css/jquery_ui/custom.css') }}">--}}
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script>
@@ -20,17 +20,17 @@
                     $( "#min-value" ).val(ui.values[ 0 ]);
                     $( "#max" ).text( "SRD " + ui.values[ 1 ]);
                     $( "#max-value" ).val( ui.values[ 1 ]);
-{{--                    @if(isset($_REQUEST['brand']))--}}
-{{--                    $( "#min" ).text( "SRD " + '{{ $_REQUEST['min'] }}');--}}
-{{--                    $( "#min-value" ).val('{{ $_REQUEST['min'] }}');--}}
-{{--                    $( "#max" ).text( "SRD " + '{{ $_REQUEST['max'] }}');--}}
-{{--                    $( "#max-value" ).val( '{{ $_REQUEST['max'] }}');--}}
-{{--                    @else--}}
-{{--                    $( "#min" ).text( "SRD " + ui.values[ 0 ]);--}}
-{{--                    $( "#min-value" ).val(ui.values[ 0 ]);--}}
-{{--                    $( "#max" ).text( "SRD " + ui.values[ 1 ]);--}}
-{{--                    $( "#max-value" ).val( ui.values[ 1 ]);--}}
-{{--                    @endif--}}
+                    {{--                    @if(isset($_REQUEST['brand']))--}}
+                    {{--                    $( "#min" ).text( "SRD " + '{{ $_REQUEST['min'] }}');--}}
+                    {{--                    $( "#min-value" ).val('{{ $_REQUEST['min'] }}');--}}
+                    {{--                    $( "#max" ).text( "SRD " + '{{ $_REQUEST['max'] }}');--}}
+                    {{--                    $( "#max-value" ).val( '{{ $_REQUEST['max'] }}');--}}
+                    {{--                    @else--}}
+                    {{--                    $( "#min" ).text( "SRD " + ui.values[ 0 ]);--}}
+                    {{--                    $( "#min-value" ).val(ui.values[ 0 ]);--}}
+                    {{--                    $( "#max" ).text( "SRD " + ui.values[ 1 ]);--}}
+                    {{--                    $( "#max-value" ).val( ui.values[ 1 ]);--}}
+                    {{--                    @endif--}}
 
                 }
             });
@@ -54,34 +54,28 @@
         } );
     </script>
 
-    @php($brand_srch= 1)
     <form method="GET" action="">
-
-        <aside class="w-full shadow-xl sm:rounded-lg">
-            <div class="overflow-y-auto py-4 px-3 bg-gray-50 rounded dark:bg-gray-500">
+        <aside class="w-full border border-black shadow-xl sm:rounded-lg">
+            <div class="overflow-y-auto py-4 px-3 bg-gray-50">
                 <div style="z-index: 5;max-height: 700px;">
-                <span style="font-family: sfsemibold; font-size: 35px" class="p-6">
+                <span style="font-family: sfsemibold; font-size: 35px" class="p-6 hidden md:hidden lg:block">
                    Filters
                 </span>
-                    <br>
-                    <hr>
-                    <br>
+                    <br class="hidden md:hidden lg:block">
+                    <hr class="hidden md:hidden lg:block">
+                    <br class="hidden md:hidden lg:block">
                     <div>
-{{--                        @if(isset($_REQUEST['search']))--}}
-{{--                            {{ $_REQUEST['search'] }}--}}
-{{--                            <input name="search" style="display: none" type="text" value="{{ $_REQUEST['search'] }}">--}}
-{{--                        @endif--}}
                         <h1  style="font-family: sflight; font-size: 20px">
                             Brand
                         </h1>
                         <select @if(isset($_REQUEST['brand'])) @endif class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="brand" id="brand">
                             <option value="">Select Brand</option>
                             @foreach($brands as $brand)
-                                    @if(isset($_REQUEST['brand']) == $brand->name)
-                                        <option selected value="{{ $brand->name }}">{{ $brand->name }}</option>
-                                    @else
-                                        <option value="{{ $brand->name }}">{{ $brand->name }}</option>
-                                    @endif
+                                @if(isset($_REQUEST['brand']) == $brand->name)
+                                    <option selected value="{{ $brand->name }}">{{ $brand->name }}</option>
+                                @else
+                                    <option value="{{ $brand->name }}">{{ $brand->name }}</option>
+                                @endif
                             @endforeach
                         </select>
                     </div>
@@ -102,7 +96,7 @@
                     <br>
                     <hr>
                     <br>
-                    <div>
+                    <div class="">
                         <h1 style="font-family: sflight; font-size: 20px">
                             Price range
                         </h1>
@@ -120,8 +114,6 @@
                             <span  id="max" style="border:0; font-weight:bold; padding-right: 20px; width: 120px"></span>
                             <input type="hidden" id="max-value" name="max">
                         </div>
-
-
                     </div>
                     <br>
                     <hr>
@@ -149,29 +141,33 @@
                     <br>
                     <hr>
                     <br>
-                    <div style="float: right;">
+                    <div style="float: left;">
                         <button class="btn" style="background-color: #0069AD; color: white">
                             Apply filters
+                        </button>
+                    </div>
+                    <div style="float: right;">
+                        <button type="button" onclick="document.getElementById('filters').style.display = 'none'; document.getElementById('toggleFilters').style.display = 'block'" class="btn" style="background-color: #0069AD; color: white">
+                            Close
                         </button>
                     </div>
                 </div>
                 <br>
             </div>
         </aside>
-
     </form>
     <script>
         @if(isset($_REQUEST['unit']))
-            document.getElementById('unit').value = '{{ $_REQUEST['unit'] }}';
+        document.getElementById('unit').value = '{{ $_REQUEST['unit'] }}';
         @endif
         @if(isset($_REQUEST['brand']))
-            document.getElementById('brand').value = '{{ $_REQUEST['brand'] }}';
+        document.getElementById('brand').value = '{{ $_REQUEST['brand'] }}';
         @endif
         @if(isset($_REQUEST['branch']))
-            document.getElementById('brand').value = '{{ $_REQUEST['branch'] }}';
+        document.getElementById('brand').value = '{{ $_REQUEST['branch'] }}';
         @endif
         @if(isset($_REQUEST['search']))
-            document.getElementById('search').value = '{{ $_REQUEST['search'] }}';
+        document.getElementById('search').value = '{{ $_REQUEST['search'] }}';
         @endif
     </script>
-    </div>
+</div>

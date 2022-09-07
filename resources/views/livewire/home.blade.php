@@ -67,7 +67,7 @@
     <br>
 {{--    Add images here for advertisement--}}
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-        <div id="itemWrap"  class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4 md:grid-rows-1 flex">
+        <div id="itemWrap"  class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             <div class="card" style="width: auto;">
                 <div style="margin: auto">
                     <div class="card-body" style="position: relative">
@@ -109,15 +109,7 @@
         </div>
 
         <div>
-
-            <div id="itemWrap" style="overflow-x: auto" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4 md:grid-rows-1 flex">
-                <script>
-                    if (screen.width < 800)
-                    {
-
-                        document.getElementById('itemWrap').classList.remove('md:grid-cols-4');
-                    }
-                </script>
+            <div id="itemWrap" style="overflow-x: auto" class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 @foreach($onSale as $sale_item)
                     @if(!is_array($sale_item))
                         @if($sale_item->onsale == 1)
@@ -147,7 +139,7 @@
                                             {{--                            <span id="item:{{ $item->ListID }}" class="card-text">{{ strip_tags($itemDesc->descriptio  n)  }}</span>--}}
                                         @endif
                                     </a>
-                                    <ul class="border-top flex justify-between" style="bottom: 0; padding: 20px">
+                                    <ul class="border-top flex justify-between  hover:bg-blue-50 " style="bottom: 0; padding: 20px">
                                         <li>
                                             @if(\Illuminate\Support\Facades\Auth::user() != null)
                                                 <span style="padding-top: 10px">Sales price: SRD <b>{{ substr($item->SalesPrice, 0, -3) }}</b></span>
@@ -252,14 +244,7 @@
 
         <div>
 
-            <div id="itemWrap" style="overflow-x: auto" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4 md:grid-rows-1 flex">
-                <script>
-                    if (screen.width < 800)
-                    {
-
-                        document.getElementById('itemWrap').classList.remove('md:grid-cols-4');
-                    }
-                </script>
+            <div  style="overflow-x: auto" class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 @foreach($restocked as $sale_item)
                     @if(!is_array($sale_item))
                             @php($item = \App\Models\Item::query()->where('ListID', $sale_item->ListID)->get()->first())

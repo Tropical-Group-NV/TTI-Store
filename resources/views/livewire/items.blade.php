@@ -1,44 +1,23 @@
-{{--@php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())--}}
-{{--@php(\Illuminate\Support\Facades\Mail::to('jamil.kasan@tropicalgroupnv.com')->send(new \App\Mail\OrderNew('77825')))--}}
-{{--@php(\Illuminate\Support\Facades\Mail::to('jamil.kasan@tropicalgroupnv.com')->send(new \App\Mail\BackOrdersFirst('739')))--}}
 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-{{--        <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>--}}
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-
-
     <div>
 
-
-        <form id="searchform" action="">
             <br>
             <div>
-                <div style="padding-left: 50px; padding-right: 50px">
+                <div class="w-full" style="padding-left: 50px; padding-right: 50px">
                     <div>
+                        <form id="searchform" action="">
                         <ul class="flex btn-group">
                             <input style="height:50px" id=search_input wire:keydown="sug_search" wire:model="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block form-control" autocomplete="false" type="search">
                             <button class="btn " style="background-color: #0069AD; height: 50px">
                                 <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
                             </button>
-                            {{--                            <select onchange="document.getElementById('searchform').submit()" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="brand" id="">--}}
-                            {{--                                <option value="">Select Brand</option>--}}
-                            {{--                                @foreach($brands as $brand)--}}
-                            {{--                                    @if($brand_srch != '' or $brand_srch != null)--}}
-                            {{--                                        @if($brand_srch == $brand->name)--}}
-                            {{--                                            <option selected value="{{ $brand->name }}">{{ $brand->name }}</option>--}}
-                            {{--                                        @else--}}
-                            {{--                                            <option value="{{ $brand->name }}">{{ $brand->name }}</option>--}}
-                            {{--                                        @endif--}}
-                            {{--                                    @else--}}
-                            {{--                                        <option value="{{ $brand->name }}">{{ $brand->name }}</option>--}}
-                            {{--                                    @endif--}}
-                            {{--                                @endforeach--}}
-                            {{--                            </select>--}}
                         </ul>
-
+                        </form>
                     </div>
                 </div>
-                <div id="list_search" style="padding-left: 50px; padding-right: 50px;z-index: 100; position: absolute; max-height: 200px" class="collapse @if(strlen($search2) > 0 and $search_sw == 1 and !empty($list)) show @endif">
+                <div id="list_search" style="padding-left: 50px; padding-right: 68px;z-index: 100; position: absolute; max-height: 200px"  class="collapse @if(strlen($search2) > 0 and $search_sw == 1 and !empty($list)) show @endif">
                     <div class="card card-body">
                         <div style="border-radius: 50px" wire:loading>
                             <img src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">
@@ -83,14 +62,21 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="block md:block lg:block xl:block 2xl:hidden" style="padding-left: 50px; padding-right: 50px; padding-top: 10px">
+                    <button type="button" id="toggleFilters" onclick="this.style.display = 'none'; document.getElementById('filters').style.display = 'block'" class="btn w-full" style="background-color: #0069AD; height: 50px; right: 0; color: white">
+                        Filters
+                    </button>
+                    <div style="padding-top: 10px; display: none" class="w-full " id="filters">
+                        @livewire('filter')
+                    </div>
+                </div>
             </div>
 
 
             {{--        @endif--}}
 
 
-        </form>
+
         <br><br>
         @if($search_str != '')
             <div style="padding-left: 100px; padding-right: 100px">
@@ -100,14 +86,7 @@
             </div>
             <br>
         @endif
-        <div id="itemWrap" style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-4 md:grid-cols-4">
-            <script>
-                if (screen.width < 800)
-                {
-
-                    document.getElementById('itemWrap').classList.remove('md:grid-cols-4');
-                }
-            </script>
+        <div id="itemWrap" style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {{--        {{ print_r($items) }}--}}
             @foreach($items as $item)
                 @if($items == '1')
@@ -117,27 +96,29 @@
                 @php($itemDesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->get()->first())
                 @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
                 <div class="card" style="width: auto;">
-                    <div style="height: 20rem; margin: auto">
+                    <div  style="height: 20rem; margin: auto">
                         <a href="{{ route('item', $item->ListID) }}">
                             @if($image!=null)
                                 <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="width: 350px;" alt="Card image cap">
                             @else
-                                <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 350px" alt="Card image cap">
+                                <img class="card-img-top grayscale" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 350px" alt="Card image cap">
                             @endif
 
                         </a>
                     </div>
                     <div class="card-body" style="position: relative">
-                        <a href="{{ route('item', $item->ListID) }}">
-                            <div style="height: 100px" class="">
-                                <h5  style="font-family: sfsemibold; font-size: 20px" class="card-title">{{ $item->Description }}</h5>
-                                <h5><b>{{$item->FullName}}</b></h5>
-                                <br>
-                            </div>
-                            @if($itemDesc != null)
-                                {{--                            <span id="item:{{ $item->ListID }}" class="card-text">{{ strip_tags($itemDesc->descriptio  n)  }}</span>--}}
-                            @endif
-                        </a>
+                        <div class="hover:bg-gray-50 hover:text-gray-400" >
+                            <a style="text-decoration: none" href="{{ route('item', $item->ListID) }}">
+                                <div style="height: 100px" class="">
+                                    <h5  style="font-family: sfsemibold; font-size: 20px" class="card-title">{{ $item->Description }}</h5>
+                                    <h5><b>{{$item->FullName}}</b></h5>
+                                    <br>
+                                </div>
+                                @if($itemDesc != null)
+                                    {{--                            <span id="item:{{ $item->ListID }}" class="card-text">{{ strip_tags($itemDesc->descriptio  n)  }}</span>--}}
+                                @endif
+                            </a>
+                        </div>
                         <ul class="border-top flex justify-between" style="bottom: 0; padding: 20px">
                             <li>
                                 @if(\Illuminate\Support\Facades\Auth::user() != null)
@@ -284,6 +265,9 @@
             });
             window.addEventListener('qtyupdate', (e) => {
                 toastr.info("Updated Quantity")
+            });
+            window.addEventListener('addedbo', (e) => {
+                toastr.success("Created Backorder")
             });
         </script>
         <script>

@@ -1,4 +1,4 @@
-<nav x-data="{ open: false }" class=" border-b border-gray-100" style="background-color: #0069AD; position: sticky;  position: -webkit-sticky">
+ <nav x-data="{ open: false }" class="border-b border-gray-100 fixed w-full" style="background-color: #0069AD; z-index: 1000">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -88,7 +88,7 @@
                                     <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
                                 </button>
                             @else
-                                <span class="inline-flex rounded-md" s>
+                                <span class="inline-flex rounded-md">
                                     <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition">
                                         {{ Auth::user()->name }}
 
@@ -96,9 +96,11 @@
                                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                         </svg>
                                     </button>
+
                                 </span>
                             @endif
                         </x-slot>
+
 
                         <x-slot name="content">
                             <!-- Account Management -->
@@ -152,7 +154,7 @@
                     </svg>
                 </button>
                 @else
-                    <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">
+                    <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">
                         <a class="text-white" href="{{ route('login') }}"><p>Log in</p></a>
                     </button>
                 @endif
