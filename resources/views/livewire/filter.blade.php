@@ -141,12 +141,12 @@
                     <br>
                     <hr>
                     <br>
-                    <div style="float: left;">
+                    <div style="float: right;">
                         <button class="btn" style="background-color: #0069AD; color: white">
                             Apply filters
                         </button>
                     </div>
-                    <div style="float: right;">
+                    <div style="float: left;">
                         <button type="button" onclick="document.getElementById('filters').style.display = 'none'; document.getElementById('toggleFilters').style.display = 'block'" class="btn" style="background-color: #0069AD; color: white">
                             Close
                         </button>
