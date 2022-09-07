@@ -47,34 +47,34 @@
         <div class="border" style="border-radius: 10px">
             <div style="padding-left: 15px">
                 <div class="py-4 border-b border-gray-200 flex items-center justify-between">
-                    <p class="text-base leading-4 text-gray-800 dark:text-gray-300"> <b>{{ $item->Description }}</b></p>
+                    <p class="text-base leading-4 text-gray-800"> <b>{{ $item->Description }}</b></p>
                     <div class="flex items-center justify-center">
                         <p class="text-sm leading-none text-gray-600 dark:text-gray-300"></p>
                         <img class="hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/productDetail3-svg2dark.svg" alt="next">
                     </div>
                 </div>
                 <div class="py-4 border-b border-gray-200 flex items-center justify-between">
-                    <p class="text-base leading-4 text-gray-800 dark:text-gray-300"><b>{{ $item->BarCodeValue }}</b></p>
+                    <p class="text-base leading-4 text-gray-800"><b>{{ $item->BarCodeValue }}</b></p>
                     <div class="flex items-center justify-center">
                         <p class="text-sm leading-none text-gray-600 dark:text-gray-300"></p>
                         <img class="hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/productDetail3-svg2dark.svg" alt="next">
                     </div>
                 </div>
                 <div class="py-4 border-b border-gray-200 flex items-center justify-between">
-                    <p class="text-base leading-4 text-gray-800 dark:text-gray-300">Price: SRD {{ substr($item->SalesPrice, 0, -3) }}</p>
+                    <p class="text-base leading-4 text-gray-800 ">Price: SRD {{ substr($item->SalesPrice, 0, -3) }}</p>
                     <div class="flex items-center justify-center">
                         <p class="text-sm leading-none text-gray-600 dark:text-gray-300"></p>
                         <img class="hidden dark:block" src="https://tuk-cdn.s3.amazonaws.com/can-uploader/productDetail3-svg2dark.svg" alt="next">
                     </div>
                 </div>
                 <div class="py-4 border-b border-gray-200 flex items-center justify-between">
-                    <p class="text-base leading-4 text-gray-800 dark:text-gray-300">Quantity: {{  substr($item->QuantityOnHand, 0, -6) }} PCs</p>
+                    <p class="text-base leading-4 text-gray-800">Quantity: {{  substr($item->QuantityOnHand, 0, -6) }} PCs</p>
                     <div class="flex items-center justify-center">
                         <p class="text-sm leading-none text-gray-600 dark:text-gray-300 mr-3"></p>
                     </div>
                 </div>
                 <div class="py-4 border-b border-gray-200 ">
-                    <p class="text-base leading-4 text-gray-800 dark:text-gray-300">{!! $itemdesc->description !!}  </p>
+                    <p class="text-base leading-4 text-gray-800">{!! $itemdesc->description !!}  </p>
                     <div class="flex items-center justify-center">
                         <p class="text-sm leading-none text-gray-600 dark:text-gray-300 mr-3"></p>
                     </div>
