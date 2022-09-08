@@ -57,6 +57,7 @@ class Item extends Component
                 'id' => $prod,
             ]);
             $this->render($Request);
+            $this->dispatchBrowserEvent('addedcart', ['message' => 'Added to cart']);
         }
     }
 }

@@ -9,6 +9,7 @@
             <div style="overflow-x: auto" class="items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
                 <div style="overflow-x: auto">
                     <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
+                        @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                         <div  >
                             <label style="font-family: sflight; font-size: 20px" for="">Search Customers
                                 <br>
@@ -43,6 +44,7 @@
                                 </div>
                             </label>
                         </div>
+                        @endif
 
                         <div style="width: 600px">
                             <label style="font-family: sflight; font-size: 20px" for="">Date
@@ -51,7 +53,9 @@
 
                             </label>
                         </div>
-                        <div>
+                            @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+
+                            <div>
                             <label style="font-family: sflight; font-size: 20px" for="">Term
                                 <br>
                                 <select required wire:model="term_id" name="term" id="term" style="width: 300px" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" >
@@ -62,6 +66,8 @@
                                 </select>
                             </label>
                         </div>
+                            @endif
+
                     </div>
                     <br>
 
@@ -182,6 +188,7 @@
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div style="overflow-x: auto" class="items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
                 <div style="overflow-x: auto">
+                    @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                     <div>
                         <h2 style="font-family: sflight; font-size: 20px">Customer message</h2>
                         <select wire:model="msg_id" class="w-full block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="msg" id="msg">
@@ -193,6 +200,7 @@
                             @endforeach
                         </select>
                     </div>
+                    @endif
                     <br>
                     <div>
                         <h2 style="font-family: sflight; font-size: 20px">Memo</h2>
@@ -239,6 +247,15 @@
             document.getElementById('adress').value = '{{ $customerBO->ShipAddressBlockAddr1 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr2 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr3 }}' + '\r\n' + '{{ $customerBO->ShipAddressBlockAddr4 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr5 }}';
             document.getElementById('shipto').value = '{{ $customerBO->ShipAddressBlockAddr1 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr2 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr3 }}' + '\r\n' + '{{ $customerBO->ShipAddressBlockAddr4 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr5 }}';
             document.getElementById('customer_id').value = '{{ $_REQUEST['customerid'] }}';
+            {{--@this.customer_id = '{{ $_REQUEST['customerid'] }}';--}}
+            document.getElementById('custname').value = 'name';
+            @endif
+            @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 3)
+                @php($customerAccount = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('users_customer')->where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->first() )
+                @php($customer = \Illuminate\Support\Facades\DB::connection('epas')->table('QB_Customer')->where('ListID', $customerAccount->customer_ListID)->first())
+            document.getElementById('adress').value = '{{ $customer->ShipAddressBlockAddr1 }}' + '\r\n' +'{{ $customer->ShipAddressBlockAddr2 }}' + '\r\n' +'{{ $customer->ShipAddressBlockAddr3 }}' + '\r\n' + '{{ $customer->ShipAddressBlockAddr4 }}' + '\r\n' +'{{ $customer->ShipAddressBlockAddr5 }}';
+            document.getElementById('shipto').value = '{{ $customer->ShipAddressBlockAddr1 }}' + '\r\n' +'{{ $customer->ShipAddressBlockAddr2 }}' + '\r\n' +'{{ $customer->ShipAddressBlockAddr3 }}' + '\r\n' + '{{ $customer->ShipAddressBlockAddr4 }}' + '\r\n' +'{{ $customer->ShipAddressBlockAddr5 }}';
+            {{--document.getElementById('customer_id').value = '{{ $customerAccount->customer_ListID }}';--}}
             {{--@this.customer_id = '{{ $_REQUEST['customerid'] }}';--}}
             document.getElementById('custname').value = 'name';
             @endif

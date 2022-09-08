@@ -1,12 +1,12 @@
 <div>
     <div style="; right: 0;" class="">
         <aside class="shadow-xl sm:rounded-lg">
-            <div class="overflow-y-auto py-4 px-3 bg-white rounded" style="width: 310px">
+            <div class="overflow-y-auto py-4 px-3 bg-white rounded w-full" style="">
 
-                <button class="block 2xl:hidden" style="position: absolute" onclick="toggleCart()" data-modal-toggle="shoppingCart">
+                <button class="block 2xl:hidden" style="position: absolute; z-index: 1000" onclick="toggleCart()" data-modal-toggle="shoppingCart">
                     <img width="24" height="24" src="https://www.svgrepo.com/show/273966/close.svg">
                 </button>
-                <div style="z-index: 5; overflow-y: auto;max-height: 400px;">
+                <div class="" style="z-index: 5; overflow-y: auto;max-height: 400px; overflow-x: hidden">
                         <span style="font-family: sfsemibold; font-size: 35px" class="p-6">
                             Shopping Cart
                         </span>
@@ -16,9 +16,6 @@
                     <table class="sm:rounded-lg table-auto border border-spacing-2 w-full">
                         <thead>
                         <tr class="border border-slate-600 border-spacing-2">
-                            <th class=" border-collapse: separate border border-slate-600">
-                                Qty
-                            </th>
                             <th class="border-collapse: separate  border border-slate-600">
                                 Item
                             </th>
@@ -34,14 +31,8 @@
                                 @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $cartItem->prod_id)->get()->first())
                                 @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
                                 @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
-                                <tr class="border-collapse: separate border border-slate-600">
-                                    <td class="border border-slate-600 sfsb">
-                                <span style="font-family: sflight" class="sfl">
-                                    {{ $cartItem->qty }}
-                                </span>
-
-                                    </td>
-                                    <td class="border-collapse: separate border border-slate-600">
+                                <tr class="border-collapse">
+                                    <td class="border-collapse">
                                         <a href="{{ route('item', $cartItem->prod_id) }}">
                                             @if($image != null)
                                                 <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="width: 150px" alt="Card image cap">
@@ -50,6 +41,12 @@
 
                                             @endif
                                         </a>
+                                    </td>
+                                    <td class="border-collapse: separate border-slate-600">
+                                    </td>
+                                </tr>
+                                <tr class="border-b">
+                                    <td class="border-collapse: separate border-slate-600">
                                         <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
                                             <span class="input-group-btn input-group-prepend">
                                             <button onclick="Livewire.emit('updateCart')" wire:loading.attr="disabled" wire:click="removeFromCart('{{$cartItem->id}}')" class="btn btn-danger">
@@ -65,8 +62,8 @@
                                             </select>
                                         </div>
                                     </td>
-                                    <td class="border-collapse: separate border border-slate-600">
-                                        SRD {{ $cartItem->qty * $item->SalesPrice }}
+                                    <td class="border-collapse: separate border-slate-600">
+                                        SRD {{ number_format($cartItem->qty * $item->SalesPrice, 2) }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -74,14 +71,11 @@
                         </tbody>
                         <tfoot>
                         <tr>
-                            <td>
+                            <td class="">
                                 Total
                             </td>
-                            <td>
-
-                            </td>
-                            <td class="border-collapse: separate border border-slate-600">
-                                SRD {{ $subTotal }}
+                            <td class="">
+                                SRD {{ number_format($subTotal, 2) }}
                             </td>
                         </tr>
                         </tfoot>

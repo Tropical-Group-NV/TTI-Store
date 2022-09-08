@@ -1,6 +1,6 @@
 <div>
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-    <div style="max-width: 110rem" class="md:flex items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
+    <div style="max-width: 110rem" class="items-start justify-center py-12 px-4 md:px-6  2xl:px-20">
     <div class="">
         <div class="">
             <div style="overflow-x: auto">
@@ -128,7 +128,25 @@
 
     </div>
 
+
     </div>
     </div>
     </div>
+    <script>
+        window.addEventListener('addedcart', (e) => {
+            toastr.success("Added to Cart")
+        });
+        window.addEventListener('removedcart', (e) => {
+            toastr.warning("Removed from Cart")
+        });
+        window.addEventListener('clearcart', (e) => {
+            toastr.warning("Cart cleared")
+        });
+        window.addEventListener('qtyupdate', (e) => {
+            toastr.info("Updated Quantity")
+        });
+        window.addEventListener('addedbo', (e) => {
+            toastr.success("Created Backorder")
+        });
+    </script>
 </div>

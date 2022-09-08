@@ -75,6 +75,15 @@ Route::get('api/get-customers',
 
 //    return view('orders');
     })->name('getCustomers');
+
+Route::get('api/get-items',
+    function( Request $request)
+    {
+        $search = $_REQUEST['search'];
+        return view('api.item-search', compact('search'));
+    })->name('getItems');
+
+
 Route::get('orders/{id}', function( Request $request)
 {
     $id = $request->id;

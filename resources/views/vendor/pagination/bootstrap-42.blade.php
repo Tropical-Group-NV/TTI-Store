@@ -1,5 +1,9 @@
 @php($item = new \App\Http\Livewire\Items())
 @if ($paginator->hasPages())
+    @php($keys = array_keys($_REQUEST))
+    @foreach($keys as $reqs)
+        {{ $reqs }}={{ $_REQUEST[$reqs] }}&
+    @endforeach
     <nav>
         <ul class="pagination">
             {{-- Previous Page Link --}}
@@ -9,7 +13,7 @@
                 </li>
             @else
                 <li class="page-item">
-                    <a class="page-link" href="{{ $paginator->previousPageUrl() }}" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
+                    <a class="page-link" href="{{ $paginator->previousPageUrl() }}?@foreach($keys as $reqs){{ $reqs }}={{ $_REQUEST[$reqs] }}&@endforeach" rel="prev" aria-label="@lang('pagination.previous')">&lsaquo;</a>
                 </li>
             @endif
 
@@ -27,19 +31,7 @@
                         @if ($page == $paginator->currentPage())
                             <li class="page-item active" aria-current="page"><span class="page-link">{{ $page }}</span></li>
                         @else
-                            @if(isset($_REQUEST['search']) or $item->search2 != '')
-                                @if($item->search2 != '')
-                                    <li class="page-item"><a class="page-link" href="{{ $url . '&search=' . $item->search2 }}">{{ $page }}</a></li>
-                                @else
-                                    <li class="page-item"><a class="page-link" href="{{ $url . '&search=' . $_REQUEST['search'] }}">{{ $page }}</a></li>
-                                @endif
-                            @else
-                                @if($item->search2 != '')
-                                <li class="page-item"><a class="page-link" href="{{ $url . '&search=' . $item->search2 }}">{{ $page }}</a></li>
-                            @else
-                                <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
-                                @endif
-                            @endif
+                            <li class="page-item"><a class="page-link" href="{{ $url }}">{{ $page }}</a></li>
                         @endif
                     @endforeach
                 @endif
@@ -48,11 +40,7 @@
             {{-- Next Page Link --}}
             @if ($paginator->hasMorePages())
                 <li class="page-item">
-                    @if(isset($_REQUEST['search']))
-                        <a class="page-link" href="{{ $paginator->nextPageUrl() . '&search=' . $_REQUEST['search'] }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
-                    @else
-                        <a class="page-link" href="{{ $paginator->nextPageUrl() }}" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
-                    @endif
+                        <a class="page-link" href="{{ $paginator->nextPageUrl() }}&@foreach($keys as $reqs){{ $reqs }}={{ $_REQUEST[$reqs] }}@endforeach" rel="next" aria-label="@lang('pagination.next')">&rsaquo;</a>
                 </li>
             @else
                 <li class="page-item disabled" aria-disabled="true" aria-label="@lang('pagination.next')">

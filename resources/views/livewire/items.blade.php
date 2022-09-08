@@ -3,77 +3,88 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <div>
 
-            <br>
-            <div>
-                <div class="w-full" style="padding-left: 50px; padding-right: 50px">
-                    <div>
-                        <form id="searchform" action="">
+        <br>
+        <div>
+            <div class="w-full" style="padding-left: 50px; padding-right: 50px">
+                <div>
+                    <form id="searchform" action="">
                         <ul class="flex btn-group">
-                            <input style="height:50px" id=search_input wire:keydown="sug_search" wire:model="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block form-control" autocomplete="false" type="search">
+{{--                            <input style="height:50px" id=search_input wire:keydown="sug_search" wire:model="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class=" focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block form-control" autocomplete="false" type="search">--}}
+                            <input onkeyup="searchItem()" style="height:50px" id=search_input placeholder="Search..." name="search" class=" focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block form-control" autocomplete="false" type="search">
                             <button class="btn " style="background-color: #0069AD; height: 50px">
                                 <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
                             </button>
                         </ul>
-                        </form>
-                    </div>
+                    </form>
                 </div>
-                <div id="list_search" style="padding-left: 50px; padding-right: 68px;z-index: 100; position: absolute; max-height: 200px"  class="collapse @if(strlen($search2) > 0 and $search_sw == 1 and !empty($list)) show @endif">
-                    <div class="card card-body">
-                        <div style="border-radius: 50px" wire:loading>
-                            <img src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">
-                            {{--                            <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">--}}
-                        </div>
-                        <div style="overflow-y: auto"  wire:loading.remove>
-                            @if(strlen($search2) > 0 and $search_sw == 1)
-                                @foreach($list as $itm)
-                                    @if(is_array($itm))
-                                        @if($itm != null)
-                                            @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $itm['ListID'])->get()->first())
-                                            @if($image != null)
-                                                {{--                                                <a href="#" onclick="document.getElementById('searchform').value = '{{ $itm['Description'] }} }}';document.getElementById('searchform').submit()">--}}
-                                                <a href="{{ route('item', $itm['ListID']) }}" >
-                                                    <ul class="flex hover:bg-gray-50 cursor-pointer">
-                                                        <img src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px" alt="">
-                                                        <h1>{{ $itm['Description'] }}</h1>
-                                                    </ul>
-                                                </a>
-                                                <hr>
-                                                <br>
-                                            @endif
-                                        @endif
+            </div>
+{{--            <div id="list_search" style="padding-left: 50px; padding-right: 68px;z-index: 100; position: absolute; max-height: 200px"  class="collapse @if(strlen($search2) > 0 and $search_sw == 1 and !empty($list)) show @endif">--}}
+{{--                <div class="card card-body">--}}
+{{--                    <div style="border-radius: 50px" wire:loading>--}}
+{{--                        <img src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">--}}
+{{--                        --}}{{--                            <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">--}}
+{{--                    </div>--}}
+{{--                    <div style="overflow-y: auto"  wire:loading.remove>--}}
+{{--                        @if(strlen($search2) > 0 and $search_sw == 1)--}}
+{{--                            @foreach($list as $itm)--}}
+{{--                                @if(is_array($itm))--}}
+{{--                                    @if($itm != null)--}}
+{{--                                        @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $itm['ListID'])->get()->first())--}}
+{{--                                        @if($image != null)--}}
+{{--                                            --}}{{--                                                <a href="#" onclick="document.getElementById('searchform').value = '{{ $itm['Description'] }} }}';document.getElementById('searchform').submit()">--}}
+{{--                                            <a href="{{ route('item', $itm['ListID']) }}" >--}}
+{{--                                                <ul class="flex hover:bg-gray-50 cursor-pointer">--}}
+{{--                                                    <img src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px" alt="">--}}
+{{--                                                    <h1>{{ $itm['Description'] }}</h1>--}}
+{{--                                                </ul>--}}
+{{--                                            </a>--}}
+{{--                                            <hr>--}}
+{{--                                            <br>--}}
+{{--                                        @endif--}}
+{{--                                    @endif--}}
 
-                                    @else
+{{--                                @else--}}
 
-                                        @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $itm->ListID)->get()->first())
-                                        @if($image != null)
-                                            {{--                                            <a href="#" onclick="document.getElementById('searchform').value = '{{ $itm->Description }}';document.getElementById('searchform').submit()">--}}
-                                            <a href="{{ route('item', $itm->ListID) }}">
-                                                <ul class="flex hover:bg-gray-50 cursor-pointer">
-                                                    <img src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px" alt="">
+{{--                                    @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $itm->ListID)->get()->first())--}}
+{{--                                    @if($image != null)--}}
+{{--                                        --}}{{--                                            <a href="#" onclick="document.getElementById('searchform').value = '{{ $itm->Description }}';document.getElementById('searchform').submit()">--}}
+{{--                                        <a href="{{ route('item', $itm->ListID) }}">--}}
+{{--                                            <ul class="flex hover:bg-gray-50 cursor-pointer">--}}
+{{--                                                <img src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px" alt="">--}}
 
-                                                    <h1>{{ $itm->Description }}</h1>
-                                                </ul>
-                                            </a>
-                                            <hr>
-                                        @endif
-                                    @endif
-                                @endforeach
-                            @endif
-                        </div>
+{{--                                                <h1>{{ $itm->Description }}</h1>--}}
+{{--                                            </ul>--}}
+{{--                                        </a>--}}
+{{--                                        <hr>--}}
+{{--                                    @endif--}}
+{{--                                @endif--}}
+{{--                            @endforeach--}}
+{{--                        @endif--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+            <div id="list_search" style="padding-left: 50px; padding-right: 68px;z-index: 100; position: absolute; max-height: 200px"  class="hidden">
+                <div id="searchwrap" class="card card-body">
+                    <div class="hidden" id="loading_searchwrap" style="border-radius: 50px">
+                        <img  src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="w-40 md:w-3/4 2xl:w-1/2" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="">
+{{--                                                    <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">--}}
                     </div>
-                </div>
-                <div class="block md:block lg:block xl:block 2xl:hidden" style="padding-left: 50px; padding-right: 50px; padding-top: 10px">
-                    <button type="button" id="toggleFilters" onclick="this.style.display = 'none'; document.getElementById('filters').style.display = 'block'" class="btn w-full" style="background-color: #0069AD; height: 50px; right: 0; color: white">
-                        Filters
-                    </button>
-                    <div style="padding-top: 10px; display: none" class="w-full " id="filters">
-                        @livewire('filter')
+                    <div id="item_searchwrap" style="overflow-y: auto">
                     </div>
                 </div>
             </div>
+            <div class="block md:block lg:block xl:block 2xl:hidden" style="padding-left: 50px; padding-right: 50px; padding-top: 10px">
+                <button type="button" id="toggleFilters" onclick="this.style.display = 'none'; document.getElementById('filters').style.display = 'block'" class="btn w-full" style="background-color: #0069AD; height: 50px; right: 0; color: white">
+                    Filters
+                </button>
+                <div style="padding-top: 10px; display: none" class="w-full " id="filters">
+                    @livewire('filter')
+                </div>
+            </div>
+        </div>
 
 
-            {{--        @endif--}}
+        {{--        @endif--}}
 
 
 
@@ -82,6 +93,7 @@
             <div style="padding-left: 100px; padding-right: 100px">
         <span style="padding-left: 10px">
             Search results for: "<b>{{ $search_str }}</b>"
+
         </span>
             </div>
             <br>
@@ -153,31 +165,51 @@
                                     </div>
                                 @else
                                     <div>
-                                            @if($item->QuantityOnHand <= 0)
+                                        @if($item->QuantityOnHand <= 0)
+                                            @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                                                 <input type="hidden" id="customer-id-{{ $item->ListID }}">
                                                 <input placeholder="Search Customers" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" id="customer-search-{{ $item->ListID }}" onkeyup="searchCustomer('{{ $item->ListID }}')">
-                                            <div style="position: absolute; z-index: 1000; min-width: 300px; display: none" class="bg-gray-50 border" id="customer-wrap-{{ $item->ListID }}">
+                                                <div style="position: absolute; z-index: 1000; min-width: 300px; display: none" class="bg-gray-50 border" id="customer-wrap-{{ $item->ListID }}">
 
-                                            </div>
-                                            <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
-                                            <select id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
-                                                    @php($count=0)
-                                                    @while($count != 1000)
-                                                        @php($count++ )
-                                                        <option value="{{ $count }}">{{ $count }}</option>
-                                                    @endwhile
-                                                </select>
-                                                <span class="input-group-btn input-group-append">
+                                                </div>
+                                                <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                                    <select id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
+                                                        @php($count=0)
+                                                        @while($count != 1000)
+                                                            @php($count++ )
+                                                            <option value="{{ $count }}">{{ $count }}</option>
+                                                        @endwhile
+                                                    </select>
+                                                    <span class="input-group-btn input-group-append">
+                                                    <button style="background-color: #0069AD; font-family: sfsemibold" wire:loading.attr="disabled" onclick="addBackorder('{{ $item->ListID }}', )"  class="btn">
+                                                        <img wire:loading wire:target="load('add{{ $item->ListID }}')" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
+                                                        <span class="text-white" wire:loading.remove  wire:target="load('add{{ $item->ListID }}')">Add backorder</span>
+                                                    </button>
+                                                </span>
+                                                </div>
+                                            @else
+                                                @php($customerAccount = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('users_customer')->where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->first())
+                                                <input type="hidden" id="customer-id-{{ $item->ListID }}" value="{{ $customerAccount->customer_ListID }}">
+                                                <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                                    <select id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
+                                                        @php($count=0)
+                                                        @while($count != 1000)
+                                                            @php($count++ )
+                                                            <option value="{{ $count }}">{{ $count }}</option>
+                                                        @endwhile
+                                                    </select>
+                                                    <span class="input-group-btn input-group-append">
                                                     <button style="background-color: #0069AD; font-family: sfsemibold" wire:loading.attr="disabled" onclick="addBackorder('{{ $item->ListID }}')"  class="btn">
                                                         <img wire:loading wire:target="load('add{{ $item->ListID }}')" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
                                                         <span class="text-white" wire:loading.remove  wire:target="load('add{{ $item->ListID }}')">Add backorder</span>
                                                     </button>
                                                 </span>
-                                            </div>
-                                            @else
+                                                </div>
+                                            @endif
+                                        @else
                                             <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
 
-                                            <select id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
+                                                <select id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
                                                     @php($count=0)
                                                     @while($count != $item->QuantityOnHand)
                                                         @php($count++ )
@@ -192,7 +224,7 @@
                                                     </button>
                                                 </span>
                                             </div>
-                                            @endif
+                                        @endif
                                     </div>
                                 @endif
                             @endif
@@ -231,6 +263,35 @@
 
                 }
             </script>
+            <script>
+                function searchItem()
+                {
+                    if(document.getElementById('search_input').value === '')
+                    {
+                        document.getElementById("list_search").classList.add('hidden');
+                    }
+                    else
+                    {
+                        document.getElementById("list_search").classList.remove('hidden');
+                        document.getElementById("item_searchwrap").classList.add('hidden');
+                        document.getElementById("list_search").classList.add('block');
+                        const items = new XMLHttpRequest();
+                        document.getElementById("loading_searchwrap").classList.remove('hidden');
+                        document.getElementById("item_searchwrap").classList.add('hidden');
+                        document.getElementById("loading_searchwrap").classList.add('block');
+                        items.onload = function()
+                        {
+                            document.getElementById("item_searchwrap").classList.remove('hidden');
+                            document.getElementById("loading_searchwrap").classList.remove('block');
+                            document.getElementById("loading_searchwrap").classList.add('hidden');
+                            document.getElementById("item_searchwrap").innerHTML = this.responseText;
+                        }
+                        items.open("GET", '{{ route('getItems') }}?search=' + document.getElementById('search_input').value , true);
+                        items.send();
+                    }
+
+                }
+            </script>
 
             <script>
                 function added(id)
@@ -249,7 +310,7 @@
         </div>
         <div class="p-6 sm:px-20 bg-white border-b border-gray-200" style="text-align: center">
             <div style="left: 50%; right: 50%">
-                {{ $items->links('vendor.pagination.bootstrap-4') }}
+                {{ $items->links() }}
             </div>
 
         </div>
@@ -286,8 +347,8 @@
                 }
                 if (document.getElementById('customer-id-' + elID ).value !== '')
                 {
-                    @this.addBackorder(elID, document.getElementById('input-' + elID).value, document.getElementById('customer-id-' + elID).value);
-                    @this.load('add' + elID);
+                @this.addBackorder(elID, document.getElementById('input-' + elID).value, document.getElementById('customer-id-' + elID).value);
+                @this.load('add' + elID);
                     document.getElementById('customer-search-' + elID).value = '';
 
                 }

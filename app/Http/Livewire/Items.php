@@ -100,7 +100,7 @@ class Items extends Component
             {
                 return view('livewire.items',
                     [
-                        'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('TimeModified', 'DESC')->paginate(12)
+                        'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('TimeModified', 'DESC')->paginate(12)->appends(request()->query())
                     ]
                 );
             }
@@ -108,7 +108,7 @@ class Items extends Component
             {
                 return view('livewire.items',
                     [
-                        'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->orWhere('BarCodeValue', 'LIKE', '%' . $this->search_str . '%')->orderBy('TimeModified', 'DESC')->paginate(12)
+                        'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->orWhere('BarCodeValue', 'LIKE', '%' . $this->search_str . '%')->orderBy('TimeModified', 'DESC')->paginate(12)->appends(request()->query())
 
                     ]
                 );
@@ -122,13 +122,13 @@ class Items extends Component
                 {
                     return view('livewire.items',
                         [
-                            'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('TimeModified', 'DESC')->paginate(12)
+                            'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('TimeModified', 'DESC')->paginate(12)->appends(request()->query())
                         ]
                     );
                 }
             }
 
-                return view('livewire.items', ['items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->orderBy('TimeModified', 'DESC')->paginate(12)]);
+                return view('livewire.items', ['items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->orderBy('TimeModified', 'DESC')->paginate(12)->appends(request()->query())]);
         }
 
     }
@@ -216,7 +216,7 @@ class Items extends Component
         if ($bo->save())
         {
             $this->dispatchBrowserEvent('addedbo', ['message' => 'Added to backorder']);
-            \App\Jobs\BackOrdersNotification::dispatch();
+//            \App\Jobs\BackOrdersNotification::dispatch();
         }
         else
         {

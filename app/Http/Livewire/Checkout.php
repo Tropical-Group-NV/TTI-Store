@@ -101,54 +101,113 @@ class Checkout extends Component
 
     public function createSalesOrder(Request $request)
     {
-        $cartItems = CartItem::query()->where('uid', Auth::user()->id)->get();
-        $customer = DB::connection('epas')->table('QB_Customer')->where('ListID', $this->customer_id)->first();
-        if ($this->msg_id != '')
+
+        if (Auth::user()->users_type_id != 3)
         {
-            $cst_msg = CustomerMessage::query()->where('ListID', $this->msg_id)->get()->first();
+            $cartItems = CartItem::query()->where('uid', Auth::user()->id)->get();
+            $customer = DB::connection('epas')->table('QB_Customer')->where('ListID', $this->customer_id)->first();
+            if ($this->msg_id != '')
+            {
+                $cst_msg = CustomerMessage::query()->where('ListID', $this->msg_id)->get()->first();
+            }
+            $term = Term::query()->where('ListID', $this->term_id)->get()->first();
+            $sale = new SalesOrder();
+            $sale->CustomerRefListID = $customer->ListID;
+            $sale->TxnDate = date("Y/m/d");
+            $sale->BillAddressAddr1 = $customer->BillAddressBlockAddr1;
+            $sale->BillAddressAddr2 = $customer->BillAddressBlockAddr2;
+            $sale->BillAddressAddr3 = $customer->BillAddressBlockAddr3;
+            $sale->BillAddressAddr4 = $customer->BillAddressBlockAddr4;
+            $sale->BillAddressAddr5 = $customer->BillAddressBlockAddr5;
+            $sale->ShipAddressAddr1 = $customer->BillAddressBlockAddr1;
+            $sale->ShipAddressAddr2 = $customer->BillAddressBlockAddr2;
+            $sale->ShipAddressAddr3 = $customer->BillAddressBlockAddr3;
+            $sale->ShipAddressAddr4 = $customer->BillAddressBlockAddr4;
+            $sale->ShipAddressAddr5 = $customer->BillAddressBlockAddr5;
+            if ($this->msg_id != '')
+            {
+                $sale->CustomerMsgRefListID = $cst_msg->ListID;
+                $sale->CustomerMsgRefFullName = $cst_msg->Name;
+            }
+
+            $sale->uid = Auth::user()->id;
+            $sale->TermsRefListID = $term->ListID;
+            $sale->TermsRefFullName = $term->Name;
+            $sale->ShipDate = $this->date;
+            $sale->Memo = $this->memo;
+            $sale->save();
+            foreach ($cartItems as $cartItem)
+            {
+                $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first();
+                $saleItem = new SalesOrderItem();
+                $saleItem->sales_order_id = $sale->id;
+                $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                $saleItem->SalesOrderLineDesc = $item->Description;
+                $saleItem->SalesOrderLineQuantity = $cartItem->qty;
+                $saleItem->SalesOrderLineRate = $item->SalesPrice;
+                $saleItem->SalesOrderLineRatePercent =null;
+                $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
+                $saleItem->save();
+            }
+            CartItem::query()->where('uid', Auth::user()->id)->delete();
+            SendFirstOrderMail::dispatch($this->customer_id);
+            Import_Sales_Order_To_QB::dispatch($sale->id);
+            return redirect()->to(route('dashboard') . '?order=' . $sale->id);
         }
-        $term = Term::query()->where('ListID', $this->term_id)->get()->first();
-        $sale = new SalesOrder();
-        $sale->CustomerRefListID = $customer->ListID;
-        $sale->TxnDate = date("Y/m/d");
-        $sale->BillAddressAddr1 = $customer->BillAddressBlockAddr1;
-        $sale->BillAddressAddr2 = $customer->BillAddressBlockAddr2;
-        $sale->BillAddressAddr3 = $customer->BillAddressBlockAddr3;
-        $sale->BillAddressAddr4 = $customer->BillAddressBlockAddr4;
-        $sale->BillAddressAddr5 = $customer->BillAddressBlockAddr5;
-        $sale->ShipAddressAddr1 = $customer->BillAddressBlockAddr1;
-        $sale->ShipAddressAddr2 = $customer->BillAddressBlockAddr2;
-        $sale->ShipAddressAddr3 = $customer->BillAddressBlockAddr3;
-        $sale->ShipAddressAddr4 = $customer->BillAddressBlockAddr4;
-        $sale->ShipAddressAddr5 = $customer->BillAddressBlockAddr5;
-        if ($this->msg_id != '')
+        else
         {
-            $sale->CustomerMsgRefListID = $cst_msg->ListID;
-            $sale->CustomerMsgRefFullName = $cst_msg->Name;
+            $customerAccount = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('users_customer')->where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->first();
+            $cartItems = CartItem::query()->where('uid', Auth::user()->id)->get();
+            $customer = DB::connection('epas')->table('QB_Customer')->where('ListID', $customerAccount->customer_ListID)->first();
+            if ($this->msg_id != '')
+            {
+                $cst_msg = CustomerMessage::query()->where('ListID', $this->msg_id)->get()->first();
+            }
+            $term = Term::query()->where('ListID', $this->term_id)->get()->first();
+            $sale = new SalesOrder();
+            $sale->CustomerRefListID = $customer->ListID;
+            $sale->TxnDate = date("Y/m/d");
+            $sale->BillAddressAddr1 = $customer->BillAddressBlockAddr1;
+            $sale->BillAddressAddr2 = $customer->BillAddressBlockAddr2;
+            $sale->BillAddressAddr3 = $customer->BillAddressBlockAddr3;
+            $sale->BillAddressAddr4 = $customer->BillAddressBlockAddr4;
+            $sale->BillAddressAddr5 = $customer->BillAddressBlockAddr5;
+            $sale->ShipAddressAddr1 = $customer->BillAddressBlockAddr1;
+            $sale->ShipAddressAddr2 = $customer->BillAddressBlockAddr2;
+            $sale->ShipAddressAddr3 = $customer->BillAddressBlockAddr3;
+            $sale->ShipAddressAddr4 = $customer->BillAddressBlockAddr4;
+            $sale->ShipAddressAddr5 = $customer->BillAddressBlockAddr5;
+            if ($this->msg_id != '')
+            {
+                $sale->CustomerMsgRefListID = $cst_msg->ListID;
+                $sale->CustomerMsgRefFullName = $cst_msg->Name;
+            }
+
+            $sale->uid = Auth::user()->id;
+            $sale->TermsRefListID = $term->ListID;
+            $sale->TermsRefFullName = $term->Name;
+            $sale->ShipDate = $this->date;
+            $sale->Memo = $this->memo;
+            $sale->save();
+            foreach ($cartItems as $cartItem)
+            {
+                $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first();
+                $saleItem = new SalesOrderItem();
+                $saleItem->sales_order_id = $sale->id;
+                $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                $saleItem->SalesOrderLineDesc = $item->Description;
+                $saleItem->SalesOrderLineQuantity = $cartItem->qty;
+                $saleItem->SalesOrderLineRate = $item->SalesPrice;
+                $saleItem->SalesOrderLineRatePercent =null;
+                $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
+                $saleItem->save();
+            }
+            CartItem::query()->where('uid', Auth::user()->id)->delete();
+            SendFirstOrderMail::dispatch($customerAccount->customer_ListID);
+            Import_Sales_Order_To_QB::dispatch($sale->id);
+            return redirect()->to(route('dashboard') . '?order=' . $sale->id);
         }
 
-        $sale->uid = Auth::user()->id;
-        $sale->TermsRefListID = $term->ListID;
-        $sale->TermsRefFullName = $term->Name;
-        $sale->ShipDate = $this->date;
-        $sale->Memo = $this->memo;
-        $sale->save();
-        foreach ($cartItems as $cartItem)
-        {
-            $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first();
-            $saleItem = new SalesOrderItem();
-            $saleItem->sales_order_id = $sale->id;
-            $saleItem->SalesOrderLineItemRefListID = $item->ListID;
-            $saleItem->SalesOrderLineDesc = $item->Description;
-            $saleItem->SalesOrderLineQuantity = $cartItem->qty;
-            $saleItem->SalesOrderLineRate = $item->SalesPrice;
-            $saleItem->SalesOrderLineRatePercent =null;
-            $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
-            $saleItem->save();
-        }
-        CartItem::query()->where('uid', Auth::user()->id)->delete();
-        SendFirstOrderMail::dispatch($this->customer_id);
-        Import_Sales_Order_To_QB::dispatch($sale->id);
-        return redirect()->to(route('dashboard') . '?order=' . $sale->id);
+
     }
 }

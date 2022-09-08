@@ -194,7 +194,7 @@
                 @endif
 
                 <div>
-                    <div class="font-medium text-base text-gray-500">{{ Auth::user()->name }}({{ $usertypes->name }})</div>
+                    <div class="font-medium text-base text-gray-300">{{ Auth::user()->name }}({{ $usertypes->name }})</div>
                     <div class="font-medium text-sm text-white">{{ Auth::user()->email }}</div>
                 </div>
             </div>
@@ -217,7 +217,7 @@
 
                     <x-jet-responsive-nav-link href="{{ route('logout') }}"
                                    @click.prevent="$root.submit();">
-                        {{ __('Log Out') }}<i style="padding-left: 10px" class="fa fa-sign-out" aria-hidden="true"></i>
+                        {{ __('Log Out') }}<i style="padding-left: 10px; padding-top: 10px" class="fa fa-sign-out" aria-hidden="true"></i>
                     </x-jet-responsive-nav-link>
                 </form>
 
