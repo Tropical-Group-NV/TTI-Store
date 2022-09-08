@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div style="padding-top: 50px">
+    <div class="pt-7 md:pt-32" >
         <div class="py-12">
             <div class="flex">
                 <div class="w-60 hidemobile"></div>

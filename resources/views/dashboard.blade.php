@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div style="padding-top: 50px">
+    <div class="pt-7 md:pt-32" >
         @if(isset($_REQUEST['order']))
             <span  style="font-family: sfsemibold; font-size: 40px; padding-left: 50px; padding-right: 50px">
             <span class="text-green-600">

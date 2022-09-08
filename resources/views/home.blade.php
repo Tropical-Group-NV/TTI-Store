@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div style="padding-top: 50px">
+    <div class="pt-7 md:pt-32" >
         <h1 style="font-family: sfsemibold; font-size: 35px" class="flex justify-center">
             <img class="border-b border-gray-100 hidden md:block" style="width: 60%" src="{{ asset('Logo-03.png') }}" alt="">    </h1>
         @if(isset($_REQUEST['order']))

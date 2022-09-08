@@ -142,7 +142,18 @@
                                 <span style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                 <br>
                                 @if($item->QuantityOnHand > 0)
-                                    In stock: <b>{{  substr($item->QuantityOnHand, 0, -6) }}</b>
+                                        @if(\Illuminate\Support\Facades\Auth::user() != null )
+                                            @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                                <span style="color: green">In stock: <b>{{  substr($item->QuantityOnHand, 0, -6) }}</b></span>
+                                            @else
+                                                <span style="color: green">In stock</span>
+
+                                            @endif
+
+                                        @else
+                                            <span style="color: green">In stock</span>
+
+                                        @endif
                                 @else
                                     <span style="color: red">Out of stock</span>
                                 @endif
@@ -309,8 +320,8 @@
             </script>
         </div>
         <div class="p-6 sm:px-20 bg-white border-b border-gray-200" style="text-align: center">
-            <div style="left: 50%; right: 50%">
-                {{ $items->links() }}
+            <div style="left: 50%; right: 50%; text-align: center">
+                {{ $items->links('vendor.pagination.bootstrap-52') }}
             </div>
 
         </div>
@@ -353,6 +364,12 @@
 
                 }
             }
+        </script>
+        <script>
+            document.body.addEventListener("click", function (evt) {
+                document.getElementById("list_search").classList.add('hidden');
+
+            });
         </script>
 
 
