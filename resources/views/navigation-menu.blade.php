@@ -1,5 +1,8 @@
  <nav x-data="{ open: false }" class="border-b border-gray-100 fixed w-full" style="background-color: #0069AD; z-index: 1000">
-    <!-- Primary Navigation Menu -->
+     @if(\Illuminate\Support\Facades\Auth::user() != null)
+     @php($usertypes = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('users_type')->where('id', \Illuminate\Support\Facades\Auth::user()->users_type_id)->first())
+     @endif
+     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
             <div class="flex">
@@ -15,15 +18,14 @@
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Items') }}
                     </x-jet-nav-link>
-{{--                    <x-jet-nav-link  href="{{ route('checkout') }}" :active="request()->routeIs('checkout')">--}}
-{{--                        {{ __('Checkout') }}--}}
-{{--                    </x-jet-nav-link>--}}
+                    @if(\Illuminate\Support\Facades\Auth::user() != null)
                     <x-jet-nav-link  href="{{ route('orders') }}" :active="request()->routeIs('orders')">
                         {{ __('Orders') }}
                     </x-jet-nav-link>
                     <x-jet-nav-link  href="{{ route('backorders') }}" :active="request()->routeIs('backorders')">
                         {{ __('Backorders') }}
                     </x-jet-nav-link>
+                        @endif
                 </div>
             </div>
 
@@ -90,7 +92,7 @@
                             @else
                                 <span class="inline-flex rounded-md">
                                     <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition">
-                                        {{ Auth::user()->name }}
+                                        {{ Auth::user()->name }}({{ $usertypes->name }})
 
                                         <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
@@ -108,9 +110,9 @@
                                 {{ __('Manage Account') }}
                             </div>
 
-                            <x-jet-dropdown-link href="{{ route('profile.show') }}">
-                                {{ __('Profile') }}
-                            </x-jet-dropdown-link>
+{{--                            <x-jet-dropdown-link href="{{ route('profile.show') }}">--}}
+{{--                                {{ __('Profile') }}--}}
+{{--                            </x-jet-dropdown-link>--}}
 
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                                 <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
@@ -146,18 +148,17 @@
 
             <!-- Hamburger -->
             <div class="-mr-2 flex items-center sm:hidden">
-                @if(\Illuminate\Support\Facades\Auth::user() != null)
                 <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">
                     <svg class="h-6 w-6" stroke="currentColor" fill="white" viewBox="0 0 24 24">
                         <path fill="white" :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         <path fill="white" :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
-                @else
-                    <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">
-                        <a class="text-white" href="{{ route('login') }}"><p>Log in</p></a>
-                    </button>
-                @endif
+{{--                @else--}}
+{{--                    <button class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition">--}}
+{{--                        <a class="text-white" href="{{ route('login') }}"><p>Log in</p></a>--}}
+{{--                    </button>--}}
+{{--                @endif--}}
             </div>
         </div>
     </div>
@@ -168,9 +169,18 @@
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Items') }}
             </x-jet-responsive-nav-link>
+            @if(\Illuminate\Support\Facades\Auth::user() != null)
             <x-jet-responsive-nav-link href="{{ route('orders') }}" :active="request()->routeIs('orders')">
                 {{ __('Orders') }}
             </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('backorders') }}" :active="request()->routeIs('backorders')">
+                {{ __('Backorders') }}
+            </x-jet-responsive-nav-link>
+            @else
+            <x-jet-responsive-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')">
+                {{ __('Login') }}
+            </x-jet-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
@@ -184,16 +194,16 @@
                 @endif
 
                 <div>
-                    <div class="font-medium text-base text-white">{{ Auth::user()->name }}</div>
+                    <div class="font-medium text-base text-gray-500">{{ Auth::user()->name }}({{ $usertypes->name }})</div>
                     <div class="font-medium text-sm text-white">{{ Auth::user()->email }}</div>
                 </div>
             </div>
 
             <div class="mt-3 space-y-1">
                 <!-- Account Management -->
-                <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">
-                    {{ __('Profile') }}
-                </x-jet-responsive-nav-link>
+{{--                <x-jet-responsive-nav-link href="{{ route('profile.show') }}" :active="request()->routeIs('profile.show')">--}}
+{{--                    {{ __('Profile') }}--}}
+{{--                </x-jet-responsive-nav-link>--}}
 
                 @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                     <x-jet-responsive-nav-link href="{{ route('api-tokens.index') }}" :active="request()->routeIs('api-tokens.index')">
@@ -207,7 +217,7 @@
 
                     <x-jet-responsive-nav-link href="{{ route('logout') }}"
                                    @click.prevent="$root.submit();">
-                        {{ __('Log Out') }}
+                        {{ __('Log Out') }}<i style="padding-left: 10px" class="fa fa-sign-out" aria-hidden="true"></i>
                     </x-jet-responsive-nav-link>
                 </form>
 
