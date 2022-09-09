@@ -95,6 +95,11 @@ Route::get('backorders', function( Request $request)
     return view('backorders');
 })->middleware('auth')->name('backorders');
 
+Route::get('customer/register', function( Request $request)
+{
+    return view('customer-register');
+})->name('customer-registration');
+
 
 
 

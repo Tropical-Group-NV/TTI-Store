@@ -1,7 +1,8 @@
 <x-app-layout>
-    <div class="pt-7 md:pt-32" >
+    <div>
         <h1 style="font-family: sfsemibold; font-size: 35px" class="flex justify-center">
-            <img class="border-b border-gray-100 hidden md:block" style="width: 60%" src="{{ asset('Logo-03.png') }}" alt="">    </h1>
+{{--            <img class="border-b border-gray-100 hidden md:block" style="width: 60%" src="{{ asset('Logo-03.png') }}" alt="">   --}}
+        </h1>
         @if(isset($_REQUEST['order']))
             <x-slot name="header">
         <span  style="font-family: sfsemibold; font-size: 40px">
@@ -11,7 +12,7 @@
         </span>
             </x-slot>
         @endif
-        <div class="py-12">
+        <div class="sm:py-12">
             <div class="flex">
                 <div style="max-width: 110rem" class="w-full mx-auto sm:px-6 lg:px-8">
                     @livewire('home')

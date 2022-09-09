@@ -3,81 +3,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     @php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())
-    <div style="height: 100px" class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-        <div>
-            <form id="searchform" action="{{ route('dashboard') }}">
-                <br>
-                <div>
-                    <div  style="padding-left: 50px; padding-right: 50px">
-                        <div>
-                            <ul class="flex btn-group">
-                                {{--                                <input style="height:50px" id=search_input wire:keydown="sug_search" wire:model="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block form-control" autocomplete="false" type="search">--}}
-                                <input onkeyup="searchItem()" style="height:50px" id=search_input placeholder="Search..." name="search" class=" focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block form-control" autocomplete="false" type="search">
-                                <button class="btn " style="background-color: #0069AD; height: 50px">
-                                    <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
-                                </button>
-                            </ul>
-
-                        </div>
-                    </div>
-                    {{--                    <div id="list_search" style="padding-left: 50px; padding-right: 50px;z-index: 100; position: absolute; max-height: 200px" class="collapse @if(strlen($search2) > 0 and $search_sw == 1 and !empty($list) or $search_sw == 1) show @endif">--}}
-                    {{--                        <div class="card card-body">--}}
-                    {{--                            <div style="border-radius: 50px" wire:loading>--}}
-                    {{--                                <img src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">--}}
-                    {{--                            </div>--}}
-                    {{--                            <div style="overflow-y: auto"  wire:loading.remove>--}}
-                    {{--                                @if(strlen($search2) > 0 and $search_sw == 1)--}}
-                    {{--                                    @foreach($list as $itm)--}}
-                    {{--                                        @if(is_array($itm))--}}
-                    {{--                                            @if($itm != null)--}}
-                    {{--                                                @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $itm['ListID'])->get()->first())--}}
-                    {{--                                                @if($image != null)--}}
-                    {{--                                                    <a href="{{ route('item', $itm['ListID']) }}" >--}}
-                    {{--                                                        <ul class="flex hover:bg-gray-50 cursor-pointer">--}}
-                    {{--                                                            <img src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px" alt="">--}}
-                    {{--                                                            <h1>{{ $itm['Description'] }}</h1>--}}
-                    {{--                                                        </ul>--}}
-                    {{--                                                    </a>--}}
-                    {{--                                                    <hr>--}}
-                    {{--                                                    <br>--}}
-                    {{--                                                @endif--}}
-                    {{--                                            @endif--}}
-                    {{--                                        @else--}}
-                    {{--                                            @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $itm->ListID)->get()->first())--}}
-                    {{--                                            @if($image != null)--}}
-                    {{--                                                <a href="{{ route('item', $itm->ListID) }}">--}}
-                    {{--                                                    <ul class="flex hover:bg-gray-50 cursor-pointer">--}}
-                    {{--                                                        <img src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px" alt="">--}}
-
-                    {{--                                                        <h1>{{ $itm->Description }}</h1>--}}
-                    {{--                                                    </ul>--}}
-                    {{--                                                </a>--}}
-
-                    {{--                                                <hr>--}}
-                    {{--                                            @endif--}}
-                    {{--                                        @endif--}}
-                    {{--                                    @endforeach--}}
-                    {{--                                @endif--}}
-                    {{--                            </div>--}}
-                    {{--                        </div>--}}
-                    {{--                    </div>--}}
-                    <div id="list_search" style="padding-left: 50px; padding-right: 68px;z-index: 100; position: absolute; max-height: 200px"  class="hidden">
-                        <div id="searchwrap" class="card card-body">
-                            <div class="hidden" id="loading_searchwrap" style="border-radius: 50px">
-                                <img  src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="w-40 md:w-3/4 2xl:w-1/2" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="max-width: 550px">
-                                {{--                                                    <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">--}}
-                            </div>
-                            <div id="item_searchwrap" style="overflow-y: auto">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-    <br>
     {{--    Add images here for advertisement--}}
-    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg hidden sm:block">
         <div id="itemWrap"  class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             <div class="card" style="width: auto;">
                 <div style="margin: auto">
@@ -153,10 +80,10 @@
                                     <ul class="border-top flex justify-between  hover:bg-blue-50 " style="bottom: 0; padding: 20px">
                                         <li>
                                             @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                                <span style="padding-top: 10px">Sales price: SRD <b>{{ substr($item->SalesPrice, 0, -3) }}</b></span>
+                                                <span style="padding-top: 10px">Sales price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                                 <br>
                                             @endif
-                                            <span style="padding-top: 10px">Retail price: SRD <b>{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                            <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
                                             <br>
                                             <span style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                             <br>
@@ -190,7 +117,7 @@
 {{--                                            <button wire:loading.attr="disabled"  wire:click="removeFromCart('{{$inCart->id}}')" class="btn btn-danger  w-full items-center">--}}
                                             {{--                                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.46-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.211-3.015c-.699-.03-1.368-.171-1.992-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-5v-1h5v1z"/></svg>--}}
                                             {{--                                            </button>--}}
-                                            <button style="font-family: sfsemibold; background-color: #0069AD; color: white" disabled class="btn w-full items-center">
+                                            <button style="font-family: sfsemibold; background-color: green; color: white" disabled class="btn w-full items-center">
                                                 Added to cart
                                             </button>
                                         </span>
@@ -246,12 +173,6 @@
                 @endif
 
             </div>
-            <script>
-                document.body.addEventListener('click', function ()
-                {
-                    document.getElementById('list_search').classList.remove('show');
-                });
-            </script>
 
         </div>
 
@@ -297,10 +218,10 @@
                                 <ul class="border-top flex justify-between" style="bottom: 0; padding: 20px">
                                     <li>
                                         @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                            <span style="padding-top: 10px">Sales price: SRD <b>{{ substr($item->SalesPrice, 0, -3) }}</b></span>
+                                            <span style="padding-top: 10px;">Sales price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                             <br>
                                         @endif
-                                        <span style="padding-top: 10px">Retail price: SRD <b>{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                        <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
                                         <br>
                                         <span style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                         <br>
@@ -334,7 +255,7 @@
 {{--                                            <button wire:loading.attr="disabled"  wire:click="removeFromCart('{{$inCart->id}}')" class="btn btn-danger  w-full items-center">--}}
                                             {{--                                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.46-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.211-3.015c-.699-.03-1.368-.171-1.992-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-5v-1h5v1z"/></svg>--}}
                                             {{--                                            </button>--}}
-                                            <button style="font-family: sfsemibold; background-color: #0069AD; color: white" disabled class="btn w-full items-center">
+                                            <button style="font-family: sfsemibold; background-color: green; color: white" disabled class="btn w-full items-center">
                                                 Added to cart
                                             </button>
                                         </span>
@@ -371,6 +292,7 @@
                     @endif
                 @endforeach
             </div>
+
             <script>
                 function searchItem()
                 {
@@ -401,11 +323,6 @@
                 }
             </script>
 
-            <script>
-                document.body.addEventListener('click', function ()
-                {
-                    document.getElementById('list_search').classList.remove('show');
-                });
             </script>
             <script>
                 window.addEventListener('addedcart', (e) => {
@@ -421,15 +338,45 @@
                     toastr.info("Updated Quantity")
                 });
             </script>
-            <script>
-                document.body.addEventListener("click", function (evt) {
-                    document.getElementById("list_search").classList.add('hidden');
 
-                });
-            </script>
 
         </div>
 
+
+    </div>
+    <br>
+    {{--    Add images here for advertisement--}}
+    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg sm:hidden">
+        <div id="itemWrap"  class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+            <div class="card" style="width: auto;">
+                <div style="margin: auto">
+                    <div class="card-body" style="position: relative">
+                        <img src="{{ asset('ex1.jpg') }}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="width: auto;">
+                <div style="margin: auto">
+                    <div class="card-body" style="position: relative">
+                        <img src="{{ asset('ex2.jpg') }}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="width: auto;">
+                <div style="margin: auto">
+                    <div class="card-body" style="position: relative">
+                        <img src="{{ asset('ex6.jpg') }}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="card" style="width: auto;">
+                <div style="margin: auto">
+                    <div class="card-body" style="position: relative">
+                        <img src="{{ asset('ex4.jpg') }}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>

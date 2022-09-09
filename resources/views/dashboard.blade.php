@@ -1,14 +1,11 @@
 <x-app-layout>
-    <div class="pt-7 md:pt-32" >
+    <div class="" >
         @if(isset($_REQUEST['order']))
             <span  style="font-family: sfsemibold; font-size: 40px; padding-left: 50px; padding-right: 50px">
             <span class="text-green-600">
                 Your order has been submitted✅ <a style="color: #0069AD; font-size: 20px" href="{{ route('order', $_REQUEST['order']) }}">Go to Order.</a>
             </span>
             </span>
-            <x-slot name="header">
-
-            </x-slot>
         @endif
         <div class="py-12">
             <div class="flex ">

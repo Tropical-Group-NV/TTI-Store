@@ -8,7 +8,7 @@
                 <a href="{{ route('item', $itm['ListID']) }}" >
                     <ul class="flex hover:bg-gray-50 cursor-pointer">
                         <img src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px" alt="">
-                        <h1>{{ $itm['Description'] }}</h1>
+                        <h1 style="font-size: 12px">{{ $itm['Description'] }}</h1>
                     </ul>
                 </a>
                 <hr>
@@ -25,7 +25,7 @@
                 <ul class="flex hover:bg-gray-50 cursor-pointer">
                     <img src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px" alt="">
 
-                    <h1>{{ $itm->Description }}</h1>
+                    <h1 style="font-size: 12px">{{ $itm->Description }}</h1>
                 </ul>
             </a>
             <hr>

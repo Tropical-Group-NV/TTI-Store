@@ -19,6 +19,8 @@ class Items extends Component
     public $srch_sw;
     public $search_customer;
     public $brand_srch;
+    public $unitsearch;
+    public $branchsearch;
     public $search2;
     public $search_str;
     public $search_sw = 0;
@@ -38,30 +40,6 @@ class Items extends Component
          $this->readyToLoad = true;
      }
 
-    public function sug_search()
-    {
-        if ($this->search_sw == 0)
-        {
-            if (strlen($this->search2) > 0)
-            {
-                $this->search_sw = 1;
-                {
-                    $this->list = DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->orWhere('BarCodeValue', 'LIKE', '%' . $this->search2 . '%')->orderBy('TimeModified', 'DESC')->limit(10)->get();
-                }
-
-            }
-        }
-        else
-        {
-            if (strlen($this->search2) > 0)
-            {
-                {
-                    $this->list = DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->orWhere('BarCodeValue', 'LIKE', '%' . $this->search2 . '%')->orderBy('TimeModified', 'DESC')->limit(10)->get();
-                }
-            }
-        }
-    }
-
     public function mount()
     {
         if (isset($_REQUEST['search']))
@@ -73,27 +51,92 @@ class Items extends Component
         {
             $this->brand_srch = $_REQUEST['brand'];
         }
-        $this->list = DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->orderBy('TimeModified', 'DESC')->limit(12)->get();
+        if (isset($_REQUEST['branch']))
+        {
+            $this->branchsearch = $_REQUEST['branch'];
+        }
+        if (isset($_REQUEST['unit']))
+        {
+            $this->unitsearch = $_REQUEST['unit'];
+        }
 
     }
-
-//    protected $listeners = ['count_up' => 'increment'];
 
 
 
     public function render(Request $request)
     {
-//        $items = DB::connection('epas')->table('item')->where('IsActive', '0')->orderBy('TimeModified', 'DESC')->limit(10)->get();
-        if (isset($_REQUEST['brand']))
+        if ($this->brand_srch != '' or $this->brand_srch != null)
         {
-            return view('livewire.items',
-                [
-                    'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $_REQUEST['brand'] . '%')->where('CustomFieldBranch', 'LIKE', '%' . $_REQUEST['branch'] . '%')->where('UnitOfMeasureSetRefFullName' ,  $_REQUEST['unit'] )->where('SalesPrice', '>',   $_REQUEST['min'] )->where('SalesPrice', '<',   $_REQUEST['max'] )->orderBy('TimeModified', 'DESC')->paginate(12)
-                ]
-            );
+            if ($this->branchsearch != null and $this->branchsearch != '')
+            {
+                if ($this->unitsearch != null and $this->unitsearch != '')
+                {
+
+                    return view('livewire.items',
+                        [
+                            'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orderBy('Description')->paginate(12)
+                        ]
+                    );
+                }
+                else
+                {
+//                    die($this->brand_srch);
+                    return view('livewire.items',
+                        [
+                            'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('Description')->where('CustomFieldBranch', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch2', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch3', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch4', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch5', 'LIKE', '%' . $this->branchsearch . '%')->paginate(12)
+                        ]
+                    );
+                }
+            }
+            else
+            {
+                if ($this->unitsearch != null and $this->unitsearch != '') {
+
+                    return view('livewire.items',
+                        [
+                            'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orderBy('Description')->paginate(12)
+                        ]
+                    );
+
+                }
+                return view('livewire.items',
+                    [
+                        'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('CustomFieldBranch', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch2', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch3', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch4', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch5', 'LIKE', '%' . $this->branchsearch . '%')->orderBy('Description')->paginate(12)
+                    ]
+                );
+            }
         }
-
-
+        else
+        {
+            if ($this->unitsearch != null and $this->unitsearch != '')
+            {
+                if ($this->branchsearch != null and $this->branchsearch != '')
+                {
+                    return view('livewire.items',
+                        [
+                            'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->where('CustomFieldBranch', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch2', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch3', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch4', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch5', 'LIKE', '%' . $this->branchsearch . '%')->orderBy('Description')->paginate(12)
+                        ]
+                    );
+                }
+                return view('livewire.items',
+                    [
+                        'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orderBy('Description')->paginate(12)
+                    ]
+                );
+            }
+            else
+            {
+                if ($this->branchsearch != null and $this->branchsearch != '')
+                {
+                    return view('livewire.items',
+                        [
+                            'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('CustomFieldBranch', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch2', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch3', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch4', 'LIKE', '%' . $this->branchsearch . '%')->orWhere('CustomFieldBranch5', 'LIKE', '%' . $this->branchsearch . '%')->paginate(12)
+                        ]
+                    );
+                }
+            }
+        }
         if ($this->search_str != null or $this->search_str != '')
         {
             if ($this->brand_srch != '' or $this->brand_srch != null)
@@ -128,8 +171,9 @@ class Items extends Component
                 }
             }
 
-                return view('livewire.items', ['items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->orderBy('TimeModified', 'DESC')->paginate(12)->appends(request()->query())]);
         }
+        return view('livewire.items', ['items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->orderBy('TimeModified', 'DESC')->paginate(12)->appends(request()->query())]);
+
 
     }
 

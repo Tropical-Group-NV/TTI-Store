@@ -1,17 +1,134 @@
-<nav x-data="{ open: false }" class="border-b border-gray-100 fixed w-full" style="background-color: #0069AD; z-index: 1000">
+<nav x-data="{ open: false }" class="border-b border-gray-100" style="background-color: #0069AD; z-index: 1000">
     @if(\Illuminate\Support\Facades\Auth::user() != null)
         @php($usertypes = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('users_type')->where('id', \Illuminate\Support\Facades\Auth::user()->users_type_id)->first())
     @endif
+
     <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 hidden md:block">
-        <div class="flex h-20 justify-center items-center">
+    <div class="px-3 hidden md:block">
+        <div class="flex justify-between h-20 items-center">
             <a href="{{ route('home') }}">
-                <img src="{{ asset('Logo-05.png') }}" alt="" class="" style="width: 400px">
+                <img src="{{ asset('Logo-05.png') }}" alt="" class="block lg:block" style="height: 50px">
+{{--                <img src="{{ asset('Logo-05-2.png') }}" alt="" class="block lg:hidden" style="height: 50px">--}}
             </a>
+            <div class="hidden 2xl:block">
+                <form class="flex-shrink-0" id="searchform" action="{{ route('dashboard') }}">
+                    <ul class="flex">
+                        <input onkeyup="searchItem2()" style="height:50px; width: 1000px" id="search_input2" placeholder="Search..." name="search" class="w-96 rounded-md flex-shrink-0" autocomplete="false" type="search">
+                        <button class="btn " style="background-color: #0069AD; height: 50px">
+                            <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
+                        </button>
+                    </ul>
+                </form>
+                <div id="list_search2" style="z-index: 100; position: absolute; max-height: 200px; width: 1000px"  class="hidden">
+                    <div id="searchwrap2" class="card card-body">
+                        <div class="hidden" id="loading_searchwrap2" style="border-radius: 50px">
+                            <img  src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="w-72 md:w-3/4 2xl:w-1/2" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="max-width: 350px">
+                        </div>
+                        <div id="item_searchwrap2" style="overflow-y: auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                @if(\Illuminate\Support\Facades\Auth::user() != null)
+                    <div class="ml-3 relative">
+                        <x-jet-dropdown align="right" width="48">
+                            <x-slot name="trigger">
+                                @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
+                                    <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
+                                        <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
+                                    </button>
+                                @else
+                                    <span class="inline-flex rounded-md">
+                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition">
+                                        <span class=""> {{ Auth::user()->name }}({{ $usertypes->name }}) </span> <i class="fa fa-user" style="color: #0069ad" aria-hidden="true"></i>
+
+                                        <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+
+                                </span>
+                                @endif
+                            </x-slot>
+
+
+                            <x-slot name="content">
+                                <!-- Account Management -->
+                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                    {{ \Illuminate\Support\Facades\Auth::user()->name . ' ' .  \Illuminate\Support\Facades\Auth::user()->last_name . '(' . $usertypes->name . ')'}}
+                                </div>
+
+                                {{--                            <x-jet-dropdown-link href="{{ route('profile.show') }}">--}}
+                                {{--                                {{ __('Profile') }}--}}
+                                {{--                            </x-jet-dropdown-link>--}}
+
+                                @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
+                                    <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
+                                        {{ __('API Tokens') }}
+                                    </x-jet-dropdown-link>
+                                @endif
+
+                                <div class="border-t border-gray-100"></div>
+
+                                <!-- Authentication -->
+                                <form method="POST" action="{{ route('logout') }}" x-data>
+                                    @csrf
+
+                                    <x-jet-dropdown-link href="{{ route('logout') }}"
+                                                         @click.prevent="$root.submit();">
+                                        {{ __('Log Out') }}
+                                    </x-jet-dropdown-link>
+                                </form>
+                            </x-slot>
+                        </x-jet-dropdown>
+                    </div>
+                @else
+                    <div class="flex">
+                        <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
+                            <div @click="open = ! open">
+                                <a class="text-white" href="{{ route('login') }}"><p>Log in</p></a>
+                            </div>
+                        </div>
+                        <h1 style="font-size: 20px; color: white; padding-left: 10px; padding-right: 10px">
+                            |
+                        </h1>
+                        <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
+                            <div @click="open = ! open">
+                                <a class="text-white" href="{{ route('customer-registration') }}"><p>Register</p></a>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+            </div>
+        </div>
+    </div>
+    <div class="px-3 hidden sm:block 2xl:hidden">
+        <div class=" justify-center h-20 items-center">
+            <div>
+                <form class="" id="searchform" action="{{ route('dashboard') }}">
+                    <ul class="flex">
+                        <input onkeyup="searchItem4()" style="height:50px; width: 100%" id="search_input4" placeholder="Search..." name="search" class="w-96 rounded-md" autocomplete="false" type="search">
+                        <button class="btn " style="background-color: #0069AD; height: 50px">
+                            <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
+                        </button>
+                    </ul>
+                </form>
+                <div id="list_search4" style="z-index: 100; position: absolute; max-height: 300px;"  class="hidden left-0 right-0">
+                    <div id="searchwrap4" class="card card-body">
+                        <div class="hidden" id="loading_searchwrap4" style="border-radius: 50px">
+                            <img  src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="w-72 md:w-3/4 2xl:w-1/2" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="max-width: 450px">
+                        </div>
+                        <div id="item_searchwrap4" style="overflow-y: auto">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
+        <div class="flex justify-between h-20  sm:h-10">
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
@@ -22,6 +139,13 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <div class="pt-3">
+                    </div>
+                    <a href="https://www.ttistore.com">
+                        <x-jet-nav-link href="https://www.ttistore.com" :active="request()->routeIs('dashboard')">
+                            TTIStore 1.0
+                        </x-jet-nav-link>
+                    </a>
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Items') }}
                     </x-jet-nav-link>
@@ -39,25 +163,8 @@
                 <div>
                     <div class="w-full" style="padding-left: 50px; padding-right: 50px">
                         <div>
-                            <form id="searchform" action="">
-                                <ul class="flex btn-group">
-                                    {{--                            <input style="height:50px" id=search_input wire:keydown="sug_search" wire:model="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class=" focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block form-control" autocomplete="false" type="search">--}}
-                                    <input onkeyup="searchItem2()" style="height:50px" id="search_input2" placeholder="Search..." name="search" class=" focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block form-control" autocomplete="false" type="search">
-                                    <button class="btn " style="background-color: #0069AD; height: 50px">
-                                        <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
-                                    </button>
-                                </ul>
-                            </form>
+
                         </div>
-                    </div>
-                </div>
-            </div><div id="list_search2" style="padding-left: 50px; padding-right: 68px;z-index: 100; position: absolute; max-height: 200px; top: 150px"  class="hidden">
-                <div id="searchwrap2" class="card card-body">
-                    <div class="hidden" id="loading_searchwrap2" style="border-radius: 50px">
-                        <img  src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="w-40 md:w-3/4 2xl:w-1/2" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="">
-                        {{--                                                    <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">--}}
-                    </div>
-                    <div id="item_searchwrap2" style="overflow-y: auto">
                     </div>
                 </div>
             </div>
@@ -112,69 +219,6 @@
                         </x-jet-dropdown>
                     </div>
                 @endif
-
-                <!-- Settings Dropdown -->
-                @if(\Illuminate\Support\Facades\Auth::user() != null)
-                    <div class="ml-3 relative">
-                        <x-jet-dropdown align="right" width="48">
-                            <x-slot name="trigger">
-                                @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
-                                    <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
-                                        <img class="h-8 w-8 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
-                                    </button>
-                                @else
-                                    <span class="inline-flex rounded-md">
-                                    <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition">
-                                        {{ Auth::user()->name }}({{ $usertypes->name }})
-
-                                        <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                        </svg>
-                                    </button>
-
-                                </span>
-                                @endif
-                            </x-slot>
-
-
-                            <x-slot name="content">
-                                <!-- Account Management -->
-                                <div class="block px-4 py-2 text-xs text-gray-400">
-                                    {{ __('Manage Account') }}
-                                </div>
-
-                                {{--                            <x-jet-dropdown-link href="{{ route('profile.show') }}">--}}
-                                {{--                                {{ __('Profile') }}--}}
-                                {{--                            </x-jet-dropdown-link>--}}
-
-                                @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
-                                    <x-jet-dropdown-link href="{{ route('api-tokens.index') }}">
-                                        {{ __('API Tokens') }}
-                                    </x-jet-dropdown-link>
-                                @endif
-
-                                <div class="border-t border-gray-100"></div>
-
-                                <!-- Authentication -->
-                                <form method="POST" action="{{ route('logout') }}" x-data>
-                                    @csrf
-
-                                    <x-jet-dropdown-link href="{{ route('logout') }}"
-                                                         @click.prevent="$root.submit();">
-                                        {{ __('Log Out') }}
-                                    </x-jet-dropdown-link>
-                                </form>
-                            </x-slot>
-                        </x-jet-dropdown>
-                    </div>
-                @else
-                    <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
-                        <div @click="open = ! open">
-                            <a class="text-white" href="{{ route('login') }}"><p>Log in</p></a>
-                        </div>
-                    </div>
-                @endif
-
             </div>
 
 
@@ -197,7 +241,30 @@
     </div>
 
     <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
+    <div :class="{'block': open , 'hidden': ! open}" style="background-color: #0069ad; z-index: 1000;" class="hidden absolute w-full">
+        <div class="px-3">
+            <div class=" justify-center h-20 items-center">
+                <div>
+                    <form class="" id="searchform" action="{{ route('dashboard') }}">
+                        <ul class="flex">
+                            <input onkeyup="searchItem3()" style="height:50px; width: 100%" id="search_input3" placeholder="Search..." name="search" class="w-96 rounded-md" autocomplete="false" type="search">
+                            <button class="btn " style="background-color: #0069AD; height: 50px">
+                                <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
+                            </button>
+                        </ul>
+                    </form>
+                    <div id="list_search3" style="z-index: 100; position: absolute; max-height: 300px;"  class="hidden left-0 right-0">
+                        <div id="searchwrap3" class="card card-body">
+                            <div class="hidden" id="loading_searchwrap3" style="border-radius: 50px">
+                                <img  src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="w-72 md:w-3/4 2xl:w-1/2" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="max-width: 450px">
+                            </div>
+                            <div id="item_searchwrap3" style="overflow-y: auto">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="pt-2 pb-3 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Items') }}
@@ -212,6 +279,9 @@
             @else
                 <x-jet-responsive-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')">
                     {{ __('Login') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="{{ route('customer-registration') }}" :active="request()->routeIs('customer-registration')">
+                    {{ __('Register') }}
                 </x-jet-responsive-nav-link>
             @endif
         </div>
@@ -257,11 +327,9 @@
                     <!-- Team Management -->
                     @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
                         <div class="border-t border-gray-200"></div>
-
                         <div class="block px-4 py-2 text-xs text-gray-400">
                             {{ __('Manage Team') }}
                         </div>
-
                         <!-- Team Settings -->
                         <x-jet-responsive-nav-link href="{{ route('teams.show', Auth::user()->currentTeam->id) }}" :active="request()->routeIs('teams.show')">
                             {{ __('Team Settings') }}
@@ -288,34 +356,104 @@
             </div>
         @endif
     </div>
-        <script>
-            function searchItem2()
+    <script>
+        function searchItem2()
+        {
+            if(document.getElementById('search_input2').value === '')
             {
-                if(document.getElementById('search_input').value === '')
-                {
-                    document.getElementById("list_search").classList.add('hidden');
-                }
-                else
-                {
-                    document.getElementById("list_search2").classList.remove('hidden');
-                    document.getElementById("item_searchwrap2").classList.add('hidden');
-                    document.getElementById("list_search2").classList.add('block');
-                    const items = new XMLHttpRequest();
-                    document.getElementById("loading_searchwrap2").classList.remove('hidden');
-                    document.getElementById("item_searchwrap2").classList.add('hidden');
-                    document.getElementById("loading_searchwrap2").classList.add('block');
-                    items.onload = function()
-                    {
-                        document.getElementById("item_searchwrap2").classList.remove('hidden');
-                        document.getElementById("loading_searchwrap2").classList.remove('block');
-                        document.getElementById("loading_searchwrap2").classList.add('hidden');
-                        document.getElementById("item_searchwrap2").innerHTML = this.responseText;
-                    }
-                    items.open("GET", '{{ route('getItems') }}?search=' + document.getElementById('search_input').value , true);
-                    items.send();
-                }
-
+                document.getElementById("list_search2").classList.add('hidden');
             }
-        </script>
+            else
+            {
+                document.getElementById("list_search2").classList.remove('hidden');
+                document.getElementById("item_searchwrap2").classList.add('hidden');
+                document.getElementById("list_search2").classList.add('block');
+                const items = new XMLHttpRequest();
+                document.getElementById("loading_searchwrap2").classList.remove('hidden');
+                document.getElementById("item_searchwrap2").classList.add('hidden');
+                document.getElementById("loading_searchwrap2").classList.add('block');
+                items.onload = function()
+                {
+                    document.getElementById("item_searchwrap2").classList.remove('hidden');
+                    document.getElementById("loading_searchwrap2").classList.remove('block');
+                    document.getElementById("loading_searchwrap2").classList.add('hidden');
+                    document.getElementById("item_searchwrap2").innerHTML = this.responseText;
+                }
+                items.open("GET", '{{ route('getItems') }}?search=' + document.getElementById('search_input2').value , true);
+                items.send();
+            }
+
+        }
+    </script>
+        <script>
+        function searchItem3()
+        {
+            if(document.getElementById('search_input3').value === '')
+            {
+                document.getElementById("list_search3").classList.add('hidden');
+            }
+            else
+            {
+                document.getElementById("list_search3").classList.remove('hidden');
+                document.getElementById("item_searchwrap3").classList.add('hidden');
+                document.getElementById("list_search3").classList.add('block');
+                const items = new XMLHttpRequest();
+                document.getElementById("loading_searchwrap3").classList.remove('hidden');
+                document.getElementById("item_searchwrap3").classList.add('hidden');
+                document.getElementById("loading_searchwrap3").classList.add('block');
+                items.onload = function()
+                {
+                    document.getElementById("item_searchwrap3").classList.remove('hidden');
+                    document.getElementById("loading_searchwrap3").classList.remove('block');
+                    document.getElementById("loading_searchwrap3").classList.add('hidden');
+                    document.getElementById("item_searchwrap3").innerHTML = this.responseText;
+                }
+                items.open("GET", '{{ route('getItems') }}?search=' + document.getElementById('search_input3').value , true);
+                items.send();
+            }
+
+        }
+    </script>
+        <script>
+        function searchItem4()
+        {
+            if(document.getElementById('search_input4').value === '')
+            {
+                document.getElementById("list_search4").classList.add('hidden');
+            }
+            else
+            {
+                document.getElementById("list_search4").classList.remove('hidden');
+                document.getElementById("item_searchwrap4").classList.add('hidden');
+                document.getElementById("list_search4").classList.add('block');
+                const items = new XMLHttpRequest();
+                document.getElementById("loading_searchwrap4").classList.remove('hidden');
+                document.getElementById("item_searchwrap4").classList.add('hidden');
+                document.getElementById("loading_searchwrap4").classList.add('block');
+                items.onload = function()
+                {
+                    document.getElementById("item_searchwrap4").classList.remove('hidden');
+                    document.getElementById("loading_searchwrap4").classList.remove('block');
+                    document.getElementById("loading_searchwrap4").classList.add('hidden');
+                    document.getElementById("item_searchwrap4").innerHTML = this.responseText;
+                }
+                items.open("GET", '{{ route('getItems') }}?search=' + document.getElementById('search_input4').value , true);
+                items.send();
+            }
+
+        }
+    </script>
+    <script>
+        document.body.addEventListener("click", function (evt) {
+            document.getElementById("list_search2").classList.add('hidden');
+
+        });
+    </script>
+        <script>
+        document.body.addEventListener("click", function (evt) {
+            document.getElementById("list_search3").classList.add('hidden');
+
+        });
+    </script>
 </nav>
 

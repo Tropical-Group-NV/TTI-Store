@@ -128,7 +128,7 @@
                                 <tr class="border-b">
                                     <td class="p-6 hidemobile"  style="font-family: sfsemibold">
                                     <span>
-                                        {{ $item->BarCodeValue }}
+                                        {{ $item->FullName }}
                                     </span>
 
                                     </td>
@@ -152,10 +152,10 @@
 
                                     </td>
                                     <td>
-                                        <span class="hidemobile">SRD</span> {{ substr($item->SalesPrice, 0, -3) }}
+                                        <span class="hidemobile">SRD</span> {{number_format($item->SalesPrice, 2) }}
                                     </td>
                                     <td class="p-6">
-                                        <span class="hidemobile">SRD</span> {{ $cartItem->qty * $item->SalesPrice  }}
+                                        <span class="hidemobile">SRD</span> {{ number_format($cartItem->qty * $item->SalesPrice , 2)  }}
                                     </td>
                                     <td>
 
@@ -176,7 +176,7 @@
                             <td class="hidemobile">
                             </td>
                             <td class="p-6">
-                                <span class="hidemobile">SRD</span> {{ $subTotal }}
+                                <span class="hidemobile">SRD</span> {{ number_format($subTotal, 2) }}
                             </td>
                         </tr>
                         </tfoot>

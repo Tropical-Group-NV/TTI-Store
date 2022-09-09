@@ -3,77 +3,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <div>
 
-        <br>
         <div>
-            <div class="w-full" style="padding-left: 50px; padding-right: 50px">
-                <div>
-                    <form id="searchform" action="">
-                        <ul class="flex btn-group">
-{{--                            <input style="height:50px" id=search_input wire:keydown="sug_search" wire:model="search2" value="{{ $search_str }}" placeholder="Search..." name="search" class=" focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block form-control" autocomplete="false" type="search">--}}
-                            <input onkeyup="searchItem()" style="height:50px" id=search_input placeholder="Search..." name="search" class=" focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block form-control" autocomplete="false" type="search">
-                            <button class="btn " style="background-color: #0069AD; height: 50px">
-                                <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
-                            </button>
-                        </ul>
-                    </form>
-                </div>
-            </div>
-{{--            <div id="list_search" style="padding-left: 50px; padding-right: 68px;z-index: 100; position: absolute; max-height: 200px"  class="collapse @if(strlen($search2) > 0 and $search_sw == 1 and !empty($list)) show @endif">--}}
-{{--                <div class="card card-body">--}}
-{{--                    <div style="border-radius: 50px" wire:loading>--}}
-{{--                        <img src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">--}}
-{{--                        --}}{{--                            <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">--}}
-{{--                    </div>--}}
-{{--                    <div style="overflow-y: auto"  wire:loading.remove>--}}
-{{--                        @if(strlen($search2) > 0 and $search_sw == 1)--}}
-{{--                            @foreach($list as $itm)--}}
-{{--                                @if(is_array($itm))--}}
-{{--                                    @if($itm != null)--}}
-{{--                                        @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $itm['ListID'])->get()->first())--}}
-{{--                                        @if($image != null)--}}
-{{--                                            --}}{{--                                                <a href="#" onclick="document.getElementById('searchform').value = '{{ $itm['Description'] }} }}';document.getElementById('searchform').submit()">--}}
-{{--                                            <a href="{{ route('item', $itm['ListID']) }}" >--}}
-{{--                                                <ul class="flex hover:bg-gray-50 cursor-pointer">--}}
-{{--                                                    <img src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px" alt="">--}}
-{{--                                                    <h1>{{ $itm['Description'] }}</h1>--}}
-{{--                                                </ul>--}}
-{{--                                            </a>--}}
-{{--                                            <hr>--}}
-{{--                                            <br>--}}
-{{--                                        @endif--}}
-{{--                                    @endif--}}
-
-{{--                                @else--}}
-
-{{--                                    @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $itm->ListID)->get()->first())--}}
-{{--                                    @if($image != null)--}}
-{{--                                        --}}{{--                                            <a href="#" onclick="document.getElementById('searchform').value = '{{ $itm->Description }}';document.getElementById('searchform').submit()">--}}
-{{--                                        <a href="{{ route('item', $itm->ListID) }}">--}}
-{{--                                            <ul class="flex hover:bg-gray-50 cursor-pointer">--}}
-{{--                                                <img src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 40px" alt="">--}}
-
-{{--                                                <h1>{{ $itm->Description }}</h1>--}}
-{{--                                            </ul>--}}
-{{--                                        </a>--}}
-{{--                                        <hr>--}}
-{{--                                    @endif--}}
-{{--                                @endif--}}
-{{--                            @endforeach--}}
-{{--                        @endif--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-            <div id="list_search" style="padding-left: 50px; padding-right: 68px;z-index: 100; position: absolute; max-height: 200px"  class="hidden">
-                <div id="searchwrap" class="card card-body">
-                    <div class="hidden" id="loading_searchwrap" style="border-radius: 50px">
-                        <img  src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="w-40 md:w-3/4 2xl:w-1/2" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="">
-{{--                                                    <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="height: 100px; margin: 0px;">--}}
-                    </div>
-                    <div id="item_searchwrap" style="overflow-y: auto">
-                    </div>
-                </div>
-            </div>
-            <div class="block md:block lg:block xl:block 2xl:hidden" style="padding-left: 50px; padding-right: 50px; padding-top: 10px">
+            <div class="block md:block lg:block xl:block 2xl:hidden" style=" padding-top: 10px; padding-bottom: 10px">
                 <button type="button" id="toggleFilters" onclick="this.style.display = 'none'; document.getElementById('filters').style.display = 'block'" class="btn w-full" style="background-color: #0069AD; height: 50px; right: 0; color: white">
                     Filters
                 </button>
@@ -82,18 +13,12 @@
                 </div>
             </div>
         </div>
-
-
         {{--        @endif--}}
-
-
-
-        <br><br>
         @if($search_str != '')
+            <br>
             <div style="padding-left: 100px; padding-right: 100px">
         <span style="padding-left: 10px">
             Search results for: "<b>{{ $search_str }}</b>"
-
         </span>
             </div>
             <br>
@@ -134,10 +59,10 @@
                         <ul class="border-top flex justify-between" style="bottom: 0; padding: 20px">
                             <li>
                                 @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                    <span style="padding-top: 10px">Sales price: SRD <b>{{ substr($item->SalesPrice, 0, -3) }}</b></span>
+                                    <span style="padding-top: 10px">Sales price: SRD <b class="font-extrabold" style="color: #0069ad; font-size: 20px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                     <br>
                                 @endif
-                                <span style="padding-top: 10px">Retail price: SRD <b>{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                <span style="padding-top: 10px">Retail price: SRD <b class="font-extrabold" style="color: #0069ad; font-size: 20px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
                                 <br>
                                 <span style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                 <br>
@@ -169,7 +94,7 @@
                                     @php($inCart = \App\Models\CartItem::query()->where('prod_id', $item->ListID)->where('uid', \Illuminate\Support\Facades\Auth::user()->id)->first())
                                     <div>
                                         <span wire:click="load2('remove{{ $item->ListID }}')" class="input-group-btn input-group-prepend">
-                                            <button style="font-family: sfsemibold; background-color: #0069AD; color: white" disabled class="btn w-full items-center">
+                                            <button style="font-family: sfsemibold; background-color: green; color: white" disabled class="btn w-full items-center">
                                                 Added to cart
                                             </button>
                                         </span>
