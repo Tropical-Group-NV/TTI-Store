@@ -1203,6 +1203,18 @@ select {
 .right-80 {
   right: 20rem;
 }
+.top-52 {
+  top: 13rem;
+}
+.top-5 {
+  top: 1.25rem;
+}
+.bottom-52 {
+  bottom: 13rem;
+}
+.bottom-96 {
+  bottom: 24rem;
+}
 .z-0 {
   z-index: 0;
 }
@@ -2246,6 +2258,10 @@ select {
   --tw-text-opacity: 1;
   color: rgb(96 165 250 / var(--tw-text-opacity));
 }
+.hover\:text-white:hover {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
 .focus\:z-10:focus {
   z-index: 10;
 }
@@ -2392,6 +2408,10 @@ select {
 .active\:text-gray-800:active {
   --tw-text-opacity: 1;
   color: rgb(31 41 55 / var(--tw-text-opacity));
+}
+.active\:text-white:active {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 .disabled\:opacity-25:disabled {
   opacity: 0.25;
@@ -2804,6 +2824,22 @@ select {
 
   .\32xl\:relative {
     position: relative;
+  }
+
+  .\32xl\:left-0 {
+    left: 0px;
+  }
+
+  .\32xl\:top-5 {
+    top: 1.25rem;
+  }
+
+  .\32xl\:left-auto {
+    left: auto;
+  }
+
+  .\32xl\:top-auto {
+    top: auto;
   }
 
   .\32xl\:block {

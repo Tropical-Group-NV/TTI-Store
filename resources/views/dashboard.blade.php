@@ -7,7 +7,7 @@
             </span>
             </span>
         @endif
-        <div class="py-12">
+        <div class="sm:py-12">
             <div class="flex ">
                 <div class="hidden md:hidden lg:hidden xl:hidden 2xl:block" style="z-index: 100">
                     @livewire('filter')
@@ -17,8 +17,8 @@
                     @livewire('items')
                 </div>
                 @if(\Illuminate\Support\Facades\Auth::user() != null)
-                    <div  class="2xl:invisible" id="toggleCart" style="position: fixed;right: 0;z-index: 100">
-                        <aside class="w-full shadow-xl sm:rounded-lg outline-amber-300 outline-8 border-black">
+                    <div  class="2xl:invisible bottom-96 round-lg border border-black border-4" id="toggleCart" style="position: fixed;right: 0;z-index: 100">
+                        <aside class="w-full shadow-xl rounded-lg outline-amber-300 outline-8 border-black">
                             <div class="overflow-y-auto py-4 px-3 w-full bg-white sm:rounded outline-8 border-black">
                                 <button  onclick="toggleCart()" data-modal-toggle="shoppingCart">
                                     <img width="24" height="24" src="https://www.svgrepo.com/show/7898/shopping-cart.svg">
@@ -26,7 +26,7 @@
                             </div>
                         </aside>
                     </div>
-                    <div style="z-index: 100; right: 0" id="shoppingCart" class="hidden 2xl:block fixed 2xl:relative">
+                    <div style="z-index: 100; right: 0" id="shoppingCart" class="hidden 2xl:block ">
                         @livewire('sidebar')
                     </div>
                 @endif

@@ -1,4 +1,4 @@
-<div style="min-width: 350px;">
+<div style="min-width: 350px; z-index: 1200">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     {{--    <link rel="stylesheet" href="{{ asset('css/jquery_ui/custom.css') }}">--}}
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -58,10 +58,11 @@
         <aside class="w-full border border-black shadow-xl sm:rounded-lg">
             <div class="overflow-y-auto py-4 px-3 bg-gray-50">
                 <div style="z-index: 5;max-height: 700px;">
-                <span style="font-family: sfsemibold; font-size: 35px" class="p-6 hidden md:hidden lg:block">
+                <span style="font-family: sfsemibold; font-size: 20px" class="p-6 hidden md:hidden lg:block">
                    Filters
+                    <i style="color: #0069ad" class="fa fa-filter" aria-hidden="true"></i>
                 </span>
-                    <br class="hidden md:hidden lg:block">
+                    <br class="hidden md:hidden">
                     <hr class="hidden md:hidden lg:block">
                     <br class="hidden md:hidden lg:block">
                     <div>

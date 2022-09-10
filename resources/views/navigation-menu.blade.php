@@ -8,7 +8,7 @@
         <div class="flex justify-between h-20 items-center">
             <a href="{{ route('home') }}">
                 <img src="{{ asset('Logo-05.png') }}" alt="" class="block lg:block" style="height: 50px">
-{{--                <img src="{{ asset('Logo-05-2.png') }}" alt="" class="block lg:hidden" style="height: 50px">--}}
+                {{--                <img src="{{ asset('Logo-05-2.png') }}" alt="" class="block lg:hidden" style="height: 50px">--}}
             </a>
             <div class="hidden 2xl:block">
                 <form class="flex-shrink-0" id="searchform" action="{{ route('dashboard') }}">
@@ -239,32 +239,31 @@
             </div>
         </div>
     </div>
-
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open , 'hidden': ! open}" style="background-color: #0069ad; z-index: 1000;" class="hidden absolute w-full">
-        <div class="px-3">
-            <div class=" justify-center h-20 items-center">
-                <div>
-                    <form class="" id="searchform" action="{{ route('dashboard') }}">
-                        <ul class="flex">
-                            <input onkeyup="searchItem3()" style="height:50px; width: 100%" id="search_input3" placeholder="Search..." name="search" class="w-96 rounded-md" autocomplete="false" type="search">
-                            <button class="btn " style="background-color: #0069AD; height: 50px">
-                                <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
-                            </button>
-                        </ul>
-                    </form>
-                    <div id="list_search3" style="z-index: 100; position: absolute; max-height: 300px;"  class="hidden left-0 right-0">
-                        <div id="searchwrap3" class="card card-body">
-                            <div class="hidden" id="loading_searchwrap3" style="border-radius: 50px">
-                                <img  src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="w-72 md:w-3/4 2xl:w-1/2" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="max-width: 450px">
-                            </div>
-                            <div id="item_searchwrap3" style="overflow-y: auto">
-                            </div>
+    <div class="px-3 sm:hidden">
+        <div class="justify-center h-20 items-center">
+            <div>
+                <form class="" id="searchform" action="{{ route('dashboard') }}">
+                    <ul class="flex">
+                        <input onkeyup="searchItem3()" style="height:50px; width: 100%" id="search_input3" placeholder="Search..." name="search" class="w-96 rounded-md" autocomplete="false" type="search">
+                        <button class="btn " style="background-color: #0069AD; height: 50px">
+                            <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
+                        </button>
+                    </ul>
+                </form>
+                <div id="list_search3" style="z-index: 100; position: absolute; max-height: 300px;"  class="hidden left-0 right-0">
+                    <div id="searchwrap3" class="card card-body">
+                        <div class="hidden" id="loading_searchwrap3" style="border-radius: 50px">
+                            <img  src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="w-72 md:w-3/4 2xl:w-1/2" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="max-width: 450px">
+                        </div>
+                        <div id="item_searchwrap3" style="overflow-y: auto">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <!-- Responsive Navigation Menu -->
+    <div :class="{'block': open , 'hidden': ! open}" style="background-color: #0069ad; z-index: 1000;" class="hidden absolute w-full">
         <div class="pt-2 pb-3 space-y-1">
             <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                 {{ __('Items') }}
@@ -385,7 +384,7 @@
 
         }
     </script>
-        <script>
+    <script>
         function searchItem3()
         {
             if(document.getElementById('search_input3').value === '')
@@ -414,7 +413,7 @@
 
         }
     </script>
-        <script>
+    <script>
         function searchItem4()
         {
             if(document.getElementById('search_input4').value === '')
@@ -449,7 +448,7 @@
 
         });
     </script>
-        <script>
+    <script>
         document.body.addEventListener("click", function (evt) {
             document.getElementById("list_search3").classList.add('hidden');
 

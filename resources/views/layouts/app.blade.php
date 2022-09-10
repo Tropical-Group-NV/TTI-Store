@@ -9,8 +9,8 @@
             position:fixed;
             width:60px;
             height:60px;
-            bottom:40px;
-            right:40px;
+            bottom:15px;
+            right:25px;
             background-color:#25d366;
             color:#FFF;
             border-radius:50px;
@@ -87,12 +87,18 @@
     </main>
 </div>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<a href="https://api.whatsapp.com/send?phone=+5978691600&text=" class="float" target="_blank">
-    <i class="fa fa-whatsapp my-float"></i>
+<a href="https://api.whatsapp.com/send?phone=+5978691600&text=" class="float active:text-white hover:text-white" target="_blank">
+    <i class="fa fa-whatsapp active:text-white my-float"></i>
 </a>
 
 @stack('modals')
 
 @livewireScripts
+
+<div style="background-color: #0069ad" class="w-full h-8 flex justify-center items-center">
+    <p style="font-family: sflight" class="text-white">
+       Copyright © 2022. Tropical Trade & Industries N.V. All rights reserved.
+    </p>
+</div>
 </body>
 </html>

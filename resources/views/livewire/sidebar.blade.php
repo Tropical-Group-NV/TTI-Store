@@ -1,16 +1,22 @@
 <div>
-    <div style="; right: 0;" class="">
+    <div style="; right: 0;" class="2xl:block fixed 2xl:relative left-0 2xl:left-auto top-5 2xl:top-auto sm:top-45">
         <aside class="shadow-xl sm:rounded-lg">
             <div class="overflow-y-auto py-4 px-3 bg-white rounded w-full" style="">
 
                 <button class="block 2xl:hidden" style="position: absolute; z-index: 1000" onclick="toggleCart()" data-modal-toggle="shoppingCart">
-                    <img width="24" height="24" src="https://www.svgrepo.com/show/273966/close.svg">
+                    <img style="width: 30px" src="https://www.svgrepo.com/show/273966/close.svg">
                 </button>
-                <div class="" style="z-index: 5; overflow-y: auto;max-height: 400px; overflow-x: hidden">
-                        <span style="font-family: sfsemibold; font-size: 35px" class="p-6">
-                            Shopping Cart
+                <span style="font-family: sfsemibold;;" class="p-6 text-center flex justify-center">
+                    <div>
+                        <span style="font-size: 20px">
+                                                        Shopping Cart
+
                         </span>
-                    <br>
+                        <i style="color: #0069ad" class="fa fa-shopping-cart" aria-hidden="true"></i>
+
+                    </div>
+                </span>
+                <div class="" style="z-index: 5; overflow-y: auto;max-height: 400px; overflow-x: hidden">
                     <hr>
                     <br>
                     <table class="sm:rounded-lg table-auto border border-spacing-2 w-full">
