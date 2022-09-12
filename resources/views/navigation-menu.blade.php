@@ -1,4 +1,6 @@
 <nav x-data="{ open: false }" class="border-b border-gray-100" style="background-color: #0069AD; z-index: 1000">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     @if(\Illuminate\Support\Facades\Auth::user() != null)
         @php($usertypes = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('users_type')->where('id', \Illuminate\Support\Facades\Auth::user()->users_type_id)->first())
     @endif
@@ -19,7 +21,7 @@
                         </button>
                     </ul>
                 </form>
-                <div id="list_search2" style="z-index: 100; position: absolute; max-height: 200px; width: 1000px"  class="hidden">
+                <div id="list_search2" style="z-index: 100000; position: absolute; max-height: 200px; width: 1000px"  class="hidden">
                     <div id="searchwrap2" class="card card-body">
                         <div class="hidden" id="loading_searchwrap2" style="border-radius: 50px">
                             <img  src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="w-72 md:w-3/4 2xl:w-1/2" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="max-width: 350px">
@@ -70,6 +72,9 @@
                                 @endif
 
                                 <div class="border-t border-gray-100"></div>
+                                <x-jet-dropdown-link href="https://www.ttistore.com">
+                                    {{ __('Go to TTISTORE 1.0') }}
+                                </x-jet-dropdown-link>
 
                                 <!-- Authentication -->
                                 <form method="POST" action="{{ route('logout') }}" x-data>
@@ -115,7 +120,7 @@
                         </button>
                     </ul>
                 </form>
-                <div id="list_search4" style="z-index: 100; position: absolute; max-height: 300px;"  class="hidden left-0 right-0">
+                <div id="list_search4" style="z-index: 100000; position: absolute; max-height: 300px;"  class="hidden left-0 right-0">
                     <div id="searchwrap4" class="card card-body">
                         <div class="hidden" id="loading_searchwrap4" style="border-radius: 50px">
                             <img  src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="w-72 md:w-3/4 2xl:w-1/2" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="max-width: 450px">
@@ -141,11 +146,6 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                     <div class="pt-3">
                     </div>
-                    <a href="https://www.ttistore.com">
-                        <x-jet-nav-link href="https://www.ttistore.com" :active="request()->routeIs('dashboard')">
-                            TTIStore 1.0
-                        </x-jet-nav-link>
-                    </a>
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Items') }}
                     </x-jet-nav-link>
@@ -250,7 +250,7 @@
                         </button>
                     </ul>
                 </form>
-                <div id="list_search3" style="z-index: 100; position: absolute; max-height: 300px;"  class="hidden left-0 right-0">
+                <div id="list_search3" style="z-index: 100000; position: absolute; max-height: 300px;"  class="hidden left-0 right-0">
                     <div id="searchwrap3" class="card card-body">
                         <div class="hidden" id="loading_searchwrap3" style="border-radius: 50px">
                             <img  src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="w-72 md:w-3/4 2xl:w-1/2" alt="Color Fill Loading Image Gif | Webpage design, Gif, Animation" data-noaft="1" style="max-width: 450px">
@@ -274,6 +274,9 @@
                 </x-jet-responsive-nav-link>
                 <x-jet-responsive-nav-link href="{{ route('backorders') }}" :active="request()->routeIs('backorders')">
                     {{ __('Backorders') }}
+                </x-jet-responsive-nav-link>
+                <x-jet-responsive-nav-link href="https://www.ttistore.com">
+                    {{ __('Go to TTISTORE 1.0') }}
                 </x-jet-responsive-nav-link>
             @else
                 <x-jet-responsive-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')">
@@ -454,5 +457,22 @@
 
         });
     </script>
+        <script>
+            window.addEventListener('addedcart', (e) => {
+                toastr.success("Added to Cart")
+            });
+            window.addEventListener('removedcart', (e) => {
+                toastr.warning("Removed from Cart")
+            });
+            window.addEventListener('clearcart', (e) => {
+                toastr.warning("Cart cleared")
+            });
+            window.addEventListener('qtyupdate', (e) => {
+                toastr.info("Updated Quantity")
+            });
+            window.addEventListener('addedbo', (e) => {
+                toastr.success("Created Backorder")
+            });
+        </script>
 </nav>
 

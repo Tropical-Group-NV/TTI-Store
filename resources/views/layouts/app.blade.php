@@ -39,7 +39,8 @@
     <link rel="stylesheet" href="{{ asset('css/fonts.css') }}">
     <link rel="stylesheet" href="{{ asset('FontAwesome/css/font-awesome.css?v=').time() }}">
     <link rel="stylesheet" href="{{ asset('css/custom.css?v=').time() }}">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+{{--    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>--}}
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
     {{--        <link rel="stylesheet" href="{{asset('bootstrap4.2.1/css/bootstrap-grid.css')}}">--}}
@@ -87,18 +88,18 @@
     </main>
 </div>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<a href="https://api.whatsapp.com/send?phone=+5978691600&text=" class="float active:text-white hover:text-white" target="_blank">
-    <i class="fa fa-whatsapp active:text-white my-float"></i>
+<a href="https://wa.me/+5978691600" class="float active:text-white hover:text-white" target="_blank">
+    <i class="fa fa-whatsapp active:text-white my-float  https://wa.me/+5978691600"></i>
 </a>
 
 @stack('modals')
 
 @livewireScripts
 
-<div style="background-color: #0069ad" class="w-full h-8 flex justify-center items-center">
-    <p style="font-family: sflight" class="text-white">
-       Copyright © 2022. Tropical Trade & Industries N.V. All rights reserved.
-    </p>
-</div>
+{{--<div style="background-color: #0069ad" class="w-full h-8 flex justify-center items-center">--}}
+{{--    <p style="font-family: sflight" class="text-white">--}}
+{{--       Copyright © 2022. Tropical Trade & Industries N.V. All rights reserved.--}}
+{{--    </p>--}}
+{{--</div>--}}
 </body>
 </html>

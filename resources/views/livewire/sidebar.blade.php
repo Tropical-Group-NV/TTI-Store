@@ -16,7 +16,7 @@
 
                     </div>
                 </span>
-                <div class="" style="z-index: 5; overflow-y: auto;max-height: 400px; overflow-x: hidden">
+                <div style="z-index: 5; overflow-y: auto;max-height: 375px; overflow-x: hidden">
                     <hr>
                     <br>
                     <table class="sm:rounded-lg table-auto border border-spacing-2 w-full">
@@ -61,7 +61,7 @@
                                         </span>
                                             <select wire:loading.attr="disabled" wire:change="changeQuantity( '{{ $cartItem->id }}', document.getElementById('{{ $cartItem->id }}').value)" class="form-control" id="{{ $cartItem->id }}" name="qty">
                                                 @php($count=0)
-                                                @while($count != $item->QuantityOnHand + 1)
+                                                @while($count != 1000)
                                                     @php($count++ )
                                                     <option @if($count ==  $cartItem->qty ) selected @endif value="{{ $count }}">{{ $count }}</option>
                                                 @endwhile

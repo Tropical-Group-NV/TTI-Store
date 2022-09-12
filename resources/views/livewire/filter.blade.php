@@ -94,19 +94,13 @@
                                 @php($currentPrivateBranch = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('settings_branch_view_item_on_user')->where('branch', $branch->CustomFieldBranch)->get())
                                 @foreach($currentPrivateBranch as $pb)
                                     @php($put = 0)
+                                @if(\Illuminate\Support\Facades\Auth::user() != null)
                                     @if(\Illuminate\Support\Facades\Auth::user()->id == $pb->user_id)
                                         @php($put = 1)
                                         @break(1)
                                     @endif
+                                    @endif
                                 @endforeach
-{{--                                @foreach($privateBranches as $privateBranch)--}}
-{{--                                    @if($privateBranch->branch == $branch->CustomFieldBranch)--}}
-{{--                                        @php($put = 0)--}}
-{{--                                        @if(\Illuminate\Support\Facades\Auth::user()->id == $privateBranch->user_id)--}}
-{{--                                        @php($put = 1)--}}
-{{--                                        @endif--}}
-{{--                                    @endif--}}
-{{--                                @endforeach--}}
                                 @if($put == 1)
                                 <option value="{{ $branch->CustomFieldBranch }}">{{ $branch->CustomFieldBranch }}</option>
                                 @endif
@@ -184,10 +178,7 @@
         document.getElementById('brand').value = '{{ $_REQUEST['brand'] }}';
         @endif
         @if(isset($_REQUEST['branch']))
-        document.getElementById('brand').value = '{{ $_REQUEST['branch'] }}';
-        @endif
-        @if(isset($_REQUEST['search']))
-        document.getElementById('search').value = '{{ $_REQUEST['search'] }}';
+        document.getElementById('branch').value = '{{ $_REQUEST['branch'] }}';
         @endif
     </script>
 </div>

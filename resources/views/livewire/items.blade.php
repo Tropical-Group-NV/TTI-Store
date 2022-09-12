@@ -147,7 +147,7 @@
 
                                                 <select id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
                                                     @php($count=0)
-                                                    @while($count != $item->QuantityOnHand)
+                                                    @while($count != 1000)
                                                         @php($count++ )
                                                         <option value="{{ $count }}">{{ $count }}</option>
                                                     @endwhile
@@ -171,10 +171,6 @@
 
                 </div>
             @endforeach
-            {{--        <div wire:target="addToCart, removeFromCart" wire:loading="addToCart('{{$item->ListID}}" id="defaultModal" tabindex="-1" style="position: fixed; left: 50%; top: 15%; z-index: 5">--}}
-            {{--            <img src="https://i.pinimg.com/originals/65/ba/48/65ba488626025cff82f091336fbf94bb.gif" alt="">--}}
-            {{--            <img src="{{ asset('ttistore_loading.gif') }}" jsaction="load:XAeZkd;" jsname="HiaYvf" class="n3VNCb KAlRDb"  data-noaft="1" style="height: 100%; margin: 0px;">--}}
-            {{--        </div>--}}
 
 
             <script>
@@ -250,23 +246,6 @@
             </div>
 
         </div>
-        <script>
-            window.addEventListener('addedcart', (e) => {
-                toastr.success("Added to Cart")
-            });
-            window.addEventListener('removedcart', (e) => {
-                toastr.warning("Removed from Cart")
-            });
-            window.addEventListener('clearcart', (e) => {
-                toastr.warning("Cart cleared")
-            });
-            window.addEventListener('qtyupdate', (e) => {
-                toastr.info("Updated Quantity")
-            });
-            window.addEventListener('addedbo', (e) => {
-                toastr.success("Created Backorder")
-            });
-        </script>
         <script>
             document.body.addEventListener('click', function ()
             {
