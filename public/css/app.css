@@ -1185,6 +1185,12 @@ select {
 .right-0 {
   right: 0px;
 }
+.left-20 {
+  left: 5rem;
+}
+.bottom-20 {
+  bottom: 5rem;
+}
 .bottom-96 {
   bottom: 24rem;
 }
@@ -1193,9 +1199,6 @@ select {
 }
 .top-0 {
   top: 0px;
-}
-.bottom-40 {
-  bottom: 10rem;
 }
 .z-0 {
   z-index: 0;
@@ -1343,15 +1346,6 @@ select {
 }
 .h-20 {
   height: 5rem;
-}
-.max-h-80 {
-  max-height: 20rem;
-}
-.max-h-52 {
-  max-height: 13rem;
-}
-.max-h-32 {
-  max-height: 8rem;
 }
 .min-h-screen {
   min-height: 100vh;
@@ -1881,9 +1875,6 @@ select {
 .pb-1 {
   padding-bottom: 0.25rem;
 }
-.pt-7 {
-  padding-top: 1.75rem;
-}
 .pt-3 {
   padding-top: 0.75rem;
 }
@@ -2400,14 +2391,6 @@ select {
 }
 @media (prefers-color-scheme: dark) {
 
-  .dark\:block {
-    display: block;
-  }
-
-  .dark\:hidden {
-    display: none;
-  }
-
   .dark\:border-gray-600 {
     --tw-border-opacity: 1;
     border-color: rgb(75 85 99 / var(--tw-border-opacity));
@@ -2748,10 +2731,6 @@ select {
   .md\:px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
-  }
-
-  .md\:pt-32 {
-    padding-top: 8rem;
   }
 }
 @media (min-width: 1024px) {

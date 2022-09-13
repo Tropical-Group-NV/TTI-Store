@@ -19,6 +19,16 @@
             box-shadow: 2px 2px 3px #999;
             z-index:100;
         }
+        .float2{
+            position:fixed;
+            width:60px;
+            height:60px;
+            bottom:15px;
+            left:25px;
+            text-align:center;
+            font-size:30px;
+            z-index:100;
+        }
 
         .my-float{
             margin-top:16px;
@@ -86,6 +96,16 @@
     <main>
         {{ $slot }}
     </main>
+</div>
+
+<div id="godaddy-security-badge" class="" style="background-image: none">
+    <a href="https://seal.godaddy.com/verifySeal?sealID=pIwHVyKG5cIEV9uGI0frERDzgcGFdBuY9WZYHYapnu4r0VKc2hLUukQbyKO9">
+        <span id="siteseal">
+        <script async="" type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=pIwHVyKG5cIEV9uGI0frERDzgcGFdBuY9WZYHYapnu4r0VKc2hLUukQbyKO9">
+        </script>
+{{--        <img style="cursor:pointer;cursor:hand" src="https://seal.godaddy.com/images/3/en/siteseal_gd_3_h_l_m.gif" onclick="verifySeal();" alt="SSL site seal - click to verify">--}}
+    </span>
+    </a>
 </div>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <a href="https://wa.me/+5978691600" class="float active:text-white hover:text-white" target="_blank">

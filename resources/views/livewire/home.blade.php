@@ -80,10 +80,12 @@
                                     <ul class="border-top flex justify-between  hover:bg-blue-50 " style="bottom: 0; padding: 20px">
                                         <li>
                                             @if(\Illuminate\Support\Facades\Auth::user() != null)
+                                                @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
                                                 <span style="padding-top: 10px">Sales price: SRD <b style="color: #0069ad; font-size: 30px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                                 <br>
+                                                @endif
                                             @endif
-                                            <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 30px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                            <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
                                             <br>
                                             <span style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                             <br>
@@ -217,11 +219,13 @@
                                 </a>
                                 <ul class="border-top flex justify-between" style="bottom: 0; padding: 20px">
                                     <li>
-                                        @if(\Illuminate\Support\Facades\Auth::user() != null or \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
+                                        @if(\Illuminate\Support\Facades\Auth::user() != null)
+                                            @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
                                             <span style="padding-top: 10px;">Sales price: SRD <b style="color: #0069ad; font-size: 30px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                             <br>
+                                            @endif
                                         @endif
-                                        <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 30px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                        <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
                                         <br>
                                         <span style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                         <br>
