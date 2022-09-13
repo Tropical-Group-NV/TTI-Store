@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Jobs\Import_Sales_Order_To_QB;
 use App\Jobs\SendFirstOrderMail;
+use App\Models\BackOrders;
 use App\Models\CartItem;
 use App\Models\CustomerMessage;
 use App\Models\QbCustomer;
@@ -35,7 +36,6 @@ class Checkout extends Component
     public function mount()
     {
         $this->date= date('Y-m-d');
-        $this->srch_sw= 'dewfwqfqf';
 
         if (isset($_REQUEST['customerid']))
         {
@@ -84,6 +84,7 @@ class Checkout extends Component
         $item = CartItem::query()->where('id', $id)->first();
         $item->qty = $qty;
         $item->save();
+        $this->dispatchBrowserEvent('updateCartQty');
     }
 
     public function clearCart()
@@ -138,16 +139,48 @@ class Checkout extends Component
             $sale->save();
             foreach ($cartItems as $cartItem)
             {
-                $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first();
-                $saleItem = new SalesOrderItem();
-                $saleItem->sales_order_id = $sale->id;
-                $saleItem->SalesOrderLineItemRefListID = $item->ListID;
-                $saleItem->SalesOrderLineDesc = $item->Description;
-                $saleItem->SalesOrderLineQuantity = $cartItem->qty;
-                $saleItem->SalesOrderLineRate = $item->SalesPrice;
-                $saleItem->SalesOrderLineRatePercent =null;
-                $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
-                $saleItem->save();
+                $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->first();
+                if($cartItem->qty > $item->QuantityOnHand)
+                {
+                    $saleItem = new SalesOrderItem();
+                    $saleItem->sales_order_id = $sale->id;
+                    $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                    $saleItem->SalesOrderLineDesc = $item->Description;
+                    $saleItem->SalesOrderLineQuantity = $item->QuantityOnHand;
+                    $saleItem->SalesOrderLineRate = $item->SalesPrice;
+                    $saleItem->SalesOrderLineRatePercent =null;
+                    $saleItem->SalesOrderLineAmount = $item->QuantityOnHand * $item->SalesPrice;
+                    $saleItem->save();
+
+                    $bo = new BackOrders();
+                    $bo->CustomerRefListID = $customer->ListID;
+                    $bo->ListID = $item->ListID;
+                    $bo->OrderQuantity = $item->QuantityOnHand;
+                    $bo->BackOrderQuantity = $cartItem->qty - $item->QuantityOnHand;
+                    $bo->uid = Auth::user()->id;
+                    $bo->email = $customer->Email;
+                    $bo->mail_is_send = null;
+                    $bo->mail_send_date_time = null;
+                    $bo->QuantityOnHandOnCreated = $item->QuantityOnHand;
+                    $bo->QuantityOnHandOnMailSend = null;
+                    $bo->first_mail_is_send = null;
+                    $bo->save();
+
+//                    \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->update(['QuantityOnHand' => 0 ]);
+                }
+                else
+                {
+                    $saleItem = new SalesOrderItem();
+                    $saleItem->sales_order_id = $sale->id;
+                    $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                    $saleItem->SalesOrderLineDesc = $item->Description;
+                    $saleItem->SalesOrderLineQuantity = $cartItem->qty;
+                    $saleItem->SalesOrderLineRate = $item->SalesPrice;
+                    $saleItem->SalesOrderLineRatePercent =null;
+                    $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
+                    $saleItem->save();
+//                    \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->update(['QuantityOnHand' => $item->QuantityOnHand - $cartItem->qty  ]);
+                }
             }
             CartItem::query()->where('uid', Auth::user()->id)->delete();
             SendFirstOrderMail::dispatch($this->customer_id);
@@ -192,15 +225,44 @@ class Checkout extends Component
             foreach ($cartItems as $cartItem)
             {
                 $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first();
-                $saleItem = new SalesOrderItem();
-                $saleItem->sales_order_id = $sale->id;
-                $saleItem->SalesOrderLineItemRefListID = $item->ListID;
-                $saleItem->SalesOrderLineDesc = $item->Description;
-                $saleItem->SalesOrderLineQuantity = $cartItem->qty;
-                $saleItem->SalesOrderLineRate = $item->SalesPrice;
-                $saleItem->SalesOrderLineRatePercent =null;
-                $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
-                $saleItem->save();
+                if($cartItem->qty > $item->QuantityOnHand)
+                {
+                    $saleItem = new SalesOrderItem();
+                    $saleItem->sales_order_id = $sale->id;
+                    $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                    $saleItem->SalesOrderLineDesc = $item->Description;
+                    $saleItem->SalesOrderLineQuantity = $item->QuantityOnHand;
+                    $saleItem->SalesOrderLineRate = $item->SalesPrice;
+                    $saleItem->SalesOrderLineRatePercent =null;
+                    $saleItem->SalesOrderLineAmount = $item->QuantityOnHand * $item->SalesPrice;
+                    $saleItem->save();
+
+                    $bo = new BackOrders();
+                    $bo->CustomerRefListID = $customer->ListID;
+                    $bo->ListID = $item->ListID;
+                    $bo->OrderQuantity = $item->QuantityOnHand;
+                    $bo->BackOrderQuantity = $cartItem->qty - $item->QuantityOnHand;
+                    $bo->uid = Auth::user()->id;
+                    $bo->email = $customer->Email;
+                    $bo->mail_is_send = null;
+                    $bo->mail_send_date_time = null;
+                    $bo->QuantityOnHandOnCreated = $item->QuantityOnHand;
+                    $bo->QuantityOnHandOnMailSend = null;
+                    $bo->first_mail_is_send = null;
+                    $bo->save();
+                }
+                if($cartItem->qty <= $item->QuantityOnHand)
+                {
+                    $saleItem = new SalesOrderItem();
+                    $saleItem->sales_order_id = $sale->id;
+                    $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                    $saleItem->SalesOrderLineDesc = $item->Description;
+                    $saleItem->SalesOrderLineQuantity = $cartItem->qty;
+                    $saleItem->SalesOrderLineRate = $item->SalesPrice;
+                    $saleItem->SalesOrderLineRatePercent =null;
+                    $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
+                    $saleItem->save();
+                }
             }
             CartItem::query()->where('uid', Auth::user()->id)->delete();
             SendFirstOrderMail::dispatch($customerAccount->customer_ListID);

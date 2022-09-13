@@ -1,5 +1,4 @@
 <div style="font-family: sfsemibold">
-
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
         <div style="" class="items-start justify-center sm:py-12 sm:px-4 md:px-6  2xl:px-20">
             <div class="">
@@ -53,8 +52,10 @@
                                 <p class="text-base leading-4 text-gray-800"><b>{{ $item->BarCodeValue }}</b></p>
                             </div>
                             <div class="py-4 border-b border-gray-200">
+                                @if(\Illuminate\Support\Facades\Auth::user() != null or \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
                                 <p class="text-base leading-4 text-gray-800" style="font-size: 25px">Sale price: <span style="color: #0069ad">SRD {{ substr($item->SalesPrice, 0, -3) }}</span></p>
                                 <br>
+                                @endif
                                 <p class="text-base leading-4 text-gray-800 " style="font-size: 25px">Retail price: <span style="color: #0069ad">SRD {{ substr($item->CustomBaliPrice, 0, -3) }}</span></p>
                             </div>
                             <div class="py-4 border-b border-gray-200 ">

@@ -129,7 +129,7 @@
                                                         <select @if($item->QuantityOnHand <= 0) disabled @endif id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
                                                             @php($count=0)
                                                             @if($item->QuantityOnHand > 0)
-                                                                @while($count != $item->QuantityOnHand)
+                                                                @while($count != 1000)
                                                                     @php($count++ )
                                                                     <option value="{{ $count }}">{{ $count }}</option>
                                                                 @endwhile
@@ -217,11 +217,11 @@
                                 </a>
                                 <ul class="border-top flex justify-between" style="bottom: 0; padding: 20px">
                                     <li>
-                                        @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                            <span style="padding-top: 10px;">Sales price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
+                                        @if(\Illuminate\Support\Facades\Auth::user() != null or \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
+                                            <span style="padding-top: 10px;">Sales price: SRD <b style="color: #0069ad; font-size: 30px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                             <br>
                                         @endif
-                                        <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                        <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 30px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
                                         <br>
                                         <span style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                         <br>
@@ -267,7 +267,7 @@
                                                     <select @if($item->QuantityOnHand <= 0) disabled @endif id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
                                                         @php($count=0)
                                                         @if($item->QuantityOnHand > 0)
-                                                            @while($count != $item->QuantityOnHand)
+                                                            @while($count != 1000)
                                                                 @php($count++ )
                                                                 <option value="{{ $count }}">{{ $count }}</option>
                                                             @endwhile
