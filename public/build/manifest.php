@@ -8,6 +8,7 @@
   'home' => 'App\\Http\\Livewire\\Home',
   'item' => 'App\\Http\\Livewire\\Item',
   'items' => 'App\\Http\\Livewire\\Items',
+  'new-customers' => 'App\\Http\\Livewire\\NewCustomers',
   'order' => 'App\\Http\\Livewire\\Order',
   'orders' => 'App\\Http\\Livewire\\Orders',
   'show-test' => 'App\\Http\\Livewire\\ShowTest',

@@ -13,16 +13,16 @@ class registrationCustomer extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $userEmail;
+    public $userID;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($email)
+    public function __construct($id)
     {
-        $this->userEmail = $email;
+        $this->userID = $id;
     }
 
     /**
@@ -32,7 +32,7 @@ class registrationCustomer extends Mailable
      */
     public function build()
     {
-        $cInfo = DB::table('temporary_user_infos')->where('id', $this->userEmail)->get()->first();
-        return $this->view('emails.registration.registration-customer', ['request' => $cInfo]);
+        $cInfo = DB::table('temporary_user_infos')->where('id', $this->userID)->get()->first();
+        return $this->view('emails.registration.registration-customer', ['request' => $cInfo])->subject('Uw TTISTore registratie gegevens.');
     }
 }

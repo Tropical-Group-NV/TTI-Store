@@ -12,8 +12,12 @@
 
         @if (session('status'))
             <div class="mb-4 font-medium text-sm text-green-600">
-                {{ session('status') }}
+                {{session('status') }}
             </div>
+        @endif
+        @if(session()->has('error'))
+            <span class="text-red-600">{{ session('error') }}</span>
+            <br>
         @endif
 
         <form method="POST" action="{{ route('customer-registration.store') }}">

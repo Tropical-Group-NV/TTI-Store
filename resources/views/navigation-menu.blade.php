@@ -33,8 +33,8 @@
             </div>
             <div>
                 @if(\Illuminate\Support\Facades\Auth::user() != null)
-                    <div class="ml-3 relative">
-                        <x-jet-dropdown align="right" width="48">
+                    <div class="ml-3 relative" style="z-index: 1000000">
+                        <x-jet-dropdown align="right" width="48" style="">
                             <x-slot name="trigger">
                                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
                                     <button class="flex text-sm border-2 border-transparent rounded-full focus:outline-none focus:border-gray-300 transition">
@@ -55,7 +55,7 @@
                             </x-slot>
 
 
-                            <x-slot name="content">
+                            <x-slot name="content" style="z-index: 1000000">
                                 <!-- Account Management -->
                                 <div class="block px-4 py-2 text-xs text-gray-400" style="z-index:100000">
                                     {{ \Illuminate\Support\Facades\Auth::user()->name . ' ' .  \Illuminate\Support\Facades\Auth::user()->last_name . '(' . $usertypes->name . ')'}}
@@ -70,12 +70,23 @@
                                         {{ __('API Tokens') }}
                                     </x-jet-dropdown-link>
                                 @endif
-
                                 <div class="border-t border-gray-100"></div>
+                                @auth()
+                                    <x-jet-dropdown-link href="{{ route('orders') }}">
+                                        {{ __('Orders') }}
+                                    </x-jet-dropdown-link>
+                                    <x-jet-dropdown-link href="{{ route('backorders') }}">
+                                        {{ __('Backorders') }}
+                                    </x-jet-dropdown-link>
+                                    @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 2)
+                                        <x-jet-dropdown-link target="_blank" href="https://www.ttistore.com/index.php?r=viewqbcustomer%2Fcustomer-near-me">
+                                            {{ __('Customer Near Me') }}
+                                        </x-jet-dropdown-link>
+                                    @endif
+                                @endauth
                                 <x-jet-dropdown-link href="https://www.ttistore.com">
                                     {{ __('Go to TTISTORE 1.0') }}
                                 </x-jet-dropdown-link>
-
                                 <!-- Authentication -->
                                 <form method="POST" action="{{ route('logout') }}" x-data>
                                     @csrf
@@ -85,6 +96,7 @@
                                         {{ __('Log Out') }}
                                     </x-jet-dropdown-link>
                                 </form>
+
                             </x-slot>
                         </x-jet-dropdown>
                     </div>
@@ -148,17 +160,17 @@
                     </div>
                     <div class="pt-3"></div>
                     <div class="pt-3"></div>
-                    <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                        {{ __('Items') }}
-                    </x-jet-nav-link>
-                    @if(\Illuminate\Support\Facades\Auth::user() != null)
-                        <x-jet-nav-link  href="{{ route('orders') }}" :active="request()->routeIs('orders')">
-                            {{ __('Orders') }}
-                        </x-jet-nav-link>
-                        <x-jet-nav-link  href="{{ route('backorders') }}" :active="request()->routeIs('backorders')">
-                            {{ __('Backorders') }}
-                        </x-jet-nav-link>
-                    @endif
+                    {{--                    <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">--}}
+                    {{--                        {{ __('Items') }}--}}
+                    {{--                    </x-jet-nav-link>--}}
+                    {{--                    @if(\Illuminate\Support\Facades\Auth::user() != null)--}}
+                    {{--                        <x-jet-nav-link  href="{{ route('orders') }}" :active="request()->routeIs('orders')">--}}
+                    {{--                            {{ __('Orders') }}--}}
+                    {{--                        </x-jet-nav-link>--}}
+                    {{--                        <x-jet-nav-link  href="{{ route('backorders') }}" :active="request()->routeIs('backorders')">--}}
+                    {{--                            {{ __('Backorders') }}--}}
+                    {{--                        </x-jet-nav-link>--}}
+                    {{--                    @endif--}}
                 </div>
             </div>
             <div class="hidden sm:block">
@@ -267,16 +279,22 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open , 'hidden': ! open}" style="background-color: #0069ad; z-index: 1000;" class="hidden absolute w-full">
         <div class="pt-2 pb-3 space-y-1">
-            <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
-                {{ __('Items') }}
-            </x-jet-responsive-nav-link>
+{{--            <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">--}}
+{{--                {{ __('Items') }}--}}
+{{--            </x-jet-responsive-nav-link>--}}
             @if(\Illuminate\Support\Facades\Auth::user() != null)
+
                 <x-jet-responsive-nav-link href="{{ route('orders') }}" :active="request()->routeIs('orders')">
                     {{ __('Orders') }}
                 </x-jet-responsive-nav-link>
                 <x-jet-responsive-nav-link href="{{ route('backorders') }}" :active="request()->routeIs('backorders')">
                     {{ __('Backorders') }}
                 </x-jet-responsive-nav-link>
+            @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 2)
+                <x-jet-responsive-nav-link href="https://www.ttistore.com/index.php?r=viewqbcustomer%2Fcustomer-near-me">
+                    {{ __('Customers Near Me') }}
+                </x-jet-responsive-nav-link>
+                @endif
                 <x-jet-responsive-nav-link href="https://www.ttistore.com">
                     {{ __('Go to TTISTORE 1.0') }}
                 </x-jet-responsive-nav-link>
@@ -459,22 +477,22 @@
 
         });
     </script>
-        <script>
-            window.addEventListener('addedcart', (e) => {
-                toastr.success("Added to Cart")
-            });
-            window.addEventListener('removedcart', (e) => {
-                toastr.warning("Removed from Cart")
-            });
-            window.addEventListener('clearcart', (e) => {
-                toastr.warning("Cart cleared")
-            });
-            window.addEventListener('qtyupdate', (e) => {
-                toastr.info("Updated Quantity")
-            });
-            window.addEventListener('addedbo', (e) => {
-                toastr.success("Created Backorder")
-            });
-        </script>
+    <script>
+        window.addEventListener('addedcart', (e) => {
+            toastr.success("Added to Cart")
+        });
+        window.addEventListener('removedcart', (e) => {
+            toastr.warning("Removed from Cart")
+        });
+        window.addEventListener('clearcart', (e) => {
+            toastr.warning("Cart cleared")
+        });
+        window.addEventListener('qtyupdate', (e) => {
+            toastr.info("Updated Quantity")
+        });
+        window.addEventListener('addedbo', (e) => {
+            toastr.success("Created Backorder")
+        });
+    </script>
 </nav>
 

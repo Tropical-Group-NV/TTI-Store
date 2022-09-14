@@ -1,23 +1,27 @@
 <html>
-<h1>
-    Bedankt voor het registreren bij TTIStore. Wij zullen uw gegevens controleren en een confirmatie email sturen als u account geactiveerd is.
+<body style="">
+<p style="font-size: 15px">
+    Bedankt voor het willen registreren bij TTIStore. Wij zullen uw gegevens controleren en een confirmatie email sturen als uw account geactiveerd is.
+</p>
+<br>
+Uw gegevens:
+<br>
+Naam: <b>{{ $request->name }}</b>
+<br>
+Voornamen: <b>{{ $request->firstname }}</b>
+<br>
+@isset($request->company_name)
+    Bedrijf: <b>{{ $request->company_name }}</b>
     <br>
-    Uw gegevens:
+    Soort bedrijf: <b>{{ $request->company_type }}</b>
     <br>
-    Naam: {{ $request->name }}
-    <br>
-    Voornamen: {{ $request->firstname }}
-    <br>
-    @isset($request->company_name)
-        Bedrijf: {{ $request->company_name }}
-        <br>
-        Soort bedrijf: {{ $request->company_type }}
-        <br>
-    @endisset
-    Adres: {{ $request->address }}
-    <br>
-    Telefoonnummer: {{ $request->phone }}
-    <br>
-    Email adres: {{ $request->email }}
-</h1>
+@endisset
+Adres: <b>{{ $request->address }}</b>
+<br>
+Telefoonnummer: <b>{{ $request->phone }}</b>
+<br>
+Email adres: <b>{{ $request->email }}</b>
+<br>
+<br>
+</body>
 </html>

@@ -104,7 +104,8 @@ Route::get('backorders', function( Request $request)
 Route::resources
 (
     [
-        'customer-registration' => \App\Http\Controllers\CustomerRegistration::class
+        'customer-registration' => \App\Http\Controllers\CustomerRegistration::class,
+        'new-customers' => \App\Http\Controllers\TemporaryUserInfoController::class
     ]
 );
 

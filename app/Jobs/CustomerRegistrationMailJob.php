@@ -2,7 +2,10 @@
 
 namespace App\Jobs;
 
+use App\Mail\registrationAdmin;
 use App\Mail\registrationCustomer;
+use App\Models\AdminEmail;
+use App\Models\TemporaryUserInfo;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -33,6 +36,13 @@ class CustomerRegistrationMailJob implements ShouldQueue
      */
     public function handle()
     {
-        Mail::to('jamil.kasan@tropicalgroupnv.com')->send(new registrationCustomer($this->customerID));
+        $admins = AdminEmail::all();
+        $newUser = TemporaryUserInfo::query()->where('id', $this->customerID)->first();
+        foreach ($admins as $admin)
+        {
+            Mail::to($admin->email)->send(new registrationAdmin($this->customerID));
+        }
+        Mail::to($newUser->email)->send(new registrationCustomer($this->customerID));
+
     }
 }
