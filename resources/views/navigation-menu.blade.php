@@ -57,7 +57,7 @@
 
                             <x-slot name="content">
                                 <!-- Account Management -->
-                                <div class="block px-4 py-2 text-xs text-gray-400">
+                                <div class="block px-4 py-2 text-xs text-gray-400" style="z-index:100000">
                                     {{ \Illuminate\Support\Facades\Auth::user()->name . ' ' .  \Illuminate\Support\Facades\Auth::user()->last_name . '(' . $usertypes->name . ')'}}
                                 </div>
 
@@ -100,7 +100,7 @@
                         </h1>
                         <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
                             <div @click="open = ! open">
-                                <a class="text-white" href="{{ route('customer-registration') }}"><p>Register</p></a>
+                                <a class="text-white" href="{{ route('customer-registration.index') }}"><p>Register</p></a>
                             </div>
                         </div>
                     </div>
@@ -143,9 +143,11 @@
                 </div>
 
                 <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex pl-10">
                     <div class="pt-3">
                     </div>
+                    <div class="pt-3"></div>
+                    <div class="pt-3"></div>
                     <x-jet-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Items') }}
                     </x-jet-nav-link>
@@ -282,7 +284,7 @@
                 <x-jet-responsive-nav-link href="{{ route('login') }}" :active="request()->routeIs('login')">
                     {{ __('Login') }}
                 </x-jet-responsive-nav-link>
-                <x-jet-responsive-nav-link href="{{ route('customer-registration') }}" :active="request()->routeIs('customer-registration')">
+                <x-jet-responsive-nav-link href="{{ route('customer-registration.index') }}" :active="request()->routeIs('customer-registration.index')">
                     {{ __('Register') }}
                 </x-jet-responsive-nav-link>
             @endif

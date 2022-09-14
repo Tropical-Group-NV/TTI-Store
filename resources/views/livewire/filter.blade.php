@@ -67,6 +67,20 @@
                     <br class="hidden md:hidden lg:block">
                     <div>
                         <h1  style="font-family: sflight; font-size: 20px">
+                            Total Items per Page
+                        </h1>
+                        <select class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="totalpage" id="totalpage">
+                            <option value="12">12</option>
+                            <option value="24">24</option>
+                            <option value="48">48</option>
+                            <option value="96">96</option>
+                        </select>
+                    </div>
+                    <br>
+                    <hr>
+                    <br>
+                    <div>
+                        <h1  style="font-family: sflight; font-size: 20px">
                             Brand
                         </h1>
                         <select @if(isset($_REQUEST['brand'])) @endif class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="brand" id="brand">
@@ -180,5 +194,8 @@
         @if(isset($_REQUEST['branch']))
         document.getElementById('branch').value = '{{ $_REQUEST['branch'] }}';
         @endif
+        @isset($_REQUEST['totalpage'])
+        document.getElementById('totalpage').value = '{{ $_REQUEST['totalpage'] }}';
+        @endisset
     </script>
 </div>

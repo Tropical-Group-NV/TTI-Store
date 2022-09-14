@@ -328,20 +328,20 @@
             </script>
 
             </script>
-            <script>
-                window.addEventListener('addedcart', (e) => {
-                    toastr.success("Added to Cart")
-                });
-                window.addEventListener('removedcart', (e) => {
-                    toastr.warning("Removed from Cart")
-                });
-                window.addEventListener('clearcart', (e) => {
-                    toastr.warning("Cart cleared")
-                });
-                window.addEventListener('qtyupdate', (e) => {
-                    toastr.info("Updated Quantity")
-                });
-            </script>
+{{--            <script>--}}
+{{--                window.addEventListener('addedcart', (e) => {--}}
+{{--                    toastr.success("Added to Cart")--}}
+{{--                });--}}
+{{--                window.addEventListener('removedcart', (e) => {--}}
+{{--                    toastr.warning("Removed from Cart")--}}
+{{--                });--}}
+{{--                window.addEventListener('clearcart', (e) => {--}}
+{{--                    toastr.warning("Cart cleared")--}}
+{{--                });--}}
+{{--                window.addEventListener('qtyupdate', (e) => {--}}
+{{--                    toastr.info("Updated Quantity")--}}
+{{--                });--}}
+{{--            </script>--}}
 
 
         </div>

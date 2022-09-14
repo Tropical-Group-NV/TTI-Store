@@ -82,9 +82,20 @@ class Checkout extends Component
     public function changeQuantity($id, $qty)
     {
         $item = CartItem::query()->where('id', $id)->first();
+        $product = \App\Models\Item::query()->where('ListID', $item->prod_id)->first();
         $item->qty = $qty;
         $item->save();
-        $this->dispatchBrowserEvent('updateCartQty');
+
+        if ($qty > $product->QuantityOnHand)
+        {
+            $this->dispatchBrowserEvent('updateCartQty', ['prodID' => $id, 'Qty' => number_format($qty) , 'inStock' =>  number_format($product->QuantityOnHand), 'BO' => $qty-$product->QuantityOnHand, 'addBO' => 1]);
+        }
+        else
+        {
+            $this->dispatchBrowserEvent('updateCartQty', ['prodID' => $id, 'Qty' => number_format($qty) , 'inStock' =>  number_format($product->QuantityOnHand) , 'addBO' => 0]);
+
+        }
+
     }
 
     public function clearCart()
@@ -269,7 +280,5 @@ class Checkout extends Component
             Import_Sales_Order_To_QB::dispatch($sale->id);
             return redirect()->to(route('dashboard') . '?order=' . $sale->id);
         }
-
-
     }
 }

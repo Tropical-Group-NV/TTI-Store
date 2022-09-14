@@ -16,9 +16,8 @@
             </div>
         @endif
 
-        <form method="POST" action="">
+        <form method="POST" action="{{ route('customer-registration.store') }}">
             @csrf
-
             <div>
                 <x-jet-label for="naam" value="{{ __('Naam') }}" />
                 <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
@@ -35,28 +34,43 @@
             </div>
             <div id="company_fields" class="hidden">
                 <div>
-                    <x-jet-label for="company_name" value="{{ __('Berdijfsnaam') }}" />
-                    <x-jet-input id="company_name" class="block mt-1 w-full" type="text" name="company_name" :value="old('company_name')" required autofocus />
+                    <x-jet-label for="company_name" value="{{ __('Bedrijfsnaam') }}" />
+                    <x-jet-input id="company_name" class="block mt-1 w-full" type="text" name="company_name" :value="old('company_name')" autofocus />
                 </div>
                 <div>
-                    <x-jet-label for="company_type" value="{{ __('Soort Bedrijf') }}" />
-                    <x-jet-input id="company_type" class="block mt-1 w-full" type="text" name="company_type" :value="old('company_type')" required autofocus />
+                    <div id="type1">
+                        <x-jet-label for="company_type" value="{{ __('Soort Bedrijf') }}" />
+                        <select class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 w-full" name="company_type" id="company_type">
+                            @php($companyTypes = \App\Models\CompanyType::all())
+                            @foreach($companyTypes as $companytype)
+                                <option value="{{ $companytype->type }}">{{ $companytype->type }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="hidden" id="type2">
+                        <x-jet-label for="company_type" value="{{ __('Soort Bedrijf') }}" />
+                        <x-jet-input id="company_type2" class="block mt-1 w-full" type="text" :value="old('company_type')" autofocus />
+                    </div>
+                    <div class="flex items-center p-2">
+                        <input onclick="toggleCompanyType()"  id="company_type_check" name="company_type_check" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                        <label for="checked-checkbox" class="ml-2 text-sm font-medium">Check hier om uw eigen bedrijfsoort te typen.</label>
+                    </div>
                 </div>
             </div>
             <br>
             <hr>
             <br>
             <div>
-                <x-jet-label for="adress" value="{{ __('Adres') }}" />
-                <x-jet-input id="adress" class="block mt-1 w-full" type="text" name="adress" :value="old('adress')" required autofocus />
+                <x-jet-label for="address" value="{{ __('Adres') }}" />
+                <x-jet-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address')" required autofocus />
             </div>
             <div>
                 <x-jet-label for="phone" value="{{ __('Telefoonnummer') }}" />
                 <x-jet-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required autofocus />
             </div>
             <div>
-                <x-jet-label for="email" value="{{ __('Email') }}" />
-                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('phone')" required autofocus />
+                <x-jet-label for="email" value="{{ __('Email adres') }}" />
+                <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
             </div>
             <div class="flex items-center justify-end mt-4">
                 <x-jet-button class="ml-4">
@@ -70,12 +84,30 @@
                 if(document.getElementById('company_check').checked)
                     {
                         document.getElementById('company_fields').classList.remove('hidden');
+                        document.getElementById('company_type').setAttribute('name', 'company_type');
                     }
                 else
                 {
                     document.getElementById('company_fields').classList.add('hidden');
                 }
 
+            }
+            function toggleCompanyType()
+            {
+                if(document.getElementById('company_type_check').checked)
+                    {
+                        document.getElementById('type2').classList.remove('hidden');
+                        document.getElementById('company_type').removeAttribute('name');
+                        document.getElementById('company_type2').setAttribute('name', 'company_type');
+                        document.getElementById('type1').classList.add('hidden');
+                    }
+                else
+                {
+                    document.getElementById('type2').classList.add('hidden');
+                    document.getElementById('company_type').setAttribute('name', 'company_type');
+                    document.getElementById('company_type2').removeAttribute('name');
+                    document.getElementById('type1').classList.remove('hidden');
+                }
             }
         </script>
     </x-jet-authentication-card>

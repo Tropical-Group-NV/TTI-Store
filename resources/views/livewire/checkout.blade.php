@@ -97,6 +97,9 @@
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div style="overflow-x: auto" class="w-full items-start justify-center py-12 md:px-6 px-4">
                 <div style="overflow-x: auto">
+                    <span class="text-red-600">The quantity of items that are currently not in stock will automatically be added to backorders</span>
+                    <br>
+                    <br>
                     <table  style="overflow-x: auto" class=" sm:rounded-lg w-full">
                         <thead>
                         <tr class="">
@@ -151,7 +154,13 @@
                                     <td>
                                         <div class="flex">
 {{--                                            @if($cartItem->qty <= $item->QuantityOnHand)--}}
-                                            <input readonly disabled wire:loading.attr="disabled" wire:keydown.debounce.1100ms="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" class="form-control border-indigo-400 w-1/4" id="ordered-{{ $cartItem->id }}" name="qty">
+                                            <select wire:loading.attr="disabled" wire:change="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" class="form-control border-indigo-400 w-full" id="ordered-{{ $cartItem->id }}" name="qty">
+                                            @php($count=0)
+                                            @while($count != 1000)
+                                                @php($count++ )
+                                                <option value="{{ $count }}">{{ $count }}</option>
+                                            @endwhile
+                                            </select>
 {{--                                            @else--}}
 {{--                                                <input wire:loading.attr="disabled" wire:keydown.debounce.1100ms="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" class="form-control border-indigo-400 w-1/4" id="ordered-{{ $cartItem->id }}" name="qty">--}}
 {{--                                            @endif--}}
@@ -313,16 +322,16 @@
         </script>
         <script>
             window.addEventListener('updateCartQty', (e) => {
-                @foreach($cartItems as $cartItem)
-                @php($item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first())
-                @if($cartItem->qty > $item->QuantityOnHand)
-                document.getElementById('ordered-{{ $cartItem->id }}').value = '{{ number_format($item->QuantityOnHand)  }}'
-                document.getElementById('backordered-{{ $cartItem->id }}').value = '{{ $cartItem->qty - $item->QuantityOnHand  }}'
-                @else
-                document.getElementById('ordered-{{ $cartItem->id }}').value = '{{ number_format($cartItem->qty)  }}'
-                document.getElementById('backordered-{{ $cartItem->id }}').value = '0'
-                @endif
-                @endforeach
+                if (event.detail.addBO === 1)
+                {
+                    document.getElementById('ordered-' + event.detail.prodID).value = event.detail.inStock;
+                    document.getElementById('backordered-' + event.detail.prodID).value = event.detail.BO;
+                }
+                else
+                {
+                    document.getElementById('ordered-' + event.detail.prodID).value = event.detail.Qty;
+                    document.getElementById('backordered-' + event.detail.prodID).value = '0';
+                }
             });
         </script>
     </form>
