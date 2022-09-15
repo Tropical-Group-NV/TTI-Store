@@ -68,7 +68,11 @@
                             </div>
                             @if($item->QuantityOnHand > 0)
                                 <div class="py-4 border-b border-gray-200 flex items-center justify-between">
-                                    <p class="text-base leading-4 text-green-600">In stock: {{  substr($item->QuantityOnHand, 0, -6) }}</p>
+                                    <p class="text-base leading-4 text-green-600">In stock @auth
+                                            @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                                :{{  substr($item->QuantityOnHand, 0, -6) }}
+                                            @endif
+                                        @endauth</p>
                                 </div>
                             @else
                                 <div class="py-4 border-b border-gray-200 flex items-center justify-between">

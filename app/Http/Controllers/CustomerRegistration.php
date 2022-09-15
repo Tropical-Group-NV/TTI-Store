@@ -35,7 +35,8 @@ class CustomerRegistration extends Controller
             $creds->email = $request->email;
             $creds->save();
             CustomerRegistrationMailJob::dispatch($creds->id);
-            return redirect( route('home'));
+            session()->flash('success', 'Uw registratie is succesvol. U zal binnenkort een mail ontvangen.');
+            return back();
         }
         else
         {
