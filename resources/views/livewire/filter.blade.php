@@ -70,10 +70,10 @@
                             Total Items per Page
                         </h1>
                         <select class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm block mt-1 form-control btn-group" name="totalpage" id="totalpage">
-                            <option value="12">12</option>
                             <option value="24">24</option>
                             <option value="48">48</option>
                             <option value="96">96</option>
+                            <option value="120">120</option>
                         </select>
                     </div>
                     <br>

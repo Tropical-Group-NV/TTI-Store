@@ -33,7 +33,7 @@
             </div>
             <div>
                 @if(\Illuminate\Support\Facades\Auth::user() != null)
-                    <div class="ml-3 relative" style="z-index: 1000000">
+                    <div class="ml-3 relative" style="z-index: 10000">
                         <x-jet-dropdown align="right" width="48" style="">
                             <x-slot name="trigger">
                                 @if (Laravel\Jetstream\Jetstream::managesProfilePhotos())
@@ -55,9 +55,9 @@
                             </x-slot>
 
 
-                            <x-slot name="content" style="z-index: 1000000">
+                            <x-slot name="content" style="z-index: 10">
                                 <!-- Account Management -->
-                                <div class="block px-4 py-2 text-xs text-gray-400" style="z-index:100000">
+                                <div class="block px-4 py-2 text-xs text-gray-400" style="z-index:100">
                                     {{ \Illuminate\Support\Facades\Auth::user()->name . ' ' .  \Illuminate\Support\Facades\Auth::user()->last_name . '(' . $usertypes->name . ')'}}
                                 </div>
 

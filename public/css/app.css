@@ -1185,12 +1185,6 @@ select {
 .right-0 {
   right: 0px;
 }
-.left-20 {
-  left: 5rem;
-}
-.bottom-20 {
-  bottom: 5rem;
-}
 .bottom-96 {
   bottom: 24rem;
 }
@@ -1874,6 +1868,9 @@ select {
 }
 .pb-1 {
   padding-bottom: 0.25rem;
+}
+.pl-10 {
+  padding-left: 2.5rem;
 }
 .pt-3 {
   padding-top: 0.75rem;

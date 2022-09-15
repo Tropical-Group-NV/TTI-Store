@@ -1,5 +1,6 @@
 <x-app-layout>
     <div>
+
         <h1 style="font-family: sfsemibold; font-size: 35px" class="flex justify-center">
 {{--            <img class="border-b border-gray-100 hidden md:block" style="width: 60%" src="{{ asset('Logo-03.png') }}" alt="">   --}}
         </h1>
@@ -14,6 +15,9 @@
         @endif
         <div class="sm:py-12">
             <div class="flex">
+{{--                <div id="app">--}}
+{{--                    <example-component></example-component>--}}
+{{--                </div>--}}
                 <div style="max-width: 110rem" class="w-full mx-auto sm:px-6 lg:px-8">
                     @livewire('home')
                 </div>
