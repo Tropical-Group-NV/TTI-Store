@@ -1,5 +1,5 @@
-<div>
-    <div style="; right: 0;" class="2xl:block fixed 2xl:relative left-0 2xl:left-auto top-5 2xl:top-auto sm:top-45">
+<div class="">
+    <div style="; right: 0;" class=" 2xl:block fixed 2xl:relative left-0 2xl:left-auto top-5 2xl:top-auto sm:top-45">
         <aside class="shadow-xl sm:rounded-lg">
             <div class="overflow-y-auto py-4 px-3 bg-white rounded w-full" style="">
 
@@ -9,8 +9,7 @@
                 <span style="font-family: sfsemibold;;" class="p-6 text-center flex justify-center">
                     <div>
                         <span style="font-size: 20px">
-                                                        Shopping Cart
-
+                            Shopping Cart
                         </span>
                         <i style="color: #0069ad" class="fa fa-shopping-cart" aria-hidden="true"></i>
 

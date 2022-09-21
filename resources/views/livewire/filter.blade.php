@@ -1,4 +1,4 @@
-<div style="min-width: 350px; z-index: 1200">
+<div style="min-width: 300px; z-index: 1200">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     {{--    <link rel="stylesheet" href="{{ asset('css/jquery_ui/custom.css') }}">--}}
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
@@ -54,7 +54,7 @@
 {{--        } );--}}
 {{--    </script>--}}
 
-    <form method="GET" action="">
+    <form method="GET" action="{{ route('dashboard') }}">
         <aside class="w-full border border-black shadow-xl sm:rounded-lg">
             <div class="overflow-y-auto py-4 px-3 bg-gray-50">
                 <div style="z-index: 5;max-height: 700px;">

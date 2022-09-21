@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use App\Models\CartItem;
 use App\Models\OnSale;
+use App\Models\SalesOrderItem;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -21,6 +22,7 @@ class Home extends Component
     public $list;
     public $readyToLoad = false;
     public $restocked;
+    public $popularItems;
 
     protected $listeners =
         [
@@ -49,6 +51,12 @@ class Home extends Component
         }
         $this->restocked = \App\Models\Item::query()->orderBy('TimeModified' , 'DESC')->limit(8)->get();
         $this->list = DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->orderBy('TimeModified', 'DESC')->limit(12)->get();
+        $this->popularItems = DB::connection('qb_sales')->table('sales_order_items')
+            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
+            ->groupBy('SalesOrderLineItemRefListID')
+            ->orderBy('occurrences', 'DESC')
+            ->limit(12)
+            ->get();
 
     }
 
