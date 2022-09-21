@@ -306,8 +306,15 @@
         <div>
             <div  style="overflow-x: auto" class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 @foreach($popularItems as $popularItem)
-                    @if(!is_array($sale_item))
-                        @php($item = \App\Models\Item::query()->where('ListID', $popularItem->SalesOrderLineItemRefListID)->get()->first())
+                    @if(is_array($popularItem))
+                        @if(\App\Models\Item::query()->where('ListID',  $popularItem['SalesOrderLineItemRefListID'])->exists())
+                            @php($item = \App\Models\Item::query()->where('ListID', $popularItem['SalesOrderLineItemRefListID'])->get()->first())
+                        @endif
+                    @else
+                        @if(\App\Models\Item::query()->where('ListID',  $popularItem->SalesOrderLineItemRefListID)->exists())
+                            @php($item = \App\Models\Item::query()->where('ListID', $popularItem->SalesOrderLineItemRefListID)->get()->first())
+                        @endif
+                    @endif
                         @php($itemDesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->get()->first())
                         @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
                         <div class="card" style="width: auto;">
@@ -318,7 +325,6 @@
                                     @else
                                         <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 350px" alt="Card image cap">
                                     @endif
-
                                 </a>
                             </div>
                             <div class="card-body" style="position: relative">
@@ -328,9 +334,6 @@
                                         <h5><b>{{$item->FullName}}</b></h5>
                                         <br>
                                     </div>
-                                    @if($itemDesc != null)
-                                        {{--                            <span id="item:{{ $item->ListID }}" class="card-text">{{ strip_tags($itemDesc->descriptio  n)  }}</span>--}}
-                                    @endif
                                 </a>
                                 <ul class="border-top flex justify-between" style="bottom: 0; padding: 20px">
                                     <li>
@@ -364,7 +367,6 @@
 
                                     </li>
                                 </ul>
-                                {{--                <button class="btn btn-primary" id="add:{{ $item->ListID }}" onclick="added('add:{{ $item->ListID }}')">Add to CartItem</button>--}}
                                 <div>
                                     @if(\Illuminate\Support\Facades\Auth::user() != null)
                                         @if(\App\Models\CartItem::query()->where('prod_id', $item->ListID)->where('uid', \Illuminate\Support\Facades\Auth::user()->id)->exists())
@@ -408,9 +410,17 @@
                                 </div>
                             </div>
                         </div>
-                    @endif
                 @endforeach
             </div>
+        </div>
+        <div class="p-6 sm:px-20 bg-white border-b border-gray-200" style="text-align: center">
+            <button class="btn"  wire:click="popularItemsCountAdd" style="background-color: #0069AD; color: white">
+                        <span wire:loading.remove  wire:target="saleUnlimited">
+                            Show more
+                        </span>
+                <img wire:loading wire:target="popularItemsCountAdd" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
+                {{ $popularItemsCount }}
+            </button>
         </div>
     </div>
     <br>

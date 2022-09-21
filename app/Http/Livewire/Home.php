@@ -23,17 +23,34 @@ class Home extends Component
     public $readyToLoad = false;
     public $restocked;
     public $popularItems;
+    public $popularItemsCount = 12;
 
     protected $listeners =
         [
             'showMore' => 'render',
-            'updateCart' => 'render'
+            'updateCart' => 'render',
+            'hydrate' => 'mount'
         ]
     ;
 
     public function render()
     {
         return view('livewire.home', ['onSale' => $this->onSale]);
+    }
+
+    public function hydrate()
+    {
+
+    }
+
+    public function boot()
+    {
+        $this->popularItems = DB::connection('qb_sales')->table('sales_order_items')
+            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
+            ->groupBy('SalesOrderLineItemRefListID')
+            ->orderBy('occurrences', 'DESC')
+            ->limit($this->popularItemsCount)
+            ->get();
     }
 
     public function mount()
@@ -51,12 +68,7 @@ class Home extends Component
         }
         $this->restocked = \App\Models\Item::query()->orderBy('TimeModified' , 'DESC')->limit(8)->get();
         $this->list = DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->orderBy('TimeModified', 'DESC')->limit(12)->get();
-        $this->popularItems = DB::connection('qb_sales')->table('sales_order_items')
-            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
-            ->groupBy('SalesOrderLineItemRefListID')
-            ->orderBy('occurrences', 'DESC')
-            ->limit(12)
-            ->get();
+
 
     }
 
@@ -113,6 +125,18 @@ class Home extends Component
             $this->dispatchBrowserEvent('addedcart', ['message' => 'Added to cart']);
 
         }
+    }
+
+    public function popularItemsCountAdd()
+    {
+        $this->popularItemsCount = $this->popularItemsCount * 2;
+        $this->popularItems = DB::connection('qb_sales')->table('sales_order_items')
+            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
+            ->groupBy('SalesOrderLineItemRefListID')
+            ->orderBy('occurrences', 'DESC')
+            ->limit($this->popularItemsCount)
+            ->get();
+        $this->emit('showMore');
     }
 
     public function load($id)
