@@ -16,7 +16,7 @@
 {{--                <div id="app">--}}
 {{--                    <example-component></example-component>--}}
 {{--                </div>--}}
-                <div>
+                <div class="hidden md:hidden lg:hidden xl:hidden 2xl:block" style="z-index: 100">
                     @livewire('filter')
                 </div>
                 <div style="max-width: 110rem" class="w-full md:w-full 2xl:w-3/4 mx-auto sm:px-6 lg:px-8">
