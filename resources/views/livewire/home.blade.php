@@ -415,11 +415,10 @@
         </div>
         <div class="p-6 sm:px-20 bg-white border-b border-gray-200" style="text-align: center">
             <button class="btn"  wire:click="popularItemsCountAdd" style="background-color: #0069AD; color: white">
-                        <span wire:loading.remove  wire:target="saleUnlimited">
+                        <span wire:loading.remove  wire:target="popularItemsCountAdd">
                             Show more
                         </span>
                 <img wire:loading wire:target="popularItemsCountAdd" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
-                {{ $popularItemsCount }}
             </button>
         </div>
     </div>
