@@ -48,7 +48,7 @@ class Home extends Component
 
     public function boot()
     {
-        $this->randomItems = DB::table('most_sold_items')->limit($this->popularItemsCount)->get();
+        $this->randomItems = \App\Models\Item::query()->where('IsActive', 1)->where('Type', 'ItemInventory')->where('QuantityOnHand', '>', 0)->limit(8)->inRandomOrder()->get();
 //        $this->popularItems = DB::connection('qb_sales')->table('sales_order_items')
 //            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
 //            ->groupBy('SalesOrderLineItemRefListID')
