@@ -148,7 +148,7 @@
                                             @else
                                                 <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 150px" alt="Card image cap">
                                             @endif
-                                            <span class="hidemobile" style="margin-top: auto;margin-bottom: auto; margin-left: 0; font-family: sfsemibold">{{ $item->Description }}</span>
+                                            <span class="hidden 2xl:block" style="margin-top: auto;margin-bottom: auto; margin-left: 0; font-family: sfsemibold">{{ $item->Description }}</span>
                                         </div>
                                     </td>
                                     <td>

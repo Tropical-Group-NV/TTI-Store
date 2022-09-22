@@ -140,7 +140,7 @@
                 </div>
                 <br>
                 <div class="flex justify-center">
-                    <a href="https://wa.me/5978691600" class="btn text-white" style="background-color: #25D366" target="_blank"><b>Contact us on Whatsapp</b></a>
+                    <a href="https://wa.me/5978691600" class="btn text-white" style="background-color: #0069ad" target="_blank"><b>Contact us on Whatsapp</b></a>
                 </div>
             </div>
         </div>
