@@ -20,7 +20,9 @@ class Home extends Component
     public $count = 0;
     public $message;
     public $list;
-    public $readyToLoad = false;
+    public $readyToLoadRandom = false;
+    public $readyToLoadPopular = false;
+    public $readyToLoadNewStock = false;
     public $restocked;
     public $popularItems;
     public $popularItemsCount = 8;
@@ -43,6 +45,7 @@ class Home extends Component
 
     public function loadPopularItems()
     {
+        $this->readyToLoadPopular = true;
         $this->popularItems = DB::table('most_sold_items')->limit($this->popularItemsCount)->get();
         $this->emit('showMore');
 
@@ -50,6 +53,7 @@ class Home extends Component
 
     public function loadRandomItems()
     {
+        $this->readyToLoadRandom = true;
         $this->randomItems = \App\Models\Item::query()->where('IsActive', 1)->where('Type', 'ItemInventory')->where('QuantityOnHand', '>', 0)->limit(8)->inRandomOrder()->get();
         $this->emit('showMore');
 
@@ -62,14 +66,14 @@ class Home extends Component
 
     public function boot()
     {
-        $this->randomItems = $this->readyToLoad ? \App\Models\Item::query()->where('IsActive', 1)->where('Type', 'ItemInventory')->where('QuantityOnHand', '>', 0)->limit(8)->inRandomOrder()->get() :  [];
+        $this->randomItems = $this->readyToLoadRandom ? \App\Models\Item::query()->where('IsActive', 1)->where('Type', 'ItemInventory')->where('QuantityOnHand', '>', 0)->limit(8)->inRandomOrder()->get() :  [];
 //        $this->popularItems = DB::connection('qb_sales')->table('sales_order_items')
 //            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
 //            ->groupBy('SalesOrderLineItemRefListID')
 //            ->orderBy('occurrences', 'DESC')
 ////            ->limit($this->popularItemsCount)
 //            ->get();
-        $this->popularItems = $this->readyToLoad ? DB::table('most_sold_items')->limit($this->popularItemsCount)->get() : [];
+        $this->popularItems = $this->readyToLoadPopular ? DB::table('most_sold_items')->limit($this->popularItemsCount)->get() : [];
 //        $this->leastPopularItems = DB::connection('qb_sales')->table('sales_order_items')
 //            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
 //            ->groupBy('SalesOrderLineItemRefListID')

@@ -301,6 +301,11 @@
         </div>
         <div>
             <div  style="overflow-x: auto" class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                @if($readyToLoadPopular != true)
+                <div >
+                    <img src="{{ asset('ttistore_loading.gif') }}" alt="">
+                </div>
+                @endif
                 @foreach($popularItems as $popularItem)
                     @if(is_array($popularItem))
                         @if(\App\Models\Item::query()->where('ListID',  $popularItem['itemID'])->exists())
