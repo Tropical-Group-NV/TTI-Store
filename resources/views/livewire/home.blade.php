@@ -4,6 +4,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     @php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())
     {{--    Add images here for advertisement--}}
+    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg block 2xl:hidden">
+        <div>
+            <div class="block md:block lg:block xl:block 2xl:hidden" style=" padding-top: 10px; padding-bottom: 10px">
+                <button type="button" id="toggleFilters" onclick="this.style.display = 'none'; document.getElementById('filters').style.display = 'block'" class="btn w-full" style="background-color: #0069AD; height: 50px; right: 0; color: white">
+                    Filters
+                </button>
+                <div style="padding-top: 10px; display: none" class="w-full " id="filters">
+                    @livewire('filter')
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg hidden sm:block">
         <div id="itemWrap"  class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
             <div class="card" style="width: auto;">
