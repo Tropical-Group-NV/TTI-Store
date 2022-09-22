@@ -41,6 +41,20 @@ class Home extends Component
         return view('livewire.home', ['onSale' => $this->onSale]);
     }
 
+    public function loadPopularItems()
+    {
+        $this->popularItems = DB::table('most_sold_items')->limit($this->popularItemsCount)->get();
+        $this->emit('showMore');
+
+    }
+
+    public function loadRandomItems()
+    {
+        $this->randomItems = \App\Models\Item::query()->where('IsActive', 1)->where('Type', 'ItemInventory')->where('QuantityOnHand', '>', 0)->limit(8)->inRandomOrder()->get();
+        $this->emit('showMore');
+
+    }
+
     public function hydrate()
     {
 
@@ -48,14 +62,14 @@ class Home extends Component
 
     public function boot()
     {
-        $this->randomItems = \App\Models\Item::query()->where('IsActive', 1)->where('Type', 'ItemInventory')->where('QuantityOnHand', '>', 0)->limit(8)->inRandomOrder()->get();
+        $this->randomItems = $this->readyToLoad ? \App\Models\Item::query()->where('IsActive', 1)->where('Type', 'ItemInventory')->where('QuantityOnHand', '>', 0)->limit(8)->inRandomOrder()->get() :  [];
 //        $this->popularItems = DB::connection('qb_sales')->table('sales_order_items')
 //            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
 //            ->groupBy('SalesOrderLineItemRefListID')
 //            ->orderBy('occurrences', 'DESC')
 ////            ->limit($this->popularItemsCount)
 //            ->get();
-        $this->popularItems = DB::table('most_sold_items')->limit($this->popularItemsCount)->get();
+        $this->popularItems = $this->readyToLoad ? DB::table('most_sold_items')->limit($this->popularItemsCount)->get() : [];
 //        $this->leastPopularItems = DB::connection('qb_sales')->table('sales_order_items')
 //            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
 //            ->groupBy('SalesOrderLineItemRefListID')

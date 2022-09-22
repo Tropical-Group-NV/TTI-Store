@@ -293,7 +293,7 @@
         </div>
     </div>
     <br>
-    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+    <div wire:init="loadPopularItems" class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
         <div class="flex">
             <h1 style="font-family: sfsemibold; font-size: 35px; color: #0069AD" class="p-6">
                 Our most popular items
@@ -419,7 +419,7 @@
         </div>
     </div>
     <br>
-    <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+    <div wire:init="loadRandomItems" class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
         <div class="flex">
             <h1 style="font-family: sfsemibold; font-size: 35px; color: #0069AD" class="p-6">
                 We also have
