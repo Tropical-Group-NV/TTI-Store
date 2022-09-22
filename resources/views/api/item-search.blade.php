@@ -1,4 +1,4 @@
-@php($list =  \Illuminate\Support\Facades\DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $search . '%')->orWhere('BarCodeValue', 'LIKE', '%' . $search . '%')->orderBy('TimeModified', 'DESC')->limit(10)->get())
+@php($list =  \Illuminate\Support\Facades\DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $search . '%')->orWhere('FullName', 'LIKE', '%' . $search . '%')->orderBy('TimeModified', 'DESC')->limit(10)->get())
 @foreach($list as $itm)
     @if(is_array($itm))
         @if($itm != null)
