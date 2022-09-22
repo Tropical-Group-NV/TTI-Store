@@ -2,6 +2,9 @@
 {{--<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">--}}
 <head>
     <style>
+        [x-cloak] { display: none }
+    </style>
+    <style>
         body #toast-container > div {
             opacity: 1;
         }
@@ -71,7 +74,8 @@
     <!-- Styles -->
     @livewireStyles
 </head>
-<body class="font-sans antialiased">
+<body class="font-sans antialiased" x-cloak x-data="{openModal: false}"
+      :class="openModal ? 'overflow-hidden' : 'overflow-visible'">
 <x-jet-banner />
 
 <div class="min-h-screen bg-gray-100">
@@ -105,9 +109,9 @@
     </a>
 </div>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<div x-data="{ 'showModal': false }" @keydown.escape="showModal = false">
+<div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
     <!-- Trigger for Modal -->
-    <button  @click="showModal = true" class="float hover:text-white items-center pb-2">
+    <button  @click="showModal =  ! showModal" class="float hover:text-white items-center pb-2">
         <i class="fa fa-whatsapp active:text-white my-float"></i>
     </button>
 
