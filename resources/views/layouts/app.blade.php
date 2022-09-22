@@ -40,13 +40,9 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="icon" href="{{ asset('Logo-04.ico') }}">
-    {{--        <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">--}}
-
     <!-- Fonts -->
-    {{--        <link rel="stylesheet" href="https://fonts.bunny.net/css2?family=Nunito:wght@400;600;700&display=swap">--}}
-    {{--        <link rel="stylesheet" href="{{asset('bootstrap4.2.1/css/bootstrap.css')}}">--}}
-{{--    <script src="{{ mix('/js/app.js') }}"></script>--}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+{{--    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>--}}
     <link rel="stylesheet" href="{{ asset('css/fonts.css') }}">
     <link rel="stylesheet" href="{{ asset('FontAwesome/css/font-awesome.css?v=').time() }}">
     <link rel="stylesheet" href="{{ asset('css/custom.css?v=').time() }}">
@@ -109,18 +105,49 @@
     </a>
 </div>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-<a href="https://wa.me/+5978691600" class="float active:text-white hover:text-white" target="_blank">
-    <i class="fa fa-whatsapp active:text-white my-float  https://wa.me/+5978691600"></i>
-</a>
+<div x-data="{ 'showModal': false }" @keydown.escape="showModal = false">
+    <!-- Trigger for Modal -->
+    <button  @click="showModal = true" class="float hover:text-white items-center pb-2">
+        <i class="fa fa-whatsapp active:text-white my-float"></i>
+    </button>
+
+    <!-- Whatsapp Modal -->
+    <div
+        class="fixed inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
+        x-show="showModal">
+        <!-- Modal inner -->
+        <div
+            class="max-w-3xl px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg"
+            @click.away="showModal = false"
+            x-transition:enter.duration.500ms
+            x-transition:leave.duration.400ms >
+            <!-- Title / Close-->
+            <div class="flex items-center justify-between">
+                <button type="button" class="z-50 cursor-pointer" @click="showModal = false">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#25D366" stroke="currentColor">
+                        <path fill="#25D366" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <!-- content -->
+            <div>
+                <div class="flex justify-center">
+                    <img class="w-3/4" style="width: 300px" src="{{ asset('TTI-Whatsapp-svg.svg') }}" alt="">
+                </div>
+                <br>
+                <div class="flex justify-center">
+                    <a href="https://wa.me/5978691600" class="btn text-white" style="background-color: #25D366" target="_blank"><b>Contact us on Whatsapp</b></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{--<a href="https://wa.me/5978691600" class="float active:text-white hover:text-white" target="_blank">--}}
+{{--    <i class="fa fa-whatsapp active:text-white my-float"></i>--}}
+{{--</a>--}}
 
 @stack('modals')
 
 @livewireScripts
-
-{{--<div style="background-color: #0069ad" class="w-full h-8 flex justify-center items-center">--}}
-{{--    <p style="font-family: sflight" class="text-white">--}}
-{{--       Copyright © 2022. Tropical Trade & Industries N.V. All rights reserved.--}}
-{{--    </p>--}}
-{{--</div>--}}
 </body>
 </html>

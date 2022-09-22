@@ -2,15 +2,14 @@
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
         <div style="" class="items-start justify-center sm:py-12 sm:px-4 md:px-6  2xl:px-20">
             <div class="">
-                <div class="">
+                <div class="block md:flex">
                     <div style="overflow-x: auto">
-                        <div style="overflow-x: auto" class="">
+                        <div style="overflow-x: auto" class="w-full">
                             <div class="product">
                                 <div class="product__images">
-                                    <img
+                                    <img style="width: 100%"
                                         src="https://www.ttistore.com/foto/{{ $images->first()->image_id }}.dat"
-                                        alt="google pixel 6"
-                                        class="product__main-image"
+                                        class=" w-full"
                                         id="main-image"
                                     />
                                     <div class="product__slider-wrap">
@@ -44,21 +43,12 @@
                         </script>
                     </div>
                     <br>
-                    <div class="border" style="border-radius: 10px; font-family: sfsemibold">
+                    <div class="" style="border-radius: 10px; font-family: sfsemibold">
                         <div style="padding-left: 15px">
                             <div class="py-4 border-b border-gray-200">
                                 <p class=text-gray-800" style="font-size: 30px; font-family: sfsemibold; white-space: normal">{{ $item->Description }} <b></b></p>
                                 <br>
-                                <p class="text-base leading-4 text-gray-800"><b>{{ $item->BarCodeValue }}</b></p>
-                            </div>
-                            <div class="py-4 border-b border-gray-200">
-                                @if(\Illuminate\Support\Facades\Auth::user() != null )
-                                    @if(\Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
-                                        <p class="text-base leading-4 text-gray-800" style="font-size: 25px">Sale price: <span style="color: #0069ad">SRD {{ substr($item->SalesPrice, 0, -3) }}</span></p>
-                                        <br>
-                                    @endif
-                                @endif
-                                <p class="text-base leading-4 text-gray-800 " style="font-size: 25px">Retail price: <span style="color: #0069ad">SRD {{ substr($item->CustomBaliPrice, 0, -3) }}</span></p>
+                                <p class="text-base leading-4 text-gray-800"><b>{{ $item->FullName }}</b></p>
                             </div>
                             <div class="py-4 border-b border-gray-200 ">
                                 <p class="text-base leading-4 text-gray-800">{!! $itemdesc->description !!}  </p>
@@ -66,11 +56,24 @@
                                     <p class="text-sm leading-none text-gray-600 dark:text-gray-300 mr-3"></p>
                                 </div>
                             </div>
+                            <div class="py-4 border-b border-gray-200 ">
+                                @if(\Illuminate\Support\Facades\Auth::user() != null)
+                                    @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
+                                        <span>Sales price: SRD <b style="color: #0069ad; font-size: 30px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
+                                        <br>
+                                    @endif
+                                @endif
+                                <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                <br>
+                            </div>
+                            <div class="py-4 border-b border-gray-200">
+                                <span style="padding-top: 10px" class="text-base leading-4">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
+                            </div>
                             @if($item->QuantityOnHand > 0)
-                                <div class="py-4 border-b border-gray-200 flex items-center justify-between">
+                                <div class="py-4  border-gray-200 items-center justify-between">
                                     <p class="text-base leading-4 text-green-600">In stock @auth
                                             @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
-                                                :{{  substr($item->QuantityOnHand, 0, -6) }}
+                                                {{  substr($item->QuantityOnHand, 0, -6) }}
                                             @endif
                                         @endauth</p>
                                 </div>
@@ -80,72 +83,73 @@
                                 </div>
                             @endif
                         </div>
-                    </div>
-                    <br>
-                    <div>
-                        @if(\Illuminate\Support\Facades\Auth::user() != null)
-                            @if(\App\Models\CartItem::query()->where('prod_id', $item->ListID)->where('uid', \Illuminate\Support\Facades\Auth::user()->id)->exists())
-                                <button disabled style="background-color: green" class="btn text-base flex items-center justify-center text-white w-full py-4">
-                                    <h1>
-                                        Added to cart
-                                    </h1>
-                                </button>
-                            @else
-                                @if($item->QuantityOnHand > 0)
-                                    <h1 style="font-family: sfsemibold">Select quantity:</h1>
-                                    <br>
-                                    <div class="border-2 border-black" style="border-color: #0069AD; border-radius: 20px">
-                                        <select style="border-radius: 20px" class=" btn focus:outline-none focus:ring-2 focus:ring-offset-2 outline-black text-base flex items-center justify-center  w-full" id="input-{{ $item->ListID }}" name="qty">
-                                            @php($count=0)
-                                            @while($count != 1000)
-                                                @php($count++ )
-                                                <option value="{{ $count }}">{{ $count }}</option>
-                                            @endwhile
-                                        </select>
-                                    </div>
-
-                                    <br>
-                                    <button wire:loading.attr="disabled" wire:click="addToCart( '{{ $item->ListID }}', document.getElementById('input-{{ $item->ListID }}').value)" style="background-color: #0069AD" class="btn dark:text-gray-900 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2  text-base flex items-center justify-center  text-white  w-full py-4 hover:bg-gray-700 ">
-                                        <img wire:loading style="width: 40px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
-                                        <h1  wire:loading.remove>
-                                            Add to Cart
+                        <div class="px-8 leading-4 ">
+                            @if(\Illuminate\Support\Facades\Auth::user() != null)
+                                @if(\App\Models\CartItem::query()->where('prod_id', $item->ListID)->where('uid', \Illuminate\Support\Facades\Auth::user()->id)->exists())
+                                    <button disabled style="background-color: green" class="btn text-base flex items-center justify-center text-white w-full py-4">
+                                        <h1>
+                                            Added to cart
                                         </h1>
                                     </button>
                                 @else
-                                    @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
-                                        <h1 style="font-family: sfsemibold">Select customer:</h1>
-                                        <input type="hidden" id="customer-id-{{ $item->ListID }}">
-                                        <input placeholder="Search Customers" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" id="customer-search-{{ $item->ListID }}" onkeyup="searchCustomer('{{ $item->ListID }}')">
-                                        <div style="position: absolute; z-index: 1000; min-width: 300px; display: none" class="bg-gray-50 border" id="customer-wrap-{{ $item->ListID }}">
-                                        </div>
+                                    @if($item->QuantityOnHand > 0)
+                                        <h1 style="font-family: sfsemibold">Select quantity:</h1>
                                         <br>
+                                        <div class="border-2 border-black" style="border-color: #0069AD; border-radius: 20px">
+                                            <select style="border-radius: 20px" class=" btn focus:outline-none focus:ring-2 focus:ring-offset-2 outline-black text-base flex items-center justify-center  w-full" id="input-{{ $item->ListID }}" name="qty">
+                                                @php($count=0)
+                                                @while($count != 1000)
+                                                    @php($count++ )
+                                                    <option value="{{ $count }}">{{ $count }}</option>
+                                                @endwhile
+                                            </select>
+                                        </div>
+
+                                        <br>
+                                        <button wire:loading.attr="disabled" wire:click="addToCart( '{{ $item->ListID }}', document.getElementById('input-{{ $item->ListID }}').value)" style="background-color: #0069AD" class="btn text-base flex items-center justify-center text-white w-full py-4">
+                                            <img wire:loading style="width: 40px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
+                                            <h1  wire:loading.remove>
+                                                Add to Cart
+                                            </h1>
+                                        </button>
                                     @else
-                                        @php($customerAccount = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('users_customer')->where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->first())
-                                        <input type="hidden" id="customer-id-{{ $item->ListID }}" value="{{ $customerAccount->customer_ListID }}">
+                                        @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                            <h1 style="font-family: sfsemibold">Select customer:</h1>
+                                            <input type="hidden" id="customer-id-{{ $item->ListID }}">
+                                            <input placeholder="Search Customers" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" id="customer-search-{{ $item->ListID }}" onkeyup="searchCustomer('{{ $item->ListID }}')">
+                                            <div style="position: absolute; z-index: 1000; min-width: 300px; display: none" class="bg-gray-50 border" id="customer-wrap-{{ $item->ListID }}">
+                                            </div>
+                                            <br>
+                                        @else
+                                            @php($customerAccount = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('users_customer')->where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->first())
+                                            <input type="hidden" id="customer-id-{{ $item->ListID }}" value="{{ $customerAccount->customer_ListID }}">
+                                        @endif
+                                        <h1 style="font-family: sfsemibold">Select quantity:</h1>
+                                        <div class="border-2 border-black" style="border-color: #0069AD; border-radius: 20px">
+                                            <select style="border-radius: 20px" class=" btn focus:outline-none focus:ring-2 focus:ring-offset-2 outline-black text-base flex items-center justify-center  w-full" id="input-{{ $item->ListID }}" name="qty">
+                                                @php($count=0)
+                                                @while($count != 1000)
+                                                    @php($count++ )
+                                                    <option value="{{ $count }}">{{ $count }}</option>
+                                                @endwhile
+                                            </select>
+                                        </div>
+
+                                        <br>
+                                        <button onclick="addBackorder('{{ $item->ListID }}', )" wire:loading.attr="disabled"  style="background-color: #0069AD" class="btn dark:text-gray-900 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2  text-base flex items-center justify-center  text-white  w-full py-4 hover:bg-gray-700 ">
+                                            <img wire:loading style="width: 40px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
+                                            <h1  wire:loading.remove>
+                                                Add backorder
+                                            </h1>
+                                        </button>
                                     @endif
-                                    <h1 style="font-family: sfsemibold">Select quantity:</h1>
-                                    <div class="border-2 border-black" style="border-color: #0069AD; border-radius: 20px">
-                                        <select style="border-radius: 20px" class=" btn focus:outline-none focus:ring-2 focus:ring-offset-2 outline-black text-base flex items-center justify-center  w-full" id="input-{{ $item->ListID }}" name="qty">
-                                            @php($count=0)
-                                            @while($count != 1000)
-                                                @php($count++ )
-                                                <option value="{{ $count }}">{{ $count }}</option>
-                                            @endwhile
-                                        </select>
-                                    </div>
 
-                                    <br>
-                                    <button onclick="addBackorder('{{ $item->ListID }}', )" wire:loading.attr="disabled"  style="background-color: #0069AD" class="btn dark:text-gray-900 dark:hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2  text-base flex items-center justify-center  text-white  w-full py-4 hover:bg-gray-700 ">
-                                        <img wire:loading style="width: 40px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
-                                        <h1  wire:loading.remove>
-                                            Add backorder
-                                        </h1>
-                                    </button>
                                 @endif
-
                             @endif
-                        @endif
+                        </div>
                     </div>
+                    <br>
+
 
 
 

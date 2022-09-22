@@ -2,10 +2,7 @@
     <div>
         <div class="py-12">
             <div class="flex">
-                <div class="hidden md:hidden lg:hidden xl:hidden 2xl:block" style="z-index: 100">
-                    @livewire('filter')
-                </div>
-                <div class="max-w-7xl w-full mx-auto sm:px-6 lg:px-8">
+                <div class=" w-full mx-auto sm:px-6 lg:px-8">
                     @livewire('item')
                 </div>
                 <div style="z-index: 100; right: 0" id="shoppingCart" class="hidden 2xl:block fixed 2xl:relative" >

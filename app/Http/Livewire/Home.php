@@ -23,7 +23,10 @@ class Home extends Component
     public $readyToLoad = false;
     public $restocked;
     public $popularItems;
-    public $popularItemsCount = 12;
+    public $popularItemsCount = 8;
+    public $leastPopularItems;
+    public $leastPopularItemsCount = 8;
+    public $randomItems;
 
     protected $listeners =
         [
@@ -45,11 +48,18 @@ class Home extends Component
 
     public function boot()
     {
+        $this->randomItems = \App\Models\Item::query()->where('IsActive', 1)->where('Type', 'ItemInventory')->where('QuantityOnHand', '>', 0)->limit(8)->inRandomOrder()->get();
         $this->popularItems = DB::connection('qb_sales')->table('sales_order_items')
             ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
             ->groupBy('SalesOrderLineItemRefListID')
             ->orderBy('occurrences', 'DESC')
             ->limit($this->popularItemsCount)
+            ->get();
+        $this->leastPopularItems = DB::connection('qb_sales')->table('sales_order_items')
+            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
+            ->groupBy('SalesOrderLineItemRefListID')
+            ->inRandomOrder()
+            ->limit($this->leastPopularItemsCount)
             ->get();
     }
 
@@ -129,12 +139,27 @@ class Home extends Component
 
     public function popularItemsCountAdd()
     {
-        $this->popularItemsCount = $this->popularItemsCount * 2;
-        $this->popularItems = DB::connection('qb_sales')->table('sales_order_items')
+        if ($this->popularItemsCount < 50)
+        {
+            $this->popularItemsCount = $this->popularItemsCount * 2;
+            $this->popularItems = DB::connection('qb_sales')->table('sales_order_items')
+                ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
+                ->groupBy('SalesOrderLineItemRefListID')
+                ->orderBy('occurrences', 'DESC')
+                ->limit($this->popularItemsCount)
+                ->get();
+            $this->emit('showMore');
+        }
+    }
+    public function leastPopularItemsCountAdd()
+    {
+        $this->leastPopularItemsCount = $this->leastPopularItemsCount * 2;
+        $this->leastPopularItems = DB::connection('qb_sales')->table('sales_order_items')
             ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
             ->groupBy('SalesOrderLineItemRefListID')
-            ->orderBy('occurrences', 'DESC')
-            ->limit($this->popularItemsCount)
+            ->orderBy('occurrences', 'ASC')
+//            ->orderBy(DB::raw('RAND()'))
+            ->limit($this->leastPopularItemsCount)
             ->get();
         $this->emit('showMore');
     }
