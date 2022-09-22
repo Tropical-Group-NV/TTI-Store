@@ -136,7 +136,7 @@
                                     @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
                                 @endif
                                 <tr class="border-b">
-                                    <td class="p-6 hidemobile"  style="font-family: sfsemibold">
+                                    <td class="p-6 hidden 2xl:block"  style="font-family: sfsemibold">
                                     <span>
                                         {{ $item->FullName }}
                                     </span>
