@@ -127,6 +127,7 @@
                         @if($cartItemExist)
                             @foreach($cartItems as $cartItem)
                                 @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $cartItem->prod_id)->get()->first())
+                                @php($itemdesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $cartItem->prod_id)->get()->first())
                                 @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
                                 @if($cartItem->qty > $item->QuantityOnHand)
                                     @php($subTotal = $subTotal + ($item->QuantityOnHand * $item->SalesPrice))
@@ -174,10 +175,12 @@
                                                                     <img class="w-3/4" style="width: 300px" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" alt="">
                                                                 </div>
                                                                 <br>
-                                                                <div class="flex justify-center">
-                                                                    <p>
+                                                                <div class="">
+                                                                    <h1>
                                                                         {{ $item->Description }}
-                                                                    </p>
+                                                                    </h1>
+                                                                    <br>
+                                                                    <p style="10px" class="text-base leading-4 text-gray-800">{!! $itemdesc->description !!}  </p>
 {{--                                                                    <a href="https://wa.me/5978691600" class="btn text-white" style="background-color: #0069ad" target="_blank"><b>Contact us on Whatsapp</b></a>--}}
                                                                 </div>
                                                             </div>
