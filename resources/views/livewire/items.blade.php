@@ -106,7 +106,7 @@
                                     @if(\App\Models\CartItem::query()->where('prod_id', $item->ListID)->where('uid', \Illuminate\Support\Facades\Auth::user()->id)->exists())
                                         @php($inCart = \App\Models\CartItem::query()->where('prod_id', $item->ListID)->where('uid', \Illuminate\Support\Facades\Auth::user()->id)->first())
                                         <div>
-                                        <span wire:click="load2('remove{{ $item->ListID }}')" class="input-group-btn input-group-prepend">
+                                        <span class="input-group-btn input-group-prepend">
                                             <button style="font-family: sfsemibold; background-color: green; color: white" disabled class="btn w-full items-center">
                                                 Added to cart
                                             </button>
@@ -156,7 +156,7 @@
                                                     </div>
                                                 @endif
                                             @else
-                                                <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                                <div wire:loading.remove  wire:target="load('add{{ $item->ListID }}')" class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
 
                                                     <select id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
                                                         @php($count=0)
@@ -173,6 +173,14 @@
                                                     </button>
                                                 </span>
                                                 </div>
+                                                <div wire:loading wire:target="load('add{{ $item->ListID }}')" class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
+                                                    <span class="input-group-btn input-group-prepend">
+                                                            <button  style="font-family: sfsemibold; background-color: green; color: white" disabled class="btn w-full items-center">
+                                                                Added to cart
+                                                            </button>
+                                                    </span>
+                                                </div>
+
                                             @endif
                                         </div>
                                     @endif
