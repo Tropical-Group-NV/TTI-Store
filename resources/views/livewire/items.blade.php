@@ -23,8 +23,14 @@
             </div>
             <br>
         @endif
-        <div id="itemWrap" style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        <div wire:init="activeLoadItems" id="itemWrap" style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {{--        {{ print_r($items) }}--}}
+            @if($loadItems != true)
+                <div >
+                    <img src="{{ asset('ttistore_loading.gif') }}" alt="">
+                </div>
+            @endif
+            @if($loadItems == true)
             @foreach($items as $item)
                 @php($put = 1)
                 @php($currentPrivateBranch = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('settings_branch_view_item_on_user')->where('branch', $item->CustomFieldBranch)->get())
@@ -194,6 +200,7 @@
             @endif
 
             @endforeach
+            @endif
 
 
             <script>

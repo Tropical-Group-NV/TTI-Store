@@ -92,16 +92,14 @@
                 </div>
             </div>
         </div>
-
         <br>
-
         <div class="bg-white shadow-xl sm:rounded-l">
             <div style="overflow-x: auto" class="">
                 <div style="overflow-x: auto; width: 100%" class="w-60">
                     <span class="text-red-600">The quantity of items that are currently not in stock will automatically be added to backorders</span>
                     <br>
                     <br>
-                    <table  style="overflow-x: auto; width: 100%" class="sm:rounded-lg">
+                    <table style="overflow-x: auto; width: 100%" class="sm:rounded-lg">
                         <thead>
                         <tr class="">
                             <th class="">
@@ -144,7 +142,48 @@
                                     <td>
                                         <div class="flex">
                                             @if($image != null)
-                                                <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 150px; width: auto" alt="Card image cap">
+{{--                                                <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 150px; width: auto" alt="Card image cap">--}}
+                                                <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
+                                                    <!-- Trigger for Modal -->
+                                                    <button  @click="showModal =  ! showModal">
+                                                        <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 150px; width: auto" alt="Card image cap">
+{{--                                                        <i class="fa fa-whatsapp active:text-white my-float"></i>--}}
+                                                    </button>
+
+                                                    <!-- Whatsapp Modal -->
+                                                    <div x-show="showModal"
+                                                         class="fixed inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
+                                                         x-transition.opacity x-transition:leave.duration.500ms >
+                                                        <!-- Modal inner -->
+                                                        <div x-show="showModal" x-transition:enter.duration.500ms
+                                                             x-transition:leave.duration.400ms
+                                                             class="max-w-3xl px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg"
+                                                             @click.away="showModal = false"
+                                                        >
+                                                            <!-- Title / Close-->
+                                                            <div class="flex items-center justify-between">
+                                                                <button type="button" class="z-50 cursor-pointer" @click="showModal = false">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#25D366" stroke="currentColor">
+                                                                        <path fill="#25D366" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                                    </svg>
+                                                                </button>
+                                                            </div>
+                                                            <!-- content -->
+                                                            <div>
+                                                                <div class="flex justify-center">
+                                                                    <img class="w-3/4" style="width: 300px" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" alt="">
+                                                                </div>
+                                                                <br>
+                                                                <div class="flex justify-center">
+                                                                    <p>
+                                                                        {{ $item->Description }}
+                                                                    </p>
+{{--                                                                    <a href="https://wa.me/5978691600" class="btn text-white" style="background-color: #0069ad" target="_blank"><b>Contact us on Whatsapp</b></a>--}}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             @else
                                                 <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 150px" alt="Card image cap">
                                             @endif

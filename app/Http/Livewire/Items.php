@@ -29,12 +29,20 @@ class Items extends Component
     public $message;
     public $list;
     public $readyToLoad = false;
+    public $loadItems = false;
+//    public $items = [];
 
     protected $listeners =
         [
             'updateCart' => 'render'
         ]
     ;
+
+    public function activeLoadItems()
+    {
+        $this->loadItems = true;
+        $this->emit('updateCart');
+    }
 
   public function loadPosts()
     {
@@ -182,6 +190,7 @@ class Items extends Component
 
         }
         return view('livewire.items', ['items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('type', 'ItemInventory')->orderBy('description', 'ASC')->paginate($this->itemsPerPage)->appends(request()->query())]);
+//        return view('livewire.items', ['items' => []]);
 
 
     }

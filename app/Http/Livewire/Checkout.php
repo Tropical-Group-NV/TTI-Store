@@ -185,6 +185,10 @@ class Checkout extends Component
                     $bo->first_mail_is_send = null;
                     $bo->save();
 
+                    $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
+                    $saveItem->QuantityOnHand = '0';
+                    $saveItem->save();
+
 //                    \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->update(['QuantityOnHand' => 0 ]);
                 }
                 else
@@ -198,6 +202,10 @@ class Checkout extends Component
                     $saleItem->SalesOrderLineRatePercent =null;
                     $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
                     $saleItem->save();
+
+                    $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
+                    $saveItem->QuantityOnHand = $item->QuantityOnHand - $cartItem->qty;
+                    $saveItem->save();
 //                    \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->update(['QuantityOnHand' => $item->QuantityOnHand - $cartItem->qty  ]);
                 }
             }
@@ -269,6 +277,9 @@ class Checkout extends Component
                     $bo->QuantityOnHandOnMailSend = null;
                     $bo->first_mail_is_send = null;
                     $bo->save();
+                    $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
+                    $saveItem->QuantityOnHand = '0';
+                    $saveItem->save();
                 }
                 if($cartItem->qty <= $item->QuantityOnHand)
                 {
@@ -278,9 +289,13 @@ class Checkout extends Component
                     $saleItem->SalesOrderLineDesc = $item->Description;
                     $saleItem->SalesOrderLineQuantity = $cartItem->qty;
                     $saleItem->SalesOrderLineRate = $item->SalesPrice;
+                    $saleItem->SalesOrderLineRate = $item->SalesPrice;
                     $saleItem->SalesOrderLineRatePercent =null;
                     $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
                     $saleItem->save();
+                    $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
+                    $saveItem->QuantityOnHand = $item->QuantityOnHand - $cartItem->qty;
+                    $saveItem->save();
                 }
             }
             CartItem::query()->where('uid', Auth::user()->id)->delete();
