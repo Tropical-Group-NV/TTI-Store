@@ -106,7 +106,7 @@
                             <th class="">
                                 Item
                             </th>
-                            <th class="hidemobile">
+                            <th class="hidden 2xl:block">
                                 Description
                             </th>
                             <th class="">
@@ -201,13 +201,13 @@
                             <td class="p-6">
                                 Total
                             </td>
-                            <td>
+                            <td >
                             </td>
                             <td>
                             </td>
-                            <td>
+                            <td class="">
                             </td>
-                            <td class="hidemobile">
+                            <td class="hidden 2xl:block">
                             </td>
                             <td class="p-6">
                                 <span class="hidemobile">SRD</span> {{ number_format($subTotal, 2) }}
