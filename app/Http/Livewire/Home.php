@@ -94,12 +94,12 @@ class Home extends Component
 
         if ($this->saleUnlimit == 1)
         {
-            $this->onSale = OnSale::query()->get();
+            $this->onSale = OnSale::query()->where('onsale', 1)->get();
 
         }
         else
         {
-            $this->onSale = OnSale::query()->limit(6)->get();
+            $this->onSale = OnSale::query()->where('onsale', 1)->limit(6)->get();
 
         }
         $this->restocked = \App\Models\Item::query()->orderBy('TimeModified' , 'DESC')->limit(4)->get();

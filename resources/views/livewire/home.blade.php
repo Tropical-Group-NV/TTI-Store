@@ -62,7 +62,6 @@
             <div id="itemWrap" style="overflow-x: auto" class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 @foreach($onSale as $sale_item)
                     @if(!is_array($sale_item))
-                        @if($sale_item->onsale == 1)
                             @php($item = \App\Models\Item::query()->where('ListID', $sale_item->ListID)->get()->first())
                             @php($itemDesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->get()->first())
                             @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
@@ -165,7 +164,6 @@
                                 </div>
                             </div>
                         @endif
-                    @endif
                 @endforeach
             </div>
             <div class="p-6 sm:px-20 bg-white border-b border-gray-200" style="text-align: center">
