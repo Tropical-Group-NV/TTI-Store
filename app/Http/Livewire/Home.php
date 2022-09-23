@@ -99,8 +99,7 @@ class Home extends Component
         }
         else
         {
-            $this->onSale = OnSale::query()->where('onsale', 1)->limit(6)->get();
-
+            $this->onSale = OnSale::query()->where('onsale', 1)->limit(4)->get();
         }
         $this->restocked = \App\Models\Item::query()->orderBy('TimeModified' , 'DESC')->limit(4)->get();
         $this->list = DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->orderBy('TimeModified', 'DESC')->limit(12)->get();

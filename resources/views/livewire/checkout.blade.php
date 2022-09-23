@@ -99,164 +99,166 @@
                     <span class="text-red-600">The quantity of items that are currently not in stock will automatically be added to backorders</span>
                     <br>
                     <br>
-                    <table style="overflow-x: auto; width: 100%" class="sm:rounded-lg">
-                        <thead>
-                        <tr class="">
-                            <th class="">
-                                Item
-                            </th>
-                            <th class="hidden 2xl:block">
-                                Description
-                            </th>
-                            <th class="">
-                                Ordered
-                            </th>
-                            <th class="">
-                                Backordered
-                            </th>
-                            <th class="">
-                                Rate
-                            </th>
-                            <th class="">
-                                Amount
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody class="border" style="overflow-y: auto; height: 300px">
-                        @php($subTotal = 0)
-                        @if($cartItemExist)
-                            @foreach($cartItems as $cartItem)
-                                @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $cartItem->prod_id)->get()->first())
-                                @php($itemdesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $cartItem->prod_id)->get()->first())
-                                @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
-                                @if($cartItem->qty > $item->QuantityOnHand)
-                                    @php($subTotal = $subTotal + ($item->QuantityOnHand * $item->SalesPrice))
-                                @else
-                                    @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
-                                @endif
-                                <tr class="border-b">
-                                    <td class="p-6 hidden 2xl:block"  style="font-family: sfsemibold">
+                    <div class="overflow-auto">
+                        <table style="overflow-x: auto; width: 100%" class="sm:rounded-lg">
+                            <thead>
+                            <tr class="">
+                                <th class="">
+                                    Item
+                                </th>
+                                <th class="hidden 2xl:block">
+                                    Description
+                                </th>
+                                <th class="">
+                                    Ordered
+                                </th>
+                                <th class="">
+                                    Backordered
+                                </th>
+                                <th class="">
+                                    Rate
+                                </th>
+                                <th class="">
+                                    Amount
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody class="border" style="overflow-y: auto; height: 300px">
+                            @php($subTotal = 0)
+                            @if($cartItemExist)
+                                @foreach($cartItems as $cartItem)
+                                    @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $cartItem->prod_id)->get()->first())
+                                    @php($itemdesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $cartItem->prod_id)->get()->first())
+                                    @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
+                                    @if($cartItem->qty > $item->QuantityOnHand)
+                                        @php($subTotal = $subTotal + ($item->QuantityOnHand * $item->SalesPrice))
+                                    @else
+                                        @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
+                                    @endif
+                                    <tr class="border-b">
+                                        <td class="p-6 hidden 2xl:block"  style="font-family: sfsemibold">
                                     <span>
                                         {{ $item->FullName }}
                                     </span>
-                                    </td>
-                                    <td>
-                                        <div class="flex">
-                                            @if($image != null)
-{{--                                                <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 150px; width: auto" alt="Card image cap">--}}
-                                                <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
-                                                    <!-- Trigger for Modal -->
-                                                    <button  @click="showModal =  ! showModal">
-                                                        <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 150px; width: auto" alt="Card image cap">
-{{--                                                        <i class="fa fa-whatsapp active:text-white my-float"></i>--}}
-                                                    </button>
+                                        </td>
+                                        <td>
+                                            <div class="flex">
+                                                @if($image != null)
+                                                    {{--                                                <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 150px; width: auto" alt="Card image cap">--}}
+                                                    <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
+                                                        <!-- Trigger for Modal -->
+                                                        <button  @click="showModal =  ! showModal">
+                                                            <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 150px; width: auto" alt="Card image cap">
+                                                            {{--                                                        <i class="fa fa-whatsapp active:text-white my-float"></i>--}}
+                                                        </button>
 
-                                                    <!-- Whatsapp Modal -->
-                                                    <div x-show="showModal"
-                                                         class="fixed inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
-                                                         x-transition.opacity x-transition:leave.duration.500ms >
-                                                        <!-- Modal inner -->
-                                                        <div x-show="showModal" x-transition:enter.duration.500ms
-                                                             x-transition:leave.duration.400ms
-                                                             class="max-w-3xl px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg"
-                                                             @click.away="showModal = false"
-                                                        >
-                                                            <!-- Title / Close-->
-                                                            <div class="flex items-center justify-between">
-                                                                <button type="button" class="z-50 cursor-pointer" @click="showModal = false">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#25D366" stroke="currentColor">
-                                                                        <path fill="#25D366" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                                                                    </svg>
-                                                                </button>
-                                                            </div>
-                                                            <!-- content -->
-                                                            <div>
-                                                                <div class="flex justify-center">
-                                                                    <img class="w-3/4" style="width: 300px" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" alt="">
+                                                        <!-- Whatsapp Modal -->
+                                                        <div x-show="showModal"
+                                                             class="fixed inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
+                                                             x-transition.opacity x-transition:leave.duration.500ms >
+                                                            <!-- Modal inner -->
+                                                            <div x-show="showModal" x-transition:enter.duration.500ms
+                                                                 x-transition:leave.duration.400ms
+                                                                 class="max-w-3xl px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg"
+                                                                 @click.away="showModal = false"
+                                                            >
+                                                                <!-- Title / Close-->
+                                                                <div class="flex items-center justify-between">
+                                                                    <button type="button" class="z-50 cursor-pointer" @click="showModal = false">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#25D366" stroke="currentColor">
+                                                                            <path fill="#25D366" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                                        </svg>
+                                                                    </button>
                                                                 </div>
-                                                                <br>
-                                                                <div class="">
-                                                                    <h1>
-                                                                        {{ $item->Description }}
-                                                                    </h1>
+                                                                <!-- content -->
+                                                                <div>
+                                                                    <div class="flex justify-center">
+                                                                        <img class="w-3/4" style="width: 300px" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" alt="">
+                                                                    </div>
                                                                     <br>
-                                                                    <p style="10px" class="text-base leading-4 text-gray-800">{!! $itemdesc->description !!}  </p>
-{{--                                                                    <a href="https://wa.me/5978691600" class="btn text-white" style="background-color: #0069ad" target="_blank"><b>Contact us on Whatsapp</b></a>--}}
+                                                                    <div class="">
+                                                                        <h1>
+                                                                            {{ $item->Description }}
+                                                                        </h1>
+                                                                        <br>
+                                                                        <p style="10px" class="text-base leading-4 text-gray-800">{!! $itemdesc->description !!}  </p>
+                                                                        {{--                                                                    <a href="https://wa.me/5978691600" class="btn text-white" style="background-color: #0069ad" target="_blank"><b>Contact us on Whatsapp</b></a>--}}
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                @else
+                                                    <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 150px" alt="Card image cap">
+                                                @endif
+                                                <span class="hidden 2xl:block" style="margin-top: auto;margin-bottom: auto; margin-left: 0; font-family: sfsemibold">{{ $item->Description }}</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="flex">
+                                                {{--                                            @if($cartItem->qty <= $item->QuantityOnHand)--}}
+                                                <select wire:loading.attr="disabled" wire:change="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" style="width: 100%" class="form-control border-indigo-400 w-full" id="ordered-{{ $cartItem->id }}" name="qty">
+                                                    @php($count=0)
+                                                    @while($count != 1000)
+                                                        @php($count++ )
+                                                        <option value="{{ $count }}">{{ $count }}</option>
+                                                    @endwhile
+                                                </select>
+                                                {{--                                            @else--}}
+                                                {{--                                                <input wire:loading.attr="disabled" wire:keydown.debounce.1100ms="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" class="form-control border-indigo-400 w-1/4" id="ordered-{{ $cartItem->id }}" name="qty">--}}
+                                                {{--                                            @endif--}}
+                                                <button type="button" onclick="Livewire.emit('updateCart')" wire:loading.attr="disabled" wire:click="removeFromCart('{{$cartItem->id}}')" class="btn btn-danger bg-danger ">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.46-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.211-3.015c-.699-.03-1.368-.171-1.992-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-5v-1h5v1z"/></svg>
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            {{--                                        @if($cartItem->qty > $item->QuantityOnHand)--}}
+                                            <div class="flex">
+                                                <input class="form-control border-indigo-400 w-1/4" readonly disabled id="backordered-{{ $cartItem->id }}" name="">
+                                                {{--                                            <button type="button" onclick="Livewire.emit('updateCart')" wire:loading.attr="disabled" wire:click="removeFromCart('{{$cartItem->id}}')" class="btn btn-danger bg-danger ">--}}
+                                                {{--                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.46-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.211-3.015c-.699-.03-1.368-.171-1.992-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-5v-1h5v1z"/></svg>--}}
+                                                {{--                                            </button>--}}
+                                            </div>
+                                            {{--                                        @endif--}}
+                                        </td>
+                                        <td>
+                                            <span class="hidemobile">SRD</span> {{number_format($item->SalesPrice, 2) }}
+                                        </td>
+                                        <td class="p-6">
+                                            @if($cartItem->qty > $item->QuantityOnHand)
+                                                <span class="hidemobile">SRD</span> {{ number_format($item->QuantityOnHand * $item->SalesPrice , 2)  }}
                                             @else
-                                                <img class="card-img-top" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 150px" alt="Card image cap">
+                                                <span class="hidemobile">SRD</span> {{ number_format($cartItem->qty * $item->SalesPrice , 2)  }}
                                             @endif
-                                            <span class="hidden 2xl:block" style="margin-top: auto;margin-bottom: auto; margin-left: 0; font-family: sfsemibold">{{ $item->Description }}</span>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <div class="flex">
-{{--                                            @if($cartItem->qty <= $item->QuantityOnHand)--}}
-                                            <select wire:loading.attr="disabled" wire:change="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" style="width: 100%" class="form-control border-indigo-400 w-full" id="ordered-{{ $cartItem->id }}" name="qty">
-                                            @php($count=0)
-                                            @while($count != 1000)
-                                                @php($count++ )
-                                                <option value="{{ $count }}">{{ $count }}</option>
-                                            @endwhile
-                                            </select>
-{{--                                            @else--}}
-{{--                                                <input wire:loading.attr="disabled" wire:keydown.debounce.1100ms="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" class="form-control border-indigo-400 w-1/4" id="ordered-{{ $cartItem->id }}" name="qty">--}}
-{{--                                            @endif--}}
-                                            <button type="button" onclick="Livewire.emit('updateCart')" wire:loading.attr="disabled" wire:click="removeFromCart('{{$cartItem->id}}')" class="btn btn-danger bg-danger ">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.46-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.211-3.015c-.699-.03-1.368-.171-1.992-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-5v-1h5v1z"/></svg>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>
-{{--                                        @if($cartItem->qty > $item->QuantityOnHand)--}}
-                                        <div class="flex">
-                                            <input class="form-control border-indigo-400 w-1/4" readonly disabled id="backordered-{{ $cartItem->id }}" name="">
-{{--                                            <button type="button" onclick="Livewire.emit('updateCart')" wire:loading.attr="disabled" wire:click="removeFromCart('{{$cartItem->id}}')" class="btn btn-danger bg-danger ">--}}
-{{--                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.46-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.211-3.015c-.699-.03-1.368-.171-1.992-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-5v-1h5v1z"/></svg>--}}
-{{--                                            </button>--}}
-                                        </div>
-{{--                                        @endif--}}
-                                    </td>
-                                    <td>
-                                        <span class="hidemobile">SRD</span> {{number_format($item->SalesPrice, 2) }}
-                                    </td>
-                                    <td class="p-6">
-                                        @if($cartItem->qty > $item->QuantityOnHand)
-                                            <span class="hidemobile">SRD</span> {{ number_format($item->QuantityOnHand * $item->SalesPrice , 2)  }}
-                                        @else
-                                            <span class="hidemobile">SRD</span> {{ number_format($cartItem->qty * $item->SalesPrice , 2)  }}
-                                        @endif
-                                    </td>
-                                    <td>
+                                        </td>
+                                        <td>
 
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @endif
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <td class="p-6">
-                                Total
-                            </td>
-                            <td >
-                            </td>
-                            <td>
-                            </td>
-                            <td class="">
-                            </td>
-                            <td class="hidden 2xl:block">
-                            </td>
-                            <td class="p-6">
-                                <span class="hidemobile">SRD</span> {{ number_format($subTotal, 2) }}
-                            </td>
-                        </tr>
-                        </tfoot>
-                    </table>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                            </tbody>
+                            <tfoot>
+                            <tr>
+                                <td class="p-6">
+                                    Total
+                                </td>
+                                <td >
+                                </td>
+                                <td>
+                                </td>
+                                <td class="">
+                                </td>
+                                <td class="hidden 2xl:block">
+                                </td>
+                                <td class="p-6">
+                                    <span class="hidemobile">SRD</span> {{ number_format($subTotal, 2) }}
+                                </td>
+                            </tr>
+                            </tfoot>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
