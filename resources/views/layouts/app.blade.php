@@ -116,15 +116,15 @@
     </button>
 
     <!-- Whatsapp Modal -->
-    <div
+    <div x-show="showModal"
         class="fixed inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
-        x-show="showModal">
+         x-transition.opacity x-transition:leave.duration.500ms >
         <!-- Modal inner -->
-        <div
+        <div x-show="showModal" x-transition:enter.duration.500ms
+             x-transition:leave.duration.400ms
             class="max-w-3xl px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg"
             @click.away="showModal = false"
-            x-transition:enter.duration.500ms
-            x-transition:leave.duration.400ms >
+            >
             <!-- Title / Close-->
             <div class="flex items-center justify-between">
                 <button type="button" class="z-50 cursor-pointer" @click="showModal = false">

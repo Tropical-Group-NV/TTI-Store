@@ -108,7 +108,15 @@ class Checkout extends Component
     public function search()
     {
             $this->search_sw = 1;
-            $this->customers = DB::connection('epas')->table('QB_Customer')->where('ISActive', 1)->where('Name', 'LIKE', '%' . $this->search_customer . '%')->orderBy('Name', 'ASC')->limit(10)->get();
+            if (Auth::user()->users_type_id == 2)
+            {
+                $salesRep = DB::connection('qb_sales')->table('users_salesRep')->where('user_id', Auth::user()->id)->first();
+                $this->customers = DB::connection('epas')->table('QB_Customer')->where('ISActive', 1)->where('Name', 'LIKE', '%' . $this->search_customer . '%')->where('SalesRepRefListID' , $salesRep->salesRep_ListID)->orderBy('Name', 'ASC')->limit(10)->get();
+            }
+            if (Auth::user()->users_type_id == 5 or Auth::user()->users_type_id == 1)
+            {
+                $this->customers = DB::connection('epas')->table('QB_Customer')->where('ISActive', 1)->where('Name', 'LIKE', '%' . $this->search_customer . '%')->orderBy('Name', 'ASC')->limit(10)->get();
+            }
     }
 
     public function createSalesOrder(Request $request)

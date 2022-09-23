@@ -22,18 +22,19 @@
                                     <div wire:loading.remove>
                                         @if($search_sw == 1)
                                             @foreach($customers as $customer)
+{{--                                                @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 3)--}}
                                                 @if(is_array($customer))
-                                                    <a onclick='addAddress("{{$customer['BillAddressBlockAddr1']}}", "{{$customer['BillAddressBlockAddr2']}}", "{{$customer['BillAddressBlockAddr3']}}", "{{$customer['BillAddressBlockAddr4']}}", "{{$customer['BillAddressBlockAddr5']}}", "{{$customer['ListID']}}", "{{ $customer['Name'] }}")' href="#">
+                                                    <a onclick='addAddress("{{$customer['BillAddressBlockAddr1']}}", "{{$customer['BillAddressBlockAddr2']}}", "{{$customer['BillAddressBlockAddr3']}}", "{{$customer['BillAddressBlockAddr4']}}", "{{$customer['BillAddressBlockAddr5']}}", "{{$customer['ListID']}}", "{{ $customer['Name'] }}", "{{ $customer['TermsRefListID'] }}")' href="#">
                                                         <br>
                                                         <div class="border-b">
-                                                            <span>{{ $customer['Name'] }}</span>
+                                                            <span>{{ $customer['Name'] }}, {{$customer['BillAddressBlockAddr1']}} {{$customer['BillAddressBlockAddr2']}} {{$customer['BillAddressBlockAddr3']}} {{$customer['BillAddressBlockAddr4']}} {{$customer['BillAddressBlockAddr5']}}</span>
                                                         </div>
                                                     </a>
                                                 @else
-                                                    <a href="#" onclick='addAddress("{{$customer->BillAddressBlockAddr1}}", "{{$customer->BillAddressBlockAddr2}}", "{{$customer->BillAddressBlockAddr3}}", "{{$customer->BillAddressBlockAddr4}}", "{{$customer->BillAddressBlockAddr5}}", "{{$customer->ListID}}", "{{ $customer->Name }}")'>
+                                                    <a href="#" onclick='addAddress("{{$customer->BillAddressBlockAddr1}}", "{{$customer->BillAddressBlockAddr2}}", "{{$customer->BillAddressBlockAddr3}}", "{{$customer->BillAddressBlockAddr4}}", "{{$customer->BillAddressBlockAddr5}}", "{{$customer->ListID}}", "{{ $customer->Name }}", "{{$customer->TermsRefListID}}")'>
                                                         <br>
                                                         <div class="border-b">
-                                                            <span>{{ $customer->Name }}</span>
+                                                            <span>{{ $customer->Name }}, {{$customer->BillAddressBlockAddr1}} {{$customer->BillAddressBlockAddr2}} {{$customer->BillAddressBlockAddr3}} {{$customer->BillAddressBlockAddr4}}, {{$customer->BillAddressBlockAddr5}}</span>
                                                         </div>
                                                     </a>
                                                 @endif
@@ -94,13 +95,13 @@
 
         <br>
 
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-            <div style="overflow-x: auto" class="w-full items-start justify-center py-12 md:px-6 px-4">
-                <div style="overflow-x: auto">
+        <div class="bg-white shadow-xl sm:rounded-l">
+            <div style="overflow-x: auto" class="">
+                <div style="overflow-x: auto; width: 100%" class="w-60">
                     <span class="text-red-600">The quantity of items that are currently not in stock will automatically be added to backorders</span>
                     <br>
                     <br>
-                    <table  style="overflow-x: auto" class=" sm:rounded-lg w-full">
+                    <table  style="overflow-x: auto; width: 100%" class="sm:rounded-lg">
                         <thead>
                         <tr class="">
                             <th class="">
@@ -121,7 +122,6 @@
                             <th class="">
                                 Amount
                             </th>
-
                         </tr>
                         </thead>
                         <tbody class="border" style="overflow-y: auto; height: 300px">
@@ -154,7 +154,7 @@
                                     <td>
                                         <div class="flex">
 {{--                                            @if($cartItem->qty <= $item->QuantityOnHand)--}}
-                                            <select wire:loading.attr="disabled" wire:change="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" class="form-control border-indigo-400 w-full" id="ordered-{{ $cartItem->id }}" name="qty">
+                                            <select wire:loading.attr="disabled" wire:change="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" style="width: 100%" class="form-control border-indigo-400 w-full" id="ordered-{{ $cartItem->id }}" name="qty">
                                             @php($count=0)
                                             @while($count != 1000)
                                                 @php($count++ )
@@ -294,7 +294,7 @@
             document.getElementById('custname').value = 'name';
             @endif
 
-            function addAddress(adr1, adr2, adr3, adr4, adr5, id, name)
+            function addAddress(adr1, adr2, adr3, adr4, adr5, id, name, term)
             {
                 document.getElementById('adress').value = adr1 + '\r\n' +adr2 + '\r\n' +adr3 + '\r\n' + adr4 + '\r\n' +adr5;
                 document.getElementById('shipto').value = adr1 + '\r\n' +adr2 + '\r\n' +adr3 + '\r\n' + adr4 + '\r\n' +adr5;
@@ -302,9 +302,11 @@
                 document.getElementById('customer_id').value = id;
                 document.getElementById('custname').value = name;
                 document.getElementById('search').value = name;
+                document.getElementById('term').value = term;
             @this.search_customer = name;
             @this.customer_id = id;
             @this.srch_sw = 0;
+            @this.term_id = term;
                 document.getElementById('searchWrap').style.display = 'none';
             }
         </script>
