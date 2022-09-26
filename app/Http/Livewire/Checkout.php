@@ -133,7 +133,7 @@ class Checkout extends Component
             $term = Term::query()->where('ListID', $this->term_id)->get()->first();
             $sale = new SalesOrder();
             $sale->CustomerRefListID = $customer->ListID;
-            $sale->TxnDate = date("Y/m/d");
+            $sale->TxnDate = $this->date;
             $sale->BillAddressAddr1 = $customer->BillAddressBlockAddr1;
             $sale->BillAddressAddr2 = $customer->BillAddressBlockAddr2;
             $sale->BillAddressAddr3 = $customer->BillAddressBlockAddr3;
