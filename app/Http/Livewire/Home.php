@@ -35,12 +35,12 @@ class Home extends Component
 //        $popularItems = $this->readyToLoadPopular ? DB::table('most_sold_items')->limit($this->popularItemsCount)->get() : [];
         if ($this->saleUnlimit == 1)
         {
-            $onSale = OnSale::query()->where('onsale', 1)->get();
+            $onSale = OnSale::query()->where('onsale', 1)->inRandomOrder()->get();
 
         }
         else
         {
-            $onSale = OnSale::query()->where('onsale', 1)->limit(4)->get();
+            $onSale = OnSale::query()->where('onsale', 1)->limit(4)->inRandomOrder()->get();
         }
         $restocked = \App\Models\Item::query()->orderBy('TimeModified' , 'DESC')->limit(4)->get();
         return view('livewire.home', ['onSale' => $onSale, 'restocked' => $restocked]);
