@@ -15,22 +15,12 @@ class Items extends Component
 {
     use WithPagination;
 
-    public $notification_sw;
     public $itemsPerPage;
-    public $srch_sw;
-    public $search_customer;
-    public $brand_srch;
-    public $unitsearch;
-    public $branchsearch;
-    public $search2;
+    protected $brand_srch;
+    protected $unitsearch;
+    protected $branchsearch;
     public $search_str;
-    public $search_sw = 0;
-    public $count = 0;
-    public $message;
-    public $list;
-    public $readyToLoad = false;
     public $loadItems = false;
-//    public $items = [];
 
     protected $listeners =
         [
@@ -41,13 +31,8 @@ class Items extends Component
     public function activeLoadItems()
     {
         $this->loadItems = true;
-        $this->emit('updateCart');
     }
 
-  public function loadPosts()
-    {
-         $this->readyToLoad = true;
-     }
 
     public function mount()
     {
@@ -210,52 +195,6 @@ class Items extends Component
             $item->save();
             $this->emit('updateCart');
             $this->dispatchBrowserEvent('addedcart', ['message' => 'Added to cart']);
-            $this->notification_sw = 1;
-        }
-    }
-    public function removeFromCart($cartItemID)
-    {
-        $item = CartItem::query()->where('id', $cartItemID)->first();
-        $item->delete();
-        $this->emit('updateCart');
-    }
-
-
-    public function changeQuantityCart($cartItemID, $qty)
-    {
-        if ($qty <= 0 or is_int($qty))
-        {
-
-        }
-        else
-        {
-            $item = CartItem::query()->where('id', $cartItemID)->first();
-            $item->qty = $qty;
-            $item->save();
-        }
-    }
-
-
-    public function addMore($cartItemID)
-    {
-        $item = CartItem::query()->where('id', $cartItemID)->first();
-        $item->qty++;
-        $item->save();
-    }
-    public function addLess($cartItemID)
-    {
-        if (CartItem::query()->where('id', $cartItemID)->exists())
-        {
-            $item = CartItem::query()->where('id', $cartItemID)->first();
-            if ($item->qty == 1)
-            {
-                $item->delete();
-            }
-            else
-            {
-                $item->qty--;
-                $item->save();
-            }
         }
     }
 
@@ -286,11 +225,6 @@ class Items extends Component
         }
     }
 
-    public function search()
-    {
-        $this->search_sw = 1;
-        $this->customers = DB::connection('epas')->table('QB_Customer')->where('ISActive', 1)->where('Name', 'LIKE', '%' . $this->search_customer . '%')->orderBy('Name', 'ASC')->limit(10)->get();
-    }
     public function load($id)
     {
         return null;
