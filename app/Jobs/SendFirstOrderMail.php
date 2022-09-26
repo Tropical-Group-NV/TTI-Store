@@ -34,11 +34,15 @@ class SendFirstOrderMail implements ShouldQueue
      */
     public function handle()
     {
-        Mail::raw('Bedankt voor uw bestelling. Uw bestelling wordt verwerkt.',
-            function($msg)
-            {
-                $customer = QbCustomer::query()->where('ListID', $this->customerID)->first();
-                $msg->to($customer->Email)->subject('Bestelling via T-Sales');
-            });
+        $customer = QbCustomer::query()->where('ListID', $this->customerID)->first();
+        if ($customer->Email != '' or $customer->Email != null)
+        {
+            Mail::raw('Bedankt voor uw bestelling. Uw bestelling wordt verwerkt.',
+                function($msg)
+                {
+                    $customer = QbCustomer::query()->where('ListID', $this->customerID)->first();
+                    $msg->to($customer->Email)->subject('Bestelling via T-Sales');
+                });
+        }
     }
 }

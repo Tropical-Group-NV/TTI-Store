@@ -44,7 +44,10 @@ class Import_Sales_Order_To_QB implements ShouldQueue
         $qrLogo = asset('tti-email-qr');
         $currency = 'SRD';
         DB::connection('qb_sales')->update( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $this->sales_order_id. '; SET NOCOUNT ON;');
-        Mail::to($c->Email)->send(new OrderNew($this->sales_order_id));
+        if ($c->Email != '' or $c->Email != null)
+        {
+            Mail::to($c->Email)->send(new OrderNew($this->sales_order_id));
+        }
 
 
     }

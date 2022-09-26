@@ -177,11 +177,11 @@
                                                                     </div>
                                                                     <br>
                                                                     <div class="">
+                                                                        <p class="text-base leading-4 text-gray-800">{!! $item->FullName !!}  </p>
+                                                                        <br>
                                                                         <h1>
                                                                             {{ $item->Description }}
                                                                         </h1>
-                                                                        <br>
-                                                                        <p style="10px" class="text-base leading-4 text-gray-800">{!! $itemdesc->description !!}  </p>
                                                                         {{--                                                                    <a href="https://wa.me/5978691600" class="btn text-white" style="background-color: #0069ad" target="_blank"><b>Contact us on Whatsapp</b></a>--}}
                                                                     </div>
                                                                 </div>
