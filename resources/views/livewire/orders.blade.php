@@ -86,7 +86,7 @@
                                         SRD {{ $subTotal }}
                                     </td>
                                     @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 1 or \Illuminate\Support\Facades\Auth::user()->users_type_id == 5)
-                                    <td class="border border-slate-700">
+                                    <td class="border border-slate-700" style="margin: auto">
                                         @if($order->write_to_quickbook == 1)
                                             <span>
                                                  <button style="background-color: rgb(22 163 74)" type="button" class="rounded-full px-4 mr-2 bg-green-600 text-white p-2 rounded  leading-none flex items-center">

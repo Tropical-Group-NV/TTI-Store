@@ -9,7 +9,7 @@
     <div class="px-3 hidden md:block">
         <div class="flex justify-between h-20 items-center">
             <a href="{{ route('home') }}">
-                <img src="{{ asset('Logo-05.png') }}" alt="" class="block lg:block" style="height: 50px">
+                <img src="{{ asset('Logo-05-min.png') }}" alt="" class="block lg:block" style="height: 50px">
                 {{--                <img src="{{ asset('Logo-05-2.png') }}" alt="" class="block lg:hidden" style="height: 50px">--}}
             </a>
             <div class="hidden 2xl:block">
