@@ -27,7 +27,14 @@ class Orders extends Component
 
     public function render()
     {
-        $orders = SalesOrder::query()->where('uid', Auth::user()->id)->orderBy('id', 'DESC')->paginate(10);
+        if (Auth::user()->users_type_id == 1 or Auth::user()->users_type_id == 5)
+        {
+            $orders = SalesOrder::query()->orderBy('id', 'DESC')->paginate(10);
+        }
+        else
+        {
+            $orders = SalesOrder::query()->where('uid', Auth::user()->id)->orderBy('id', 'DESC')->paginate(10);
+        }
         return view('livewire.orders', ['orders' => $orders]);
     }
 

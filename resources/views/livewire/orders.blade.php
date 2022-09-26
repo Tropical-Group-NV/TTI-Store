@@ -2,6 +2,19 @@
     <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">
         Your Orders
     </h1>
+
+{{--    <div class="bg-white shadow-xl sm:rounded-lg">--}}
+{{--        <div style="" class="py-12 md:px-6  2xl:px-20 ">--}}
+{{--            <form class="" id="searchform" action="{{ route('orders') }}">--}}
+{{--                <ul class="flex">--}}
+{{--                    <input onkeyup="searchItem2()" style="height:50px;" id="search_input2" placeholder="Search..." name="search" class="w-full rounded-md flex-shrink-0" autocomplete="false" type="search">--}}
+{{--                    <button class="btn w-full" style="background-color: #0069AD; height: 50px">--}}
+{{--                        <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">--}}
+{{--                    </button>--}}
+{{--                </ul>--}}
+{{--            </form>--}}
+{{--        </div>--}}
+{{--    </div>--}}
         <div class="bg-white shadow-xl sm:rounded-lg">
             <div style="overflow-x: auto" class="  py-12 2xl:px-20 md:px-6 px-4">
                 <div style="overflow-x: auto">
@@ -15,7 +28,7 @@
                                 <th  style="width: 350px" class="border border-slate-600">
                                     Customer
                                 </th>
-                                <th style="width: 350px" class="border border-slate-600">
+                                <th style="width: 350px" class="border border-slate-600 w-full">
                                     Adres
                                 </th>
                                 <th style="width: 350px" class="border border-slate-600">
@@ -26,6 +39,12 @@
                                 </th>
                                 <th style="width: 350px" class="border border-slate-600">
                                     Amount
+                                </th>
+                                <th style="width: 150px" class="border border-slate-600">
+                                    In QB
+                                </th>
+                                <th style="width: 150px" class="border border-slate-600">
+                                    In QB Date
                                 </th>
                                 <th style="width: 150px" class="border border-slate-600">
                                     Reorder
@@ -46,7 +65,7 @@
                                     <td class="border border-slate-700">
                                         {{ $customer->Name }}
                                     </td>
-                                    <td class="border border-slate-700">
+                                    <td class="border border-slate-700 w-fullr">
                                         {{ $customer->BillAddressBlockAddr1 . ' ' .  $customer->BillAddressBlockAddr2 . ' ' . $customer->BillAddressBlockAddr3 . ' ' . $customer->BillAddressBlockAddr4 . ' ' . $customer->BillAddressBlockAddr5}}
                                     </td>
                                     <td class="border border-slate-700">
@@ -63,6 +82,32 @@
                                     </td>
                                     <td class="border border-slate-700">
                                         SRD {{ $subTotal }}
+                                    </td>
+                                    <td class="border border-slate-700">
+                                        @if($order->write_to_quickbook == 1)
+                                            <span>
+                                                 <button style="background-color: rgb(22 163 74)" type="button" class="rounded-full px-4 mr-2 bg-green-600 text-white p-2 rounded  leading-none flex items-center">
+                                                     <b style="font-family: sfsemibold">
+                                                         YES
+                                                     </b>
+
+                                                 </button>
+                                            </span>
+                                        @else
+                                            <span>
+                                                 <button type="button" class="rounded-full px-4 mr-2 bg-red-600 text-white p-2 rounded  leading-none flex items-center">
+                                                     <b style="font-family: sfsemibold">
+                                                     NO
+                                                     </b>
+                                                 </button>
+                                            </span>
+                                        @endif
+{{--                                        SRD {{ $subTotal }}--}}
+                                    </td>
+                                    <td class="border border-slate-700">
+                                        @if($order->datetime_to_quickbook != null)
+                                            {{ date('Y-m-d', strtotime($order->datetime_to_quickbook)) }}
+                                        @endif
                                     </td>
                                     <td class="border border-indigo-400">
                                         <button wire:click="reorder('{{ $order->id }}')" style="background-color: #0069AD; color: white" class="btn ">
