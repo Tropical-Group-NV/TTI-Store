@@ -139,7 +139,7 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                 foreach ($salesOrderItems as $salesOrderItem)
                                 {
                                     $item = \App\Models\Item::query()->where('ListID', $salesOrderItem->SalesOrderLineItemRefListID)->first();
-                                    echo '<tr><td style="padding: 2px;text-align: left;border: 1px solid #ddd;">'.$item->BarCodeValue.'</td>'.
+                                    echo '<tr><td style="padding: 2px;text-align: left;border: 1px solid #ddd;">'.$item->Name.'</td>'.
                                         '<td style="padding: 2px;text-align: left;border: 1px solid #ddd;">'.$salesOrderItem->SalesOrderLineDesc.'</td>'.
                                         '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'.$salesOrderItem->SalesOrderLineQuantity.'</td>'.
                                         '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'.$item->UnitOfMeasureSetRefFullName.'</td>'.
