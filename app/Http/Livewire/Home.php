@@ -13,13 +13,6 @@ class Home extends Component
 {
     public $saleUnlimit;
     public $onSale;
-    public $brand_srch;
-    public $search2;
-    public $search_str;
-    public $search_sw = 0;
-    public $count = 0;
-    public $message;
-    public $list;
     public $readyToLoadRandom = false;
     public $readyToLoadPopular = false;
     public $readyToLoadNewStock = false;
@@ -67,26 +60,8 @@ class Home extends Component
     public function boot()
     {
         $this->randomItems = $this->readyToLoadRandom ? \App\Models\Item::query()->where('IsActive', 1)->where('Type', 'ItemInventory')->where('QuantityOnHand', '>', 0)->limit(8)->inRandomOrder()->get() :  [];
-//        $this->popularItems = DB::connection('qb_sales')->table('sales_order_items')
-//            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
-//            ->groupBy('SalesOrderLineItemRefListID')
-//            ->orderBy('occurrences', 'DESC')
-////            ->limit($this->popularItemsCount)
-//            ->get();
         $this->popularItems = $this->readyToLoadPopular ? DB::table('most_sold_items')->limit($this->popularItemsCount)->get() : [];
-//        $this->leastPopularItems = DB::connection('qb_sales')->table('sales_order_items')
-//            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
-//            ->groupBy('SalesOrderLineItemRefListID')
-//            ->inRandomOrder()
-//            ->limit($this->leastPopularItemsCount)
-//            ->get();
         $this->leastPopularItems = DB::table('most_sold_items')->limit($this->popularItemsCount)->get();
-
-//        foreach ($this->popularItems as $items)
-//        {
-//            DB::table('most_sold_items')->insert(['itemID'=> $items->SalesOrderLineItemRefListID, 'qty' => $items->occurrences]);
-//        }
-
     }
 
     public function mount()
@@ -102,8 +77,6 @@ class Home extends Component
             $this->onSale = OnSale::query()->where('onsale', 1)->limit(4)->get();
         }
         $this->restocked = \App\Models\Item::query()->orderBy('TimeModified' , 'DESC')->limit(4)->get();
-        $this->list = DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->orderBy('TimeModified', 'DESC')->limit(12)->get();
-
 
     }
 
@@ -118,30 +91,6 @@ class Home extends Component
         $this->saleUnlimit = 0;
         $this->onSale = OnSale::query()->limit(6)->get();
         $this->emit('showMore');
-    }
-
-    public function sug_search()
-    {
-        if ($this->search_sw == 0)
-        {
-            if (strlen($this->search2) > 0)
-            {
-                $this->search_sw = 1;
-                {
-                    $this->list = DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->orWhere('BarCodeValue', 'LIKE', '%' . $this->search2 . '%')->orderBy('TimeModified', 'DESC')->limit(10)->get();
-                }
-
-            }
-        }
-        else
-        {
-            if (strlen($this->search2) > 0)
-            {
-                {
-                    $this->list = DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search2 . '%')->orWhere('BarCodeValue', 'LIKE', '%' . $this->search2 . '%')->orderBy('TimeModified', 'DESC')->limit(10)->get();
-                }
-            }
-        }
     }
     public function addToCart($prod, $qty)
     {
@@ -180,13 +129,6 @@ class Home extends Component
     public function leastPopularItemsCountAdd()
     {
         $this->leastPopularItemsCount = $this->leastPopularItemsCount * 2;
-//        $this->leastPopularItems = DB::connection('qb_sales')->table('sales_order_items')
-//            ->select('SalesOrderLineItemRefListID', DB::raw('COUNT(SalesOrderLineItemRefListID) AS occurrences'))
-//            ->groupBy('SalesOrderLineItemRefListID')
-//            ->orderBy('occurrences', 'ASC')
-////            ->orderBy(DB::raw('RAND()'))
-//            ->limit($this->leastPopularItemsCount)
-//            ->get();
         $this->emit('showMore');
     }
 
