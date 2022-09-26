@@ -40,12 +40,14 @@
                                 <th style="width: 350px" class="border border-slate-600">
                                     Amount
                                 </th>
+                                @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 1 or \Illuminate\Support\Facades\Auth::user()->users_type_id == 5)
                                 <th style="width: 150px" class="border border-slate-600">
                                     In QB
                                 </th>
                                 <th style="width: 150px" class="border border-slate-600">
                                     In QB Date
                                 </th>
+                                @endif
                                 <th style="width: 150px" class="border border-slate-600">
                                     Reorder
                                 </th>
@@ -83,6 +85,7 @@
                                     <td class="border border-slate-700">
                                         SRD {{ $subTotal }}
                                     </td>
+                                    @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 1 or \Illuminate\Support\Facades\Auth::user()->users_type_id == 5)
                                     <td class="border border-slate-700">
                                         @if($order->write_to_quickbook == 1)
                                             <span>
@@ -109,6 +112,7 @@
                                             {{ date('Y-m-d', strtotime($order->datetime_to_quickbook)) }}
                                         @endif
                                     </td>
+                                    @endif
                                     <td class="border border-indigo-400">
                                         <button wire:click="reorder('{{ $order->id }}')" style="background-color: #0069AD; color: white" class="btn ">
                                             Reorder
