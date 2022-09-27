@@ -637,7 +637,7 @@
         </div>
     </div>
     <br>
-    <div class="overflow-hidden sm:rounded-lg block 2xl:hidden" style="text-align: center">
+    <div class="overflow-hidden sm:rounded-lg sm:hidden" style="text-align: center">
         <a href="{{ route('dashboard') }}">
             <button style="background-color: #0069ad; color: white" class="w-3/4 rounded-lg">
                 <h1 style="font-family: sfsemibold; font-size: 35px;" class="p-6">
