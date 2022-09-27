@@ -21,28 +21,28 @@
             <div class="card" style="width: auto;">
                 <div style="margin: auto">
                     <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ex1.jpg') }}" alt="">
+                        <img src="{{ asset('ads/spierbalsem.jpg') }}" alt="">
                     </div>
                 </div>
             </div>
             <div class="card" style="width: auto;">
                 <div style="margin: auto">
                     <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ex2.jpg') }}" alt="">
+                        <img src="{{ asset('ads/TP_Kola.jpg') }}" alt="">
                     </div>
                 </div>
             </div>
             <div class="card" style="width: auto;">
                 <div style="margin: auto">
                     <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ex6.jpg') }}" alt="">
+                        <img src="{{ asset('ads/TP_Essence.jpg') }}" alt="">
                     </div>
                 </div>
             </div>
             <div class="card" style="width: auto;">
                 <div style="margin: auto">
                     <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ex4.jpg') }}" alt="">
+                        <img src="{{ asset('ads/vaporub.jpg') }}" alt="">
                     </div>
                 </div>
             </div>
@@ -555,7 +555,19 @@
                 @endforeach
             </div>
         </div>
+
     </div>
+    <br>
+    <div class=" overflow-hidden sm:rounded-lg" style="text-align: center">
+        <a href="{{ route('dashboard') }}">
+            <button style="background-color: #0069ad; color: white" class="w-3/4 rounded-lg">
+                <h1 style="font-family: sfsemibold; font-size: 35px;" class="p-6">
+                    View all items
+                </h1>
+            </button>
+        </a>
+    </div>
+
     <br>
 
 
@@ -597,32 +609,42 @@
             <div class="card" style="width: auto;">
                 <div style="margin: auto">
                     <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ex1.jpg') }}" alt="">
+                        <img src="{{ asset('ads/spierbalsem.jpg') }}" alt="">
                     </div>
                 </div>
             </div>
             <div class="card" style="width: auto;">
                 <div style="margin: auto">
                     <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ex2.jpg') }}" alt="">
+                        <img src="{{ asset('ads/TP_Kola.jpg') }}" alt="">
                     </div>
                 </div>
             </div>
             <div class="card" style="width: auto;">
                 <div style="margin: auto">
                     <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ex6.jpg') }}" alt="">
+                        <img src="{{ asset('ads/TP_Essence.jpg') }}" alt="">
                     </div>
                 </div>
             </div>
             <div class="card" style="width: auto;">
                 <div style="margin: auto">
                     <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ex4.jpg') }}" alt="">
+                        <img src="{{ asset('ads/vaporub.jpg') }}" alt="">
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <br>
+    <div class="overflow-hidden sm:rounded-lg block 2xl:hidden" style="text-align: center">
+        <a href="{{ route('dashboard') }}">
+            <button style="background-color: #0069ad; color: white" class="w-3/4 rounded-lg">
+                <h1 style="font-family: sfsemibold; font-size: 35px;" class="p-6">
+                    View all items
+                </h1>
+            </button>
+        </a>
     </div>
 
 </div>

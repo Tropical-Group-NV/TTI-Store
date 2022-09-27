@@ -23,7 +23,7 @@
             </div>
             <br>
         @endif
-        <div id="itemWrap" style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        <div id="itemWrap" style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {{--        {{ print_r($items) }}--}}
 {{--            @if($loadItems != true)--}}
 {{--                <div >--}}

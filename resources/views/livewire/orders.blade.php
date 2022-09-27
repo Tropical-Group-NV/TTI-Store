@@ -23,7 +23,7 @@
                             <thead class="bg-gray-100">
                             <tr>
                                 <th style="width: 350px" class="border border-slate-600">
-                                    Date
+                                    Date to ship
                                 </th>
                                 <th  style="width: 350px" class="border border-slate-600">
                                     Customer
@@ -136,7 +136,7 @@
                     </div>
                 </div>
                 <div class="w-20">
-                    {{ $orders->links() }}
+                    {{ $orders->links('vendor.pagination.bootstrap-52') }}
                 </div>
             </div>
         </div>
