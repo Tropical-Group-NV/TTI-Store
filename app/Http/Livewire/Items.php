@@ -16,9 +16,9 @@ class Items extends Component
     use WithPagination;
 
     public $itemsPerPage;
-    protected $brand_srch;
-    protected $unitsearch;
-    protected $branchsearch;
+    public $brand_srch;
+    public $unitsearch;
+    public $branchsearch;
     public $search_str;
     public $loadItems = false;
 
@@ -83,7 +83,6 @@ class Items extends Component
                 }
                 else
                 {
-//                    die($this->brand_srch);
                     return view('livewire.items',
                         [
                             'items' =>  DB::connection('qb_sales')->table('view_item')->where('CustomFieldBranch', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orWhere('CustomFieldBranch2', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orWhere('CustomFieldBranch3', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orWhere('CustomFieldBranch4', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orWhere('CustomFieldBranch5', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('Description')->paginate($this->itemsPerPage)
@@ -108,6 +107,7 @@ class Items extends Component
                     ]
                 );
             }
+
         }
         else
         {
@@ -175,8 +175,6 @@ class Items extends Component
 
         }
         return view('livewire.items', ['items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('type', 'ItemInventory')->orderBy('description', 'ASC')->paginate($this->itemsPerPage)->appends(request()->query())]);
-//        return view('livewire.items', ['items' => []]);
-
 
     }
 
