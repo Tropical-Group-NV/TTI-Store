@@ -72,6 +72,9 @@
                                 @endif
                                 <div class="border-t border-gray-100"></div>
                                 @auth()
+                                    <x-jet-dropdown-link href="{{ route('dashboard') }}">
+                                        {{ __('All items') }}
+                                    </x-jet-dropdown-link>
                                     <x-jet-dropdown-link href="{{ route('orders') }}">
                                         {{ __('Orders') }}
                                     </x-jet-dropdown-link>
@@ -284,6 +287,9 @@
 {{--            </x-jet-responsive-nav-link>--}}
             @if(\Illuminate\Support\Facades\Auth::user() != null)
 
+                <x-jet-responsive-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
+                    {{ __('All items') }}
+                </x-jet-responsive-nav-link>
                 <x-jet-responsive-nav-link href="{{ route('orders') }}" :active="request()->routeIs('orders')">
                     {{ __('Orders') }}
                 </x-jet-responsive-nav-link>
