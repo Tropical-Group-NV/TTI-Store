@@ -190,10 +190,10 @@ class Items extends Component
             $this->emit('updateCart');
             $this->dispatchBrowserEvent('addedcart', ['message' => 'Added to cart']);
         }
-        if ($qty <= 0 or is_int($qty))
-        {
-            $this->dispatchBrowserEvent('Invalid', ['message' => 'Added to cart']);
-        }
+//        if ($qty <= 0 or is_int($qty))
+//        {
+//            $this->dispatchBrowserEvent('Invalid', ['message' => 'Added to cart']);
+//        }
         else
         {
             $item = new CartItem();
