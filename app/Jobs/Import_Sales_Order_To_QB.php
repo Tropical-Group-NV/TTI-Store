@@ -66,7 +66,27 @@ class Import_Sales_Order_To_QB implements ShouldQueue
         }
         else
         {
-            $this->delay(now()->addMinutes(5));
+            sleep(60);
+            $in_process = new ImportSoInProcess();
+            $in_process->in_process = 1;
+            $in_process->save();
+            try
+            {
+                $model = SalesOrder::query()->where('id', $this->sales_order_id)->first();
+                $c = QbCustomer::query()->where('ListID', $model->CustomerRefListID)->first();
+                $logo = asset('tti-new_email');
+                $qrLogo = asset('tti-email-qr');
+                $currency = 'SRD';
+                DB::connection('qb_sales')->update( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $this->sales_order_id. '; SET NOCOUNT ON;');
+                if ($c->Email != '' or $c->Email != null)
+                {
+                    Mail::to($c->Email)->send(new OrderNew($this->sales_order_id));
+                }
+            }
+            catch (\Exception $e)
+            {
+                ImportSoInProcess::query()->delete();
+            }
         }
 
 
