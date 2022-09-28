@@ -12,16 +12,22 @@ use Livewire\WithPagination;
 
 class Orders extends Component
 {
+    public $search;
     use WithPagination;
 //    public $orders;
 
     public function mount()
     {
-        if (Auth::user() != null)
+        if (isset($_REQUEST['search']))
         {
-//            $this->orders = SalesOrder::query()->where('uid', Auth::user()->id)->orderBy('id', 'DESC');
+            $this->search = $_REQUEST['search'];
 
         }
+//        if (Auth::user() != null)
+//        {
+//            $this->orders = SalesOrder::query()->where('uid', Auth::user()->id)->orderBy('id', 'DESC');
+
+//        }
 
     }
 
@@ -29,13 +35,36 @@ class Orders extends Component
     {
         if (Auth::user()->users_type_id == 1 or Auth::user()->users_type_id == 5)
         {
-            $orders = SalesOrder::query()->orderBy('id', 'DESC')->paginate(10);
+            if (isset($_REQUEST['search']))
+            {
+                return view('livewire.orders', ['orders' => SalesOrder::query()->where('ShipAddressAddr1','LIKE', '%' . $this->search . '%')->orWhere('TermsRefFullName','LIKE', '%' . $this->search . '%')->orWhere('RefNumber','LIKE', '%' . $this->search . '%')->orderBy('id', 'DESC')->paginate(10)]);
+            }
+            else
+            {
+                return view('livewire.orders', ['orders' => SalesOrder::query()->orderBy('id', 'DESC')->paginate(10)]);
+//                $orders = SalesOrder::query()->orderBy('id', 'DESC')->paginate(10);
+
+            }
         }
         else
         {
-            $orders = SalesOrder::query()->where('uid', Auth::user()->id)->orderBy('id', 'DESC')->paginate(10);
+            if (isset($_REQUEST['search']))
+            {
+                return view('livewire.orders', ['orders' => SalesOrder::query()->where('uid', Auth::user()->id)->where('ShipAddressAddr1','LIKE', '%' . $this->search . '%')->orWhere('uid', Auth::user()->id)->where('TermsRefFullName','LIKE', '%' . $this->search . '%')->orWhere('uid', Auth::user()->id)->where('RefNumber','LIKE', '%' . $this->search . '%')->orderBy('id', 'DESC')->paginate(10)]);
+
+//                $orders = SalesOrder::query()->where('uid', Auth::user()->id)->where('ShipAddressAddr1','LIKE', '%' . $this->search . '%')->orWhere('uid', Auth::user()->id)->where('TermsRefFullName','LIKE', '%' . $this->search . '%')->orWhere('uid', Auth::user()->id)->where('RefNumber','LIKE', '%' . $this->search . '%')->orderBy('id', 'DESC')->paginate(10);
+            }
+            else
+            {
+                return view('livewire.orders', ['orders' => SalesOrder::query()->where('uid', Auth::user()->id)->orderBy('id', 'DESC')->paginate(10)]);
+//                $orders = SalesOrder::query()->where('uid', Auth::user()->id)->orderBy('id', 'DESC')->paginate(10);
+            }
         }
-        return view('livewire.orders', ['orders' => $orders]);
+//        else
+//        {
+//            return view('livewire.orders', ['orders' => $orders]);
+//
+//        }
     }
 
     public function reorder($orderID)
