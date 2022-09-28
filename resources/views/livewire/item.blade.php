@@ -83,6 +83,7 @@
                                 </div>
                             @endif
                         </div>
+                        <br>
                         <div class="px-8 leading-4 ">
                             @if(\Illuminate\Support\Facades\Auth::user() != null)
                                 @if(\App\Models\CartItem::query()->where('prod_id', $item->ListID)->where('uid', \Illuminate\Support\Facades\Auth::user()->id)->exists())
@@ -92,7 +93,7 @@
                                         </h1>
                                     </button>
                                 @else
-                                    @if($item->QuantityOnHand > 0)
+                                    @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0)
                                         <h1 style="font-family: sfsemibold">Select quantity:</h1>
                                         <br>
                                         <div class="border-2 border-black" style="border-color: #0069AD; border-radius: 20px">
