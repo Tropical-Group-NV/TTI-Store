@@ -109,6 +109,10 @@ Route::resources
     ]
 );
 
+Route::get('vue/home', function( Request $request)
+{
+    return inertia('Home');
+})->name('vue-home');
 
 
 

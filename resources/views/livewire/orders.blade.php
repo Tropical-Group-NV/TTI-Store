@@ -23,7 +23,7 @@
                             <thead class="bg-gray-100">
                             <tr>
                                 <th style="width: 350px" class="border border-slate-600">
-                                    Date to ship
+                                    Delivery date
                                 </th>
                                 <th  style="width: 350px" class="border border-slate-600">
                                     Customer

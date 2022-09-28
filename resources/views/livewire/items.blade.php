@@ -64,8 +64,8 @@
                             <div class="hover:bg-gray-50 hover:text-gray-400" >
                                 <a style="text-decoration: none" href="{{ route('item', $item->ListID) }}">
                                     <div style="height: 100px" class="">
-                                        <h5  style="font-family: sfsemibold; font-size: 20px" class="card-title">{{ $item->Description }}</h5>
-                                        <h5><b>{{$item->FullName}}</b></h5>
+                                        <h5  style="font-family: sfsemibold;" class="card-title text-xs sm:text-lg xl:text-2xl">{{ $item->Description }}</h5>
+                                        <h5 class="card-title text-xs sm:text-lg  xl:text-2xl"><b>{{$item->FullName}}</b></h5>
                                         <br>
                                     </div>
                                     @if($itemDesc != null)
@@ -77,11 +77,11 @@
                                 <li>
                                     @if(\Illuminate\Support\Facades\Auth::user() != null)
                                         @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
-                                            <span style="padding-top: 10px">Sales price: SRD <b class="font-extrabold" style="color: #0069ad; font-size: 27px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
+                                            <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: SRD <b class="font-extrabold text-sm sm:text-2xl" style="color: #0069ad; ">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                             <br>
                                         @endif
                                     @endif
-                                    <span style="padding-top: 10px">Retail price: SRD <b class="font-extrabold" style="color: #0069ad; font-size: 18px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                    <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-sm sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
                                     <br>
                                     <span style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                     <br>

@@ -24,7 +24,9 @@ import { createApp } from 'vue';
 const app = createApp({});
 
 import ExampleComponent from './components/ExampleComponent.vue';
+import Home from './components/Home.vue'
 app.component('example-component', ExampleComponent);
+app.component('home', Home)
 
 /**
  * The following block of code may be used to automatically register your
@@ -45,3 +47,15 @@ app.component('example-component', ExampleComponent);
  */
 
 app.mount('#app');
+
+// import { createApp, h } from 'vue'
+import { createInertiaApp } from '@inertiajs/inertia-vue3'
+
+createInertiaApp({
+    resolve: name => require(`./Pages/${name}`),
+    setup({ el, App, props, plugin }) {
+        createApp({ render: () => h(App, props) })
+            .use(plugin)
+            .mount(el)
+    },
+})

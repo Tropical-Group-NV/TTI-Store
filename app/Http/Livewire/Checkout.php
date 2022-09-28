@@ -32,6 +32,11 @@ class Checkout extends Component
     public $search_sw;
     public $terms;
     public $status_msg;
+    public $ship1;
+    public $ship2;
+    public $ship3;
+    public $ship4;
+    public $ship5;
 
     public function mount()
     {
