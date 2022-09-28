@@ -357,9 +357,9 @@
         <script>
             @foreach($cartItems as $cartItem)
             @php($item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first())
-            @if($cartItem->qty > $item->QuantityOnHand)
-            document.getElementById('ordered-{{ $cartItem->id }}').value = '{{ number_format($item->QuantityOnHand)  }}'
-            document.getElementById('backordered-{{ $cartItem->id }}').value = '{{ $cartItem->qty - $item->QuantityOnHand  }}'
+            @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
+            document.getElementById('ordered-{{ $cartItem->id }}').value = '{{ number_format($item->QuantityOnHand - $item->QuantityOnSalesOrder)  }}'
+            document.getElementById('backordered-{{ $cartItem->id }}').value = '{{ $cartItem->qty - $item->QuantityOnHand - $item->QuantityOnSalesOrder  }}'
             @else
             document.getElementById('ordered-{{ $cartItem->id }}').value = '{{ number_format($cartItem->qty)  }}'
             document.getElementById('backordered-{{ $cartItem->id }}').value = '0'

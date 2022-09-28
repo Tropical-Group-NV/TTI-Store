@@ -69,11 +69,11 @@
                             <div class="py-4 border-b border-gray-200">
                                 <span style="padding-top: 10px" class="text-base leading-4">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                             </div>
-                            @if($item->QuantityOnHand > 0)
+                            @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0)
                                 <div class="py-4  border-gray-200 items-center justify-between">
                                     <p class="text-base leading-4 text-green-600">In stock @auth
                                             @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
-                                                {{  substr($item->QuantityOnHand, 0, -6) }}
+                                                {{  $item->QuantityOnHand - $item->QuantityOnSalesOrder }}
                                             @endif
                                         @endauth</p>
                                 </div>
