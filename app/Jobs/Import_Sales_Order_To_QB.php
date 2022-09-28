@@ -56,6 +56,7 @@ class Import_Sales_Order_To_QB implements ShouldQueue
                 {
                     Mail::to($c->Email)->send(new OrderNew($this->sales_order_id));
                 }
+                ImportSoInProcess::query()->delete();
             }
             catch (\Exception $e)
             {
