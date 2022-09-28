@@ -66,7 +66,7 @@ class Import_Sales_Order_To_QB implements ShouldQueue
         }
         else
         {
-            Import_Sales_Order_To_QB::dispatch($this->sales_order_id)->delay(now()->addMinutes(10));
+            Import_Sales_Order_To_QB::dispatch($this->sales_order_id)->delay(now()->addMinutes(5));
         }
 
 
