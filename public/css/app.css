@@ -1344,6 +1344,12 @@ select {
 .h-20 {
   height: 5rem;
 }
+.h-32 {
+  height: 8rem;
+}
+.h-28 {
+  height: 7rem;
+}
 .min-h-screen {
   min-height: 100vh;
 }
@@ -2554,6 +2560,22 @@ select {
     height: 5rem;
   }
 
+  .sm\:h-96 {
+    height: 24rem;
+  }
+
+  .sm\:h-52 {
+    height: 13rem;
+  }
+
+  .sm\:h-64 {
+    height: 16rem;
+  }
+
+  .sm\:h-60 {
+    height: 15rem;
+  }
+
   .sm\:w-10 {
     width: 2.5rem;
   }
@@ -2839,6 +2861,21 @@ select {
   .xl\:text-2xl {
     font-size: 1.5rem;
     line-height: 2rem;
+  }
+
+  .xl\:text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+
+  .xl\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+
+  .xl\:text-sm {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 }
 @media (min-width: 1536px) {

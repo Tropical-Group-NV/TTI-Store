@@ -487,6 +487,9 @@
         window.addEventListener('addedcart', (e) => {
             toastr.success("Added to Cart")
         });
+        window.addEventListener('Invalid', (e) => {
+            toastr.warning("Not a valid value")
+        });
         window.addEventListener('removedcart', (e) => {
             toastr.warning("Removed from Cart")
         });

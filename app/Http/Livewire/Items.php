@@ -180,9 +180,19 @@ class Items extends Component
 
     public function addToCart($prod, $qty)
     {
+        if ($qty == '' or $qty == null)
+        {
+            $item = new CartItem();
+            $item->prod_id = $prod;
+            $item->qty = 1;
+            $item->uid = Auth::user()->id;
+            $item->save();
+            $this->emit('updateCart');
+            $this->dispatchBrowserEvent('addedcart', ['message' => 'Added to cart']);
+        }
         if ($qty <= 0 or is_int($qty))
         {
-            return 'no vAlue';
+            $this->dispatchBrowserEvent('Invalid', ['message' => 'Added to cart']);
         }
         else
         {
