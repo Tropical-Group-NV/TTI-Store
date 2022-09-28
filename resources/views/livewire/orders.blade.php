@@ -147,7 +147,7 @@
                                             <!-- Modal inner -->
                                             <div x-show="showModal" x-transition:enter.duration.500ms
                                                  x-transition:leave.duration.400ms
-                                                 class="max-w-3xl px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg"
+                                                 class=" max-w-3xl px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg"
                                                  @click.away="showModal = false"
                                             >
                                                 <!-- Title / Close-->
@@ -159,7 +159,7 @@
                                                     </button>
                                                 </div>
                                                 <!-- content -->
-                                                <div>
+                                                <div class="h-3/4">
                                                     <?php
                                                     $model = \App\Models\SalesOrderItem::query()->where('id', $order->id)->first();
                                                     $c = \App\Models\QbCustomer::query()->where('ListID', $model->CustomerRefListID)->first();
@@ -172,7 +172,7 @@
                                                     <table width="100%">
                                                         <tr>
                                                             <td style="text-align: center">
-                                                                <table width="95%" style="border: 1px solid #ddd;">
+                                                                <table width="95%" style="">
                                                                     <tr>
                                                                         <td style="padding: 10px">
                                                                             <table width="100%" style="border: none;margin-bottom: 2px" cellpadding="0" cellspacing="0">
@@ -185,11 +185,11 @@
                                                                                             </tr>
                                                                                             <tr>
                                                                                                 <td style="padding-bottom: 5px;width: 80px">S.O. No.</td>
-                                                                                                <td style="padding-bottom: 5px"><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$model->RefNumber?:'&nbsp;'?></div></td>
+                                                                                                <td style="padding-bottom: 5px"><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$order->RefNumber?:'&nbsp;'?></div></td>
                                                                                             </tr>
                                                                                             <tr>
                                                                                                 <td style="width: 80px"><?=$currency=='USD'?'Date':'Datum'?></td>
-                                                                                                <td><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?php echo $model->TxnDate ?></div></td>
+                                                                                                <td><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?php echo $order->TxnDate ?></div></td>
                                                                                             </tr>
                                                                                         </table>
                                                                                         <hr>
@@ -203,11 +203,15 @@
                                                                                                         </tr>
                                                                                                         <tr>
                                                                                                             <td style="text-align:left;vertical-align: top;">
-                                                                                                                {{ $model->BillAddressAddr1 }}
-                                                                                                                {{ $model->BillAddressAddr2 }}
-                                                                                                                {{ $model->BillAddressAddr3}}
-                                                                                                                {{ $model->BillAddressAddr4 }}
-                                                                                                                {{ $model->BillAddressAddr5 }}
+                                                                                                                {{ $order->BillAddressAddr1 }}
+                                                                                                                <br>
+                                                                                                                {{ $order->BillAddressAddr2 }}
+                                                                                                                <br>
+                                                                                                                {{ $order->BillAddressAddr3 }}
+                                                                                                                <br>
+                                                                                                                {{ $order->BillAddressAddr4 }}
+                                                                                                                <br>
+                                                                                                                {{ $order->BillAddressAddr5 }}
                                                                                                                 <?php
                                                                                                                 $bill = $model->BillAddressAddr1?$model->BillAddressAddr1.'<br>':'';
                                                                                                                 $bill .= $model->BillAddressAddr2?$model->BillAddressAddr2.'<br>':'';
@@ -228,11 +232,11 @@
                                                                                                         <tr>
                                                                                                             <td style="text-align:left;vertical-align: top;">
                                                                                                                 <?php
-                                                                                                                $shipTo = $model->ShipAddressAddr1?$model->ShipAddressAddr1.'<br>':'';
-                                                                                                                $shipTo .= $model->ShipAddressAddr2?$model->ShipAddressAddr2.'<br>':'';
-                                                                                                                $shipTo .= $model->ShipAddressAddr3?$model->ShipAddressAddr3.'<br>':'';
-                                                                                                                $shipTo .= $model->ShipAddressAddr4?$model->ShipAddressAddr4.'<br>':'';
-                                                                                                                $shipTo .= $model->ShipAddressAddr5?$model->ShipAddressAddr5.'<br>':'';
+                                                                                                                $shipTo = $order->ShipAddressAddr1?$order->ShipAddressAddr1.'<br>':'';
+                                                                                                                $shipTo .= $order->ShipAddressAddr2?$order->ShipAddressAddr2.'<br>':'';
+                                                                                                                $shipTo .= $order->ShipAddressAddr3?$order->ShipAddressAddr3.'<br>':'';
+                                                                                                                $shipTo .= $order->ShipAddressAddr4?$order->ShipAddressAddr4.'<br>':'';
+                                                                                                                $shipTo .= $order->ShipAddressAddr5?$order->ShipAddressAddr5.'<br>':'';
                                                                                                                 //                                                            $shipTo .= $customer->ShipAddressCity?$customer->ShipAddressCity.'<br>':'';
                                                                                                                 //                                                            $shipTo .= $customer->ShipAddressState?$customer->ShipAddressState.'<br>':'';
                                                                                                                 //                                                            $shipTo .= $customer->ShipAddressPostalCode?$customer->ShipAddressPostalCode.'<br>':'';
@@ -260,7 +264,7 @@
                                                                                             <thead>
                                                                                             <tr>
                                                                                                 <td style="text-align: center">P.O. No.</td>
-                                                                                                <td style="text-align: center"><?=$currency=='USD'?'Ship&nbsp;Date':'Leveringsdatum'?></td>
+                                                                                                <td style="text-align: center; width: 250px"><?=$currency=='USD'?'Ship&nbsp;Date':'Leveringsdatum'?></td>
                                                                                                 <td style="text-align: center"><?=$currency=='USD'?'Terms':'Voorwaarde'?></td>
                                                                                                 <td style="text-align: center"><?=$currency=='USD'?'Vert.':'Vert.'?></td>
                                                                                                 <td style="text-align: center"><?=$currency=='USD'?'Customer&nbsp;Type':'Klanttype'?></td>
@@ -268,9 +272,9 @@
                                                                                             </thead>
                                                                                             <tbody>
                                                                                             <tr>
-                                                                                                <td><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$model->PONumber?:'&nbsp;'?></div></td>
-                                                                                                <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?php echo $model->ShipDate?></div></td>
-                                                                                                <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$model->TermsRefFullName?:'&nbsp;'?></div></td>
+                                                                                                <td><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$order->PONumber?:'&nbsp;'?></div></td>
+                                                                                                <td><div style="border-radius: 25px;padding: 5px;border: 1px solid #ddd"><?php echo $order->ShipDate?></div></td>
+                                                                                                <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$order->TermsRefFullName?:'&nbsp;'?></div></td>
                                                                                                 <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->SalesRepRefFullName?:'&nbsp;'?></div></td>
                                                                                                 <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->CustomFieldKlanttype?:'&nbsp;'?></div></td>
                                                                                             </tr>
