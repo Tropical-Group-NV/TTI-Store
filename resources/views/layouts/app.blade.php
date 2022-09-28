@@ -3,6 +3,26 @@
 <head>
     <style>
         [x-cloak] { display: none }
+
+        /*#myBtn {*/
+        /*    display: none;*/
+        /*    position: fixed;*/
+        /*    bottom: 20px;*/
+        /*    right: 30px;*/
+        /*    z-index: 99;*/
+        /*    font-size: 18px;*/
+        /*    border: none;*/
+        /*    outline: none;*/
+        /*    background-color: red;*/
+        /*    color: white;*/
+        /*    cursor: pointer;*/
+        /*    padding: 15px;*/
+        /*    border-radius: 4px;*/
+        /*}*/
+
+        /*#myBtn:hover {*/
+        /*    background-color: #555;*/
+        /*}*/
     </style>
     <style>
         body #toast-container > div {
@@ -99,12 +119,12 @@
     </main>
 </div>
 
-<div id="godaddy-security-badge" class="" style="background-image: none">
+<div id="godaddy-security-badge" class="fixed bottom-0 left-0 btn" style="background-image: none" target="_blank">
     <a href="https://seal.godaddy.com/verifySeal?sealID=pIwHVyKG5cIEV9uGI0frERDzgcGFdBuY9WZYHYapnu4r0VKc2hLUukQbyKO9">
         <span id="siteseal">
-        <script async="" type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=pIwHVyKG5cIEV9uGI0frERDzgcGFdBuY9WZYHYapnu4r0VKc2hLUukQbyKO9">
-        </script>
-{{--        <img style="cursor:pointer;cursor:hand" src="https://seal.godaddy.com/images/3/en/siteseal_gd_3_h_l_m.gif" onclick="verifySeal();" alt="SSL site seal - click to verify">--}}
+{{--        <script async="" type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=pIwHVyKG5cIEV9uGI0frERDzgcGFdBuY9WZYHYapnu4r0VKc2hLUukQbyKO9">--}}
+{{--        </script>--}}
+        <img style="cursor:pointer;cursor:hand" src="https://seal.godaddy.com/images/3/en/siteseal_gd_3_h_l_m.gif" onclick="verifySeal();" alt="SSL site seal - click to verify">
     </span>
     </a>
 </div>
@@ -149,6 +169,55 @@
 {{--<a href="https://wa.me/5978691600" class="float active:text-white hover:text-white" target="_blank">--}}
 {{--    <i class="fa fa-whatsapp active:text-white my-float"></i>--}}
 {{--</a>--}}
+
+<div x-data="{ visible: false }" x-intersect="visible = true">
+    <p class="duration-1000 transition-all transform" :class="visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full'">Hello, World!</p>
+</div>
+
+<div
+    x-data
+    x-init="window.scrollTo({top: 0, behavior: 'smooth'})"
+    class="fixed bottom-10 left-10"></div>
+<button
+    x-data
+    @click.window="window.scrollTo({top: 0, behavior: 'smooth'})"
+    class="fixed bottom-10 left-10 btn" style="background-color: #0069AD; z-index: 1000; color: white; font-family: sfsemibold">⬆</button>
+
+{{--<div x-data="{ open: false }">--}}
+{{--    <button @click="open = ! open">Toggle</button>--}}
+
+{{--</div>--}}
+{{--<a href="#" @click.prevent="$refs.root.scrollTo({ top: $refs.root.scrollHeight, behavior: 'smooth' })">Scroll Down 👇</a>--}}
+
+{{--<div class="fixed bottom-10 left-10 btn " x-data="{ shown: false }" x-intersect="shown = true">--}}
+{{--    <div x-show="shown" x-transition>--}}
+{{--        I'm in the viewport!--}}
+{{--    </div>--}}
+{{--</div>--}}
+{{--<button onclick="topFunction()" id="myBtn" class="fixed bottom-10 left-10 btn " style="background-color: #0069AD; z-index: 1000; color: white; font-family: sfsemibold" title="Go to top">⬆</button>--}}
+
+
+<script>
+    // Get the button
+    let mybutton = document.getElementById("myBtn");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function() {scrollFunction()};
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
 
 @stack('modals')
 

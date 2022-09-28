@@ -111,7 +111,7 @@ Route::resources
 
 Route::get('vue/home', function( Request $request)
 {
-    return inertia('Home');
+    return view('test-home');
 })->name('vue-home');
 
 

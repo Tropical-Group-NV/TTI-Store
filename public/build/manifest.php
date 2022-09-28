@@ -13,4 +13,7 @@
   'orders' => 'App\\Http\\Livewire\\Orders',
   'show-test' => 'App\\Http\\Livewire\\ShowTest',
   'sidebar' => 'App\\Http\\Livewire\\Sidebar',
+  'test-cart' => 'App\\Http\\Livewire\\TestCart',
+  'test-filter' => 'App\\Http\\Livewire\\TestFilter',
+  'test-items' => 'App\\Http\\Livewire\\TestItems',
 );

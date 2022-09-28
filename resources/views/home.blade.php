@@ -32,7 +32,7 @@
                             </div>
                         </aside>
                     </div>
-                    <div style="z-index: 100; right: 0" id="shoppingCart" class="hidden 2xl:block fixed 2xl:relative">
+                    <div style="z-index: 100; right: 0; position: -webkit-sticky;position: sticky;" id="shoppingCart" class="hidden 2xl:block sticky">
                         @livewire('sidebar')
                     </div>
                 @endif
