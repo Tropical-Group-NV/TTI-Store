@@ -170,18 +170,18 @@
 {{--    <i class="fa fa-whatsapp active:text-white my-float"></i>--}}
 {{--</a>--}}
 
-<div x-data="{ visible: false }" x-intersect="visible = true">
-    <p class="duration-1000 transition-all transform" :class="visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full'">Hello, World!</p>
-</div>
+{{--<div x-data="{ visible: false }" x-intersect="visible = true">--}}
+{{--    <p class="duration-1000 transition-all transform" :class="visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-full'">Hello, World!</p>--}}
+{{--</div>--}}
 
-<div
-    x-data
-    x-init="window.scrollTo({top: 0, behavior: 'smooth'})"
-    class="fixed bottom-10 left-10"></div>
-<button
-    x-data
-    @click.window="window.scrollTo({top: 0, behavior: 'smooth'})"
-    class="fixed bottom-10 left-10 btn" style="background-color: #0069AD; z-index: 1000; color: white; font-family: sfsemibold">⬆</button>
+{{--<div--}}
+{{--    x-data--}}
+{{--    x-init="window.scrollTo({top: 0, behavior: 'smooth'})"--}}
+{{--    class="fixed bottom-10 left-10"></div>--}}
+{{--<button--}}
+{{--    x-data--}}
+{{--    @click.window="window.scrollTo({top: 0, behavior: 'smooth'})"--}}
+{{--    class="fixed bottom-10 left-10 btn" style="background-color: #0069AD; z-index: 1000; color: white; font-family: sfsemibold">⬆</button>--}}
 
 {{--<div x-data="{ open: false }">--}}
 {{--    <button @click="open = ! open">Toggle</button>--}}
@@ -197,27 +197,27 @@
 {{--<button onclick="topFunction()" id="myBtn" class="fixed bottom-10 left-10 btn " style="background-color: #0069AD; z-index: 1000; color: white; font-family: sfsemibold" title="Go to top">⬆</button>--}}
 
 
-<script>
-    // Get the button
-    let mybutton = document.getElementById("myBtn");
+{{--<script>--}}
+{{--    // Get the button--}}
+{{--    let mybutton = document.getElementById("myBtn");--}}
 
-    // When the user scrolls down 20px from the top of the document, show the button
-    window.onscroll = function() {scrollFunction()};
+{{--    // When the user scrolls down 20px from the top of the document, show the button--}}
+{{--    window.onscroll = function() {scrollFunction()};--}}
 
-    function scrollFunction() {
-        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
-            mybutton.style.display = "block";
-        } else {
-            mybutton.style.display = "none";
-        }
-    }
+{{--    function scrollFunction() {--}}
+{{--        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {--}}
+{{--            mybutton.style.display = "block";--}}
+{{--        } else {--}}
+{{--            mybutton.style.display = "none";--}}
+{{--        }--}}
+{{--    }--}}
 
-    // When the user clicks on the button, scroll to the top of the document
-    function topFunction() {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-    }
-</script>
+{{--    // When the user clicks on the button, scroll to the top of the document--}}
+{{--    function topFunction() {--}}
+{{--        document.body.scrollTop = 0;--}}
+{{--        document.documentElement.scrollTop = 0;--}}
+{{--    }--}}
+{{--</script>--}}
 
 @stack('modals')
 

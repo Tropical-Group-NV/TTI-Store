@@ -94,7 +94,7 @@
                                     @if($item->QuantityOnHand > 0)
                                         @if(\Illuminate\Support\Facades\Auth::user() != null )
                                             @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
-                                                <span class="text-xs sm:text-lg" style="color: green">In stock: <b>{{  substr($item->QuantityOnHand, 0, -6) }}</b></span>
+                                                <span class="text-xs sm:text-lg" style="color: green">In stock: <b>{{ $item->QuantityOnHand - $item->QuantityOnSalesOrder}}</b></span>
                                             @else
                                                 <span class="text-xs sm:text-lg" style="color: green">In stock</span>
 
@@ -126,7 +126,7 @@
                                         </div>
                                     @else
                                         <div>
-                                            @if($item->QuantityOnHand <= 0)
+                                            @if($item->QuantityOnHand - $item->QuantityOnSalesOrder <= 0)
                                                 @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                                                     <input type="hidden" id="customer-id-{{ $item->ListID }}">
                                                     <input placeholder="Search Customers" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" id="customer-search-{{ $item->ListID }}" onkeyup="searchCustomer('{{ $item->ListID }}')">

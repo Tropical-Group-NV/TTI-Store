@@ -104,7 +104,7 @@
                                             @if($item->QuantityOnHand > 0)
                                                 @if(\Illuminate\Support\Facades\Auth::user() != null )
                                                     @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
-                                                        <span style="color: green">In stock: <b>{{  substr($item->QuantityOnHand, 0, -6) }}</b></span>
+                                                        <span style="color: green">In stock: <b>{{  $item->QuantityOnHand - $item->QuantityOnSalesOrder }}</b></span>
                                                     @else
                                                         <span style="color: green">In stock</span>
 
@@ -238,10 +238,10 @@
                                         <br>
                                         <span style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                         <br>
-                                        @if($item->QuantityOnHand > 0)
+                                        @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0)
                                             @if(\Illuminate\Support\Facades\Auth::user() != null )
                                                 @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
-                                                    <span style="color: green">In stock: <b>{{  substr($item->QuantityOnHand, 0, -6) }}</b></span>
+                                                    <span style="color: green">In stock: <b>{{  $item->QuantityOnHand - $item->QuantityOnSalesOrder }}</b></span>
                                                 @else
                                                     <span style="color: green">In stock</span>
 
@@ -366,10 +366,10 @@
                                     <br>
                                     <span style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                     <br>
-                                    @if($item->QuantityOnHand > 0)
+                                    @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0)
                                         @if(\Illuminate\Support\Facades\Auth::user() != null )
                                             @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
-                                                <span style="color: green">In stock: <b>{{  substr($item->QuantityOnHand, 0, -6) }}</b></span>
+                                                <span style="color: green">In stock: <b>{{  $item->QuantityOnHand - $item->QuantityOnSalesOrder }}</b></span>
                                             @else
                                                 <span style="color: green">In stock</span>
 
@@ -486,10 +486,10 @@
                                     <br>
                                     <span style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                     <br>
-                                    @if($item->QuantityOnHand > 0)
+                                    @if($item->QuantityOnHand - $item->QuantityOnSalesOrder> 0)
                                         @if(\Illuminate\Support\Facades\Auth::user() != null )
                                             @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
-                                                <span style="color: green">In stock: <b>{{  substr($item->QuantityOnHand, 0, -6) }}</b></span>
+                                                <span style="color: green">In stock: <b>{{  $item->QuantityOnHand - $item->QuantityOnSalesOrder }}</b></span>
                                             @else
                                                 <span style="color: green">In stock</span>
 

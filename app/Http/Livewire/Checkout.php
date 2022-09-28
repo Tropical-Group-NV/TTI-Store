@@ -164,7 +164,7 @@ class Checkout extends Component
             foreach ($cartItems as $cartItem)
             {
                 $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->first();
-                if($cartItem->qty > $item->QuantityOnHand)
+                if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
                 {
                     $saleItem = new SalesOrderItem();
                     $saleItem->sales_order_id = $sale->id;
@@ -191,7 +191,7 @@ class Checkout extends Component
                     $bo->save();
 
                     $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
-                    $saveItem->QuantityOnHand = '0';
+                    $saveItem->QuantityOnSalesOrder = $saveItem->QuantityOnSalesOrder + 1;
                     $saveItem->save();
 
 //                    \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->update(['QuantityOnHand' => 0 ]);
@@ -209,7 +209,7 @@ class Checkout extends Component
                     $saleItem->save();
 
                     $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
-                    $saveItem->QuantityOnHand = $item->QuantityOnHand - $cartItem->qty;
+                    $saveItem->QuantityOnSalesOrder = $saveItem->QuantityOnSalesOrder + 1;
                     $saveItem->save();
 //                    \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->update(['QuantityOnHand' => $item->QuantityOnHand - $cartItem->qty  ]);
                 }
