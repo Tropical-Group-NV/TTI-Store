@@ -205,13 +205,7 @@
                                         <td>
                                             <div class="flex">
                                                 {{--                                            @if($cartItem->qty <= $item->QuantityOnHand)--}}
-                                                <select wire:loading.attr="disabled" wire:change="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" style="width: 100%" class="form-control border-indigo-400 w-full" id="ordered-{{ $cartItem->id }}" name="qty">
-                                                    @php($count=0)
-                                                    @while($count != 1000)
-                                                        @php($count++ )
-                                                        <option value="{{ $count }}">{{ $count }}</option>
-                                                    @endwhile
-                                                </select>
+                                                <input type="number" value="1" wire:loading.attr="disabled" wire:keyup.debounce.500ms="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" style="width: 100%" class="form-control border-indigo-400 w-full rounded-l" id="ordered-{{ $cartItem->id }}" name="qty"/>
                                                 {{--                                            @else--}}
                                                 {{--                                                <input wire:loading.attr="disabled" wire:keydown.debounce.1100ms="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" class="form-control border-indigo-400 w-1/4" id="ordered-{{ $cartItem->id }}" name="qty">--}}
                                                 {{--                                            @endif--}}

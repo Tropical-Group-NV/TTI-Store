@@ -66,10 +66,14 @@
                                     {{ round( $order->BackOrderQuantity, 2) }}
                                 </td>
                                 <td class="border border-indigo-400">
-                                    {{ round($item->QuantityOnHand, 2)  }}
+                                    @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0 )
+                                        {{ $item->QuantityOnHand - $item->QuantityOnSalesOrder  }}
+                                    @else
+                                        0
+                                    @endif
                                 </td>
                                 <td style="margin: auto" class="border border-indigo-400">
-                                    @if($item->QuantityOnHand > 0)
+                                    @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0)
                                         <button wire:loading.attr="disabled" wire:click="createOrder('{{ $item->ListID }}', '{{ round( $order->BackOrderQuantity, 2) }}', '{{ $customer->ListID }}')" class="btn btn-primary" style="background-color: #0069AD; color: white; font-family: sfsemibold">Create Order</button>
                                     @endif
                                 </td>

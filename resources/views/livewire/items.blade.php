@@ -32,7 +32,7 @@
             <img wire:loading wire:target="gotoPage" class="w-1/2" src="{{asset('ttistore_loading.gif') }}" alt="">
         </div>
         {{ session('key') }}
-        <div id="itemWrap" style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        <div id="itemWrap" style="" class=" bg-opacity-25 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {{--        {{ print_r($items) }}--}}
 {{--            @if($loadItems != true)--}}
 {{--                <div >--}}
@@ -59,7 +59,7 @@
             @if($put == 1)
                     @php($itemDesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->get()->first())
                     @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
-                    <div class="card" style="width: auto;">
+                    <div class="" style="width: auto;">
                         <div class="h-28 sm:h-52" style=" margin: auto">
 {{--                        <div  style="height: 20rem; margin: auto">--}}
                             <a href="{{ route('item', $item->ListID) }}">

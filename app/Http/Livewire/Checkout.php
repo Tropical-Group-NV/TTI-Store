@@ -87,21 +87,28 @@ class Checkout extends Component
 
     public function changeQuantity($id, $qty)
     {
-        $item = CartItem::query()->where('id', $id)->first();
-        $product = \App\Models\Item::query()->where('ListID', $item->prod_id)->first();
-        $item->qty = $qty;
-        $item->save();
 
-        if ($qty > $product->QuantityOnHand - $product->QuantityOnSalesOrder)
+        if ($qty > 0 and !is_int($qty))
         {
-            $this->dispatchBrowserEvent('updateCartQty', ['prodID' => $id, 'Qty' => number_format($qty) , 'inStock' =>  number_format($product->QuantityOnHand - $product->QuantityOnSalesOrder), 'BO' => $qty-($product->QuantityOnHand - $product->QuantityOnSalesOrder), 'addBO' => 1]);
-        }
-        else
-        {
-            $this->dispatchBrowserEvent('updateCartQty', ['prodID' => $id, 'Qty' => number_format($qty) , 'inStock' =>  number_format($product->QuantityOnHand - $product->QuantityOnSalesOrder) , 'addBO' => 0]);
+            $item = CartItem::query()->where('id', $id)->first();
+            $product = \App\Models\Item::query()->where('ListID', $item->prod_id)->first();
+            $item->qty = $qty;
+            $item->save();
 
-        }
+            if ($qty > $product->QuantityOnHand - $product->QuantityOnSalesOrder)
+            {
+                $this->dispatchBrowserEvent('updateCartQty', ['prodID' => $id, 'Qty' => number_format($qty) , 'inStock' =>  number_format($product->QuantityOnHand - $product->QuantityOnSalesOrder), 'BO' => $qty-($product->QuantityOnHand - $product->QuantityOnSalesOrder), 'addBO' => 1]);
+            }
+            else
+            {
+                $this->dispatchBrowserEvent('updateCartQty', ['prodID' => $id, 'Qty' => number_format($qty) , 'inStock' =>  number_format($product->QuantityOnHand - $product->QuantityOnSalesOrder) , 'addBO' => 0]);
 
+            }
+        }
+//        else
+//        {
+//            $this->dispatchBrowserEvent('updateCartQty', ['prodID' => $id, 'Qty' => number_format($qty) , 'inStock' =>  number_format($product->QuantityOnHand - $product->QuantityOnSalesOrder), 'BO' => $qty-($product->QuantityOnHand - $product->QuantityOnSalesOrder), 'addBO' => 1]);
+//        }
     }
 
     public function clearCart()

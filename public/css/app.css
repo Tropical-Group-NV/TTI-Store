@@ -1830,6 +1830,10 @@ select {
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
 }
+.rounded-l {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
 .border {
   border-width: 1px;
 }
@@ -3480,6 +3484,18 @@ select {
 
   .\32xl\:w-1\/2 {
     width: 50%;
+  }
+
+  .\32xl\:w-52 {
+    width: 13rem;
+  }
+
+  .\32xl\:w-96 {
+    width: 24rem;
+  }
+
+  .\32xl\:w-80 {
+    width: 20rem;
   }
 
   .\32xl\:grid-cols-3 {

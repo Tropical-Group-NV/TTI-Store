@@ -2,7 +2,9 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\BackOrders;
 use App\Models\CartItem;
+use App\Models\Customer;
 use App\Models\OnSale;
 use App\Models\SalesOrderItem;
 use Illuminate\Support\Facades\Auth;
@@ -119,6 +121,33 @@ class Home extends Component
             $this->popularItemsCount = $this->popularItemsCount * 2;
             $this->popularItems = DB::table('most_sold_items')->limit($this->popularItemsCount)->get();
             $this->emit('showMore');
+        }
+    }
+
+    public function addBackorder($itm, $qty, $cID)
+    {
+        $customer = Customer::query()->where('ListID', $cID)->first();
+        $bo = new BackOrders();
+        $bo->CustomerRefListID = $cID;
+        $bo->ListID = $itm;
+        $bo->OrderQuantity = 0;
+        $bo->BackOrderQuantity = $qty;
+        $bo->uid = Auth::user()->id;
+        $bo->email = $customer->Email;
+        $bo->mail_is_send = null;
+        $bo->mail_send_date_time = null;
+        $bo->QuantityOnHandOnCreated = 0;
+        $bo->QuantityOnHandOnMailSend = null;
+        $bo->first_mail_is_send = null;
+        $bo->save();
+        if ($bo->save())
+        {
+            $this->dispatchBrowserEvent('addedbo', ['message' => 'Added to backorder']);
+//            \App\Jobs\BackOrdersNotification::dispatch();
+        }
+        else
+        {
+            $this->dispatchBrowserEvent('update', ['message' => 'Failed']);
         }
     }
 
