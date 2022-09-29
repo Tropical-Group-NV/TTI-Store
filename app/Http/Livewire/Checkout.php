@@ -221,7 +221,7 @@ class Checkout extends Component
                     $saleItem->save();
 
                     $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
-                    $saveItem->QuantityOnSalesOrder = $saveItem->QuantityOnSalesOrder + 1;
+                    $saveItem->QuantityOnSalesOrder = $saveItem->QuantityOnSalesOrder + $cartItem->qty;
                     $saveItem->save();
 //                    \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->update(['QuantityOnHand' => $item->QuantityOnHand - $cartItem->qty  ]);
                 }
@@ -305,13 +305,13 @@ class Checkout extends Component
                     $saleItem->SalesOrderLineItemRefListID = $item->ListID;
                     $saleItem->SalesOrderLineDesc = $item->Description;
                     $saleItem->SalesOrderLineQuantity = $cartItem->qty;
-                    $saleItem->SalesOrderLineRate = $item->SalesPrice;
+//                    $saleItem->SalesOrderLineRate = $item->SalesPrice;
                     $saleItem->SalesOrderLineRate = $item->SalesPrice;
                     $saleItem->SalesOrderLineRatePercent = null;
                     $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
                     $saleItem->save();
                     $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
-                    $saveItem->QuantityOnSalesOrder = $item->QuantityOnSalesOrder + $cartItem->qty;
+                    $saveItem->QuantityOnSalesOrder = $saveItem->QuantityOnSalesOrder + $cartItem->qty;
                     $saveItem->save();
                 }
             }
