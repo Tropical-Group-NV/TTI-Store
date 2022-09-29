@@ -23,6 +23,14 @@
             </div>
             <br>
         @endif
+        <div style="z-index: 1000000">
+            {{--                    <div class="fixed w-1/2 bottom-1/2 top-1/2 border border-5 border-black rounded-lg" style="background-color: white;z-index: 1000000">--}}
+            {{--                        <img class="w-1/2"  src="{{asset('ttistore_loading.gif') }}" alt="">--}}
+            {{--                    </div>--}}
+            <img wire:loading wire:target="nextPage" class="w-1/2 " src="{{asset('ttistore_loading.gif') }}" alt="">
+            <img wire:loading wire:target="previousPage" class="w-1/2 " src="{{asset('ttistore_loading.gif') }}" alt="">
+            <img wire:loading wire:target="gotoPage" class="w-1/2" src="{{asset('ttistore_loading.gif') }}" alt="">
+        </div>
         {{ session('key') }}
         <div id="itemWrap" style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {{--        {{ print_r($items) }}--}}
@@ -33,7 +41,7 @@
 {{--            @endif--}}
             @if(1 == 1)
             @foreach($items as $item)
-                @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3 or !str_contains($item->FullName, 'INRUIL') and  \Illuminate\Support\Facades\Auth::user()->users_type_id == 3)
+                @if(\Illuminate\Support\Facades\Auth::user()!= null and \Illuminate\Support\Facades\Auth::user()->users_type_id != 3 or \Illuminate\Support\Facades\Auth::user()!= null and !str_contains($item->FullName, 'INRUIL') and  \Illuminate\Support\Facades\Auth::user()->users_type_id == 3 or \Illuminate\Support\Facades\Auth::user() == null and !str_contains($item->FullName, 'INRUIL'))
                 @php($put = 1)
                 @php($currentPrivateBranch = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('settings_branch_view_item_on_user')->where('branch', $item->CustomFieldBranch)->get())
                 @foreach($currentPrivateBranch as $pb)
@@ -279,9 +287,12 @@
         <div class="p-6 sm:px-20 bg-white border-b border-gray-200" style="text-align: center">
             <div style="left: 50%; right: 50%; text-align: center">
                 {{ $items->links('vendor.pagination.bootstrap-52') }}
-                <div>
-                    <img wire:loading wire:target="nextPage" class="w-1/2" src="{{asset('ttistore_loading.gif') }}" alt="">
-                    <img wire:loading wire:target="previousPage" class="w-1/2" src="{{asset('ttistore_loading.gif') }}" alt="">
+                <div style="z-index: 1000000">
+{{--                    <div class="fixed w-1/2 bottom-1/2 top-1/2 border border-5 border-black rounded-lg" style="background-color: white;z-index: 1000000">--}}
+{{--                        <img class="w-1/2"  src="{{asset('ttistore_loading.gif') }}" alt="">--}}
+{{--                    </div>--}}
+                    <img wire:loading wire:target="nextPage" class="w-1/2 " src="{{asset('ttistore_loading.gif') }}" alt="">
+                    <img wire:loading wire:target="previousPage" class="w-1/2 " src="{{asset('ttistore_loading.gif') }}" alt="">
                     <img wire:loading wire:target="gotoPage" class="w-1/2" src="{{asset('ttistore_loading.gif') }}" alt="">
                 </div>
             </div>
