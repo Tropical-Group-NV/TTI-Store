@@ -146,11 +146,24 @@ class Checkout extends Component
             $sale->BillAddressAddr3 = $customer->BillAddressBlockAddr3;
             $sale->BillAddressAddr4 = $customer->BillAddressBlockAddr4;
             $sale->BillAddressAddr5 = $customer->BillAddressBlockAddr5;
-            $sale->ShipAddressAddr1 = $shipping_array[0] ?? null;
-            $sale->ShipAddressAddr2 = $shipping_array[1] ?? null;
-            $sale->ShipAddressAddr3 = $shipping_array[2] ?? null;
-            $sale->ShipAddressAddr4 = $shipping_array[3] ?? null;
-            $sale->ShipAddressAddr5 = $shipping_array[4] ?? null;
+            if ($this->customer_id == '410000-1128694047')
+            {
+                $sale->ShipAddressAddr1 = $shipping_array[0] ?? null;
+                $sale->ShipAddressAddr2 = $shipping_array[1] ?? null;
+                $sale->ShipAddressAddr3 = $shipping_array[2] ?? null;
+                $sale->ShipAddressAddr4 = $shipping_array[3] ?? null;
+                $sale->ShipAddressAddr5 = $shipping_array[4] ?? null;
+            }
+            else
+            {
+                $sale->ShipAddressAddr1 = $customer->BillAddressBlockAddr1;
+                $sale->ShipAddressAddr2 = $customer->BillAddressBlockAddr2;
+                $sale->ShipAddressAddr3 = $customer->BillAddressBlockAddr3;
+                $sale->ShipAddressAddr4 = $customer->BillAddressBlockAddr4;
+                $sale->ShipAddressAddr5 = $customer->BillAddressBlockAddr5;
+            }
+
+
             if ($this->msg_id != '')
             {
                 $sale->CustomerMsgRefListID = $cst_msg->ListID;
@@ -271,11 +284,22 @@ class Checkout extends Component
             $sale->BillAddressAddr3 = $customer->BillAddressBlockAddr3;
             $sale->BillAddressAddr4 = $customer->BillAddressBlockAddr4;
             $sale->BillAddressAddr5 = $customer->BillAddressBlockAddr5;
-            $sale->ShipAddressAddr1 = $shipping_array[0] ?? null;
-            $sale->ShipAddressAddr2 = $shipping_array[1] ?? null;
-            $sale->ShipAddressAddr3 = $shipping_array[2] ?? null;
-            $sale->ShipAddressAddr4 = $shipping_array[3] ?? null;
-            $sale->ShipAddressAddr5 = $shipping_array[4] ?? null;
+            if ($this->customer_id == '410000-1128694047')
+            {
+                $sale->ShipAddressAddr1 = $shipping_array[0] ?? null;
+                $sale->ShipAddressAddr2 = $shipping_array[1] ?? null;
+                $sale->ShipAddressAddr3 = $shipping_array[2] ?? null;
+                $sale->ShipAddressAddr4 = $shipping_array[3] ?? null;
+                $sale->ShipAddressAddr5 = $shipping_array[4] ?? null;
+            }
+            else
+            {
+                $sale->ShipAddressAddr1 = $customer->BillAddressBlockAddr1;
+                $sale->ShipAddressAddr2 = $customer->BillAddressBlockAddr2;
+                $sale->ShipAddressAddr3 = $customer->BillAddressBlockAddr3;
+                $sale->ShipAddressAddr4 = $customer->BillAddressBlockAddr4;
+                $sale->ShipAddressAddr5 = $customer->BillAddressBlockAddr5;
+            }
             if ($this->msg_id != '')
             {
                 $sale->CustomerMsgRefListID = $cst_msg->ListID;
