@@ -85,9 +85,9 @@
                         <div>
                             <label style="font-family: sflight; font-size: 20px" for="">Ship to
                                 <br>
-                                <textarea style="width: 500px; font-family: sflight; font-size: 20px" class="w-full block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="shipto" id="shipto" cols="30" rows="6"></textarea>
+                                <textarea style="width: 500px; font-family: sflight; font-size: 20px" class="w-full block border border-gray-200 text-gray-700 rounded focus:outline-none focus:bg-white focus:border-gray-500" onkeyup="checkShipping()" name="shipto" id="shipto" cols="30" rows="6"></textarea>
                             </label>
-                        </div>
+                         </div>
                     </div>
                 </div>
             </div>
@@ -325,6 +325,14 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            @this.ship1 = document.getElementById('shipto').value
+            function checkShipping()
+            {
+               @this.ship1 = document.getElementById('shipto').value
+            }
+        </script>
         <script>
             function checkCustomers()
             {
@@ -342,17 +350,18 @@
 
             @if(isset($_REQUEST['customerid']))
             @php($customerBO = \Illuminate\Support\Facades\DB::connection('epas')->table('QB_Customer')->where('ListID', $_REQUEST['customerid'])->first())
-            document.getElementById('adress').value = '{{ $customerBO->ShipAddressBlockAddr1 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr2 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr3 }}' + '\r\n' + '{{ $customerBO->ShipAddressBlockAddr4 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr5 }}';
-            document.getElementById('shipto').value = '{{ $customerBO->ShipAddressBlockAddr1 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr2 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr3 }}' + '\r\n' + '{{ $customerBO->ShipAddressBlockAddr4 }}' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr5 }}';
+            document.getElementById('adress').value = '{{ $customerBO->ShipAddressBlockAddr1 }},' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr2 }},' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr3 }},' + '\r\n' + '{{ $customerBO->ShipAddressBlockAddr4 }},' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr5 }}';
+            document.getElementById('shipto').value = '{{ $customerBO->ShipAddressBlockAddr1 }},' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr2 }},' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr3 }},' + '\r\n' + '{{ $customerBO->ShipAddressBlockAddr4 }},' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr5 }}';
             document.getElementById('customer_id').value = '{{ $_REQUEST['customerid'] }}';
+            document.getElementById('custname').value = '{{ $customerBO->Name }}';
             {{--@this.customer_id = '{{ $_REQUEST['customerid'] }}';--}}
             document.getElementById('custname').value = 'name';
             @endif
             @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 3)
                 @php($customerAccount = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('users_customer')->where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->first() )
                 @php($customer = \Illuminate\Support\Facades\DB::connection('epas')->table('QB_Customer')->where('ListID', $customerAccount->customer_ListID)->first())
-            document.getElementById('adress').value = '{{ $customer->ShipAddressBlockAddr1 }}' + '\r\n' +'{{ $customer->ShipAddressBlockAddr2 }}' + '\r\n' +'{{ $customer->ShipAddressBlockAddr3 }}' + '\r\n' + '{{ $customer->ShipAddressBlockAddr4 }}' + '\r\n' +'{{ $customer->ShipAddressBlockAddr5 }}';
-            document.getElementById('shipto').value = '{{ $customer->ShipAddressBlockAddr1 }}' + '\r\n' +'{{ $customer->ShipAddressBlockAddr2 }}' + '\r\n' +'{{ $customer->ShipAddressBlockAddr3 }}' + '\r\n' + '{{ $customer->ShipAddressBlockAddr4 }}' + '\r\n' +'{{ $customer->ShipAddressBlockAddr5 }}';
+            document.getElementById('adress').value = '{{ $customer->ShipAddressBlockAddr1 }},' + '\r\n' +'{{ $customer->ShipAddressBlockAddr2 }},' + '\r\n' +'{{ $customer->ShipAddressBlockAddr3 }},' + '\r\n' + '{{ $customer->ShipAddressBlockAddr4 }},' + '\r\n' +'{{ $customer->ShipAddressBlockAddr5 }}';
+            document.getElementById('shipto').value = '{{ $customer->ShipAddressBlockAddr1 }},' + '\r\n' +'{{ $customer->ShipAddressBlockAddr2 }},' + '\r\n' +'{{ $customer->ShipAddressBlockAddr3 }},' + '\r\n' + '{{ $customer->ShipAddressBlockAddr4 }},' + '\r\n' +'{{ $customer->ShipAddressBlockAddr5 }}';
             {{--document.getElementById('customer_id').value = '{{ $customerAccount->customer_ListID }}';--}}
             {{--@this.customer_id = '{{ $_REQUEST['customerid'] }}';--}}
             document.getElementById('custname').value = 'name';
@@ -360,9 +369,9 @@
 
             function addAddress(adr1, adr2, adr3, adr4, adr5, id, name, term)
             {
-                document.getElementById('adress').value = adr1 + '\r\n' +adr2 + '\r\n' +adr3 + '\r\n' + adr4 + '\r\n' +adr5;
-                document.getElementById('shipto').value = adr1 + '\r\n' +adr2 + '\r\n' +adr3 + '\r\n' + adr4 + '\r\n' +adr5;
-                document.getElementById('shipto').value = adr1 + '\r\n' +adr2 + '\r\n' +adr3 + '\r\n' + adr4 + '\r\n' +adr5;
+                document.getElementById('adress').value = adr1 + ',\r\n' +adr2 + ',\r\n' +adr3 + ',\r\n' + adr4 + ',\r\n' +adr5;
+                document.getElementById('shipto').value = adr1 + ',\r\n' +adr2 + ',\r\n' +adr3 + ',\r\n' + adr4 + ',\r\n' +adr5;
+                document.getElementById('shipto').value = adr1 + ',\r\n' +adr2 + ',\r\n' +adr3 + ',\r\n' + adr4 + ',\r\n' +adr5;
                 document.getElementById('customer_id').value = id;
                 document.getElementById('custname').value = name;
                 document.getElementById('search').value = name;

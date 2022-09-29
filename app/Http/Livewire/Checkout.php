@@ -47,6 +47,7 @@ class Checkout extends Component
             $customer = Customer::query()->where('ListID', $_REQUEST['customerid'])->get()->first();
             $this->customer_id = $_REQUEST['customerid'];
             $this->search_customer = $customer->Name;
+            $this->ship1 = $customer->ShipAddressBlockAddr1 . ',' . $customer->ShipAddressBlockAddr2 . ',' . $customer->ShipAddressBlockAddr3 . ',' . $customer->ShipAddressBlockAddr4 . ',' . $customer->ShipAddressBlockAddr5;
         }
     }
 
@@ -131,6 +132,7 @@ class Checkout extends Component
         {
             $cartItems = CartItem::query()->where('uid', Auth::user()->id)->get();
             $customer = DB::connection('epas')->table('QB_Customer')->where('ListID', $this->customer_id)->first();
+            $shipping_array = explode(',', $this->ship1);
             if ($this->msg_id != '')
             {
                 $cst_msg = CustomerMessage::query()->where('ListID', $this->msg_id)->get()->first();
@@ -144,11 +146,11 @@ class Checkout extends Component
             $sale->BillAddressAddr3 = $customer->BillAddressBlockAddr3;
             $sale->BillAddressAddr4 = $customer->BillAddressBlockAddr4;
             $sale->BillAddressAddr5 = $customer->BillAddressBlockAddr5;
-            $sale->ShipAddressAddr1 = $customer->BillAddressBlockAddr1;
-            $sale->ShipAddressAddr2 = $customer->BillAddressBlockAddr2;
-            $sale->ShipAddressAddr3 = $customer->BillAddressBlockAddr3;
-            $sale->ShipAddressAddr4 = $customer->BillAddressBlockAddr4;
-            $sale->ShipAddressAddr5 = $customer->BillAddressBlockAddr5;
+            $sale->ShipAddressAddr1 = $shipping_array[0] ?? null;
+            $sale->ShipAddressAddr2 = $shipping_array[1] ?? null;
+            $sale->ShipAddressAddr3 = $shipping_array[2] ?? null;
+            $sale->ShipAddressAddr4 = $shipping_array[3] ?? null;
+            $sale->ShipAddressAddr5 = $shipping_array[4] ?? null;
             if ($this->msg_id != '')
             {
                 $sale->CustomerMsgRefListID = $cst_msg->ListID;
@@ -269,11 +271,11 @@ class Checkout extends Component
             $sale->BillAddressAddr3 = $customer->BillAddressBlockAddr3;
             $sale->BillAddressAddr4 = $customer->BillAddressBlockAddr4;
             $sale->BillAddressAddr5 = $customer->BillAddressBlockAddr5;
-            $sale->ShipAddressAddr1 = $customer->BillAddressBlockAddr1;
-            $sale->ShipAddressAddr2 = $customer->BillAddressBlockAddr2;
-            $sale->ShipAddressAddr3 = $customer->BillAddressBlockAddr3;
-            $sale->ShipAddressAddr4 = $customer->BillAddressBlockAddr4;
-            $sale->ShipAddressAddr5 = $customer->BillAddressBlockAddr5;
+            $sale->ShipAddressAddr1 = $shipping_array[0] ?? null;
+            $sale->ShipAddressAddr2 = $shipping_array[1] ?? null;
+            $sale->ShipAddressAddr3 = $shipping_array[2] ?? null;
+            $sale->ShipAddressAddr4 = $shipping_array[3] ?? null;
+            $sale->ShipAddressAddr5 = $shipping_array[4] ?? null;
             if ($this->msg_id != '')
             {
                 $sale->CustomerMsgRefListID = $cst_msg->ListID;
