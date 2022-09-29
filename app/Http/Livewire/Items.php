@@ -178,10 +178,11 @@ class Items extends Component
 
     }
 
-    public function addToCart($prod, $qty)
+    public function addToCart($prod, $qty, Request $request)
     {
         if ($qty == '' or $qty == null)
         {
+            session()->flash('key', 'value');
             $item = new CartItem();
             $item->prod_id = $prod;
             $item->qty = 1;

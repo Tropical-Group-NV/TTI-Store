@@ -23,6 +23,7 @@
             </div>
             <br>
         @endif
+        {{ session('key') }}
         <div id="itemWrap" style="" class="bg-gray-200 bg-opacity-25 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {{--        {{ print_r($items) }}--}}
 {{--            @if($loadItems != true)--}}
@@ -32,6 +33,7 @@
 {{--            @endif--}}
             @if(1 == 1)
             @foreach($items as $item)
+                @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3 or !str_contains($item->FullName, 'INRUIL') and  \Illuminate\Support\Facades\Auth::user()->users_type_id == 3)
                 @php($put = 1)
                 @php($currentPrivateBranch = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('settings_branch_view_item_on_user')->where('branch', $item->CustomFieldBranch)->get())
                 @foreach($currentPrivateBranch as $pb)
@@ -202,7 +204,7 @@
 
                     </div>
             @endif
-
+                        @endif
             @endforeach
             @endif
 
