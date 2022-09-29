@@ -91,7 +91,7 @@
                                     <br>
                                     <span class="text-xs sm:text-lg" style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                     <br>
-                                    @if($item->QuantityOnHand > 0)
+                                    @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0)
                                         @if(\Illuminate\Support\Facades\Auth::user() != null )
                                             @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                                                 <span class="text-xs sm:text-lg" style="color: green">In stock: <b>{{ $item->QuantityOnHand - $item->QuantityOnSalesOrder}}</b></span>
