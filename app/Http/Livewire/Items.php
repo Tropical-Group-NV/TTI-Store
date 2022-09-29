@@ -180,31 +180,35 @@ class Items extends Component
 
     public function addToCart($prod, $qty, Request $request)
     {
-        if ($qty == '' or $qty == null)
+        if (!CartItem::query()->where('uid', Auth::user()->id)->where('prod_id', $prod)->exists())
         {
-            session()->flash('key', 'value');
-            $item = new CartItem();
-            $item->prod_id = $prod;
-            $item->qty = 1;
-            $item->uid = Auth::user()->id;
-            $item->save();
-            $this->emit('updateCart');
-            $this->dispatchBrowserEvent('addedcart', ['message' => 'Added to cart']);
-        }
+            if ($qty == '' or $qty == null)
+            {
+                session()->flash('key', 'value');
+                $item = new CartItem();
+                $item->prod_id = $prod;
+                $item->qty = 1;
+                $item->uid = Auth::user()->id;
+                $item->save();
+                $this->emit('updateCart');
+                $this->dispatchBrowserEvent('addedcart', ['message' => 'Added to cart']);
+            }
 //        if ($qty <= 0 or is_int($qty))
 //        {
 //            $this->dispatchBrowserEvent('Invalid', ['message' => 'Added to cart']);
 //        }
-        else
-        {
-            $item = new CartItem();
-            $item->prod_id = $prod;
-            $item->qty = $qty;
-            $item->uid = Auth::user()->id;
-            $item->save();
-            $this->emit('updateCart');
-            $this->dispatchBrowserEvent('addedcart', ['message' => 'Added to cart']);
+            else
+            {
+                $item = new CartItem();
+                $item->prod_id = $prod;
+                $item->qty = $qty;
+                $item->uid = Auth::user()->id;
+                $item->save();
+                $this->emit('updateCart');
+                $this->dispatchBrowserEvent('addedcart', ['message' => 'Added to cart']);
+            }
         }
+
     }
 
     public function addBackorder($itm, $qty, $cID)
