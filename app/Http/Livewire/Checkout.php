@@ -178,15 +178,19 @@ class Checkout extends Component
                         $saleItem->SalesOrderLineAmount = ($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice;
                         $saleItem->save();
                     }
-                    $saleItem = new SalesOrderItem();
-                    $saleItem->sales_order_id = $sale->id;
-                    $saleItem->SalesOrderLineItemRefListID = $item->ListID;
-                    $saleItem->SalesOrderLineDesc = $item->Description;
-                    $saleItem->SalesOrderLineQuantity = $item->QuantityOnHand - $item->QuantityOnSalesOrder;
-                    $saleItem->SalesOrderLineRate = $item->SalesPrice;
-                    $saleItem->SalesOrderLineRatePercent =null;
-                    $saleItem->SalesOrderLineAmount = ($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice;
-                    $saleItem->save();
+                    else
+                    {
+                        $saleItem = new SalesOrderItem();
+                        $saleItem->sales_order_id = $sale->id;
+                        $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                        $saleItem->SalesOrderLineDesc = $item->Description;
+                        $saleItem->SalesOrderLineQuantity = $item->QuantityOnHand - $item->QuantityOnSalesOrder;
+                        $saleItem->SalesOrderLineRate = $item->SalesPrice;
+                        $saleItem->SalesOrderLineRatePercent =null;
+                        $saleItem->SalesOrderLineAmount = ($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice;
+                        $saleItem->save();
+                    }
+
 
                     $bo = new BackOrders();
                     $bo->CustomerRefListID = $customer->ListID;
@@ -210,15 +214,31 @@ class Checkout extends Component
                 }
                 else
                 {
-                    $saleItem = new SalesOrderItem();
-                    $saleItem->sales_order_id = $sale->id;
-                    $saleItem->SalesOrderLineItemRefListID = $item->ListID;
-                    $saleItem->SalesOrderLineDesc = $item->Description;
-                    $saleItem->SalesOrderLineQuantity = $cartItem->qty;
-                    $saleItem->SalesOrderLineRate = $item->SalesPrice;
-                    $saleItem->SalesOrderLineRatePercent =null;
-                    $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
-                    $saleItem->save();
+                    if ($this->customer_id == '410000-1128694047')
+                    {
+                        $saleItem = new SalesOrderItem();
+                        $saleItem->sales_order_id = $sale->id;
+                        $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                        $saleItem->SalesOrderLineDesc = $item->Description;
+                        $saleItem->SalesOrderLineQuantity = $cartItem->qty;
+                        $saleItem->SalesOrderLineRate = $item->CustomBaliPrice;
+                        $saleItem->SalesOrderLineRatePercent =null;
+                        $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->CustomBaliPrice;
+                        $saleItem->save();
+                    }
+                    else
+                    {
+                        $saleItem = new SalesOrderItem();
+                        $saleItem->sales_order_id = $sale->id;
+                        $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                        $saleItem->SalesOrderLineDesc = $item->Description;
+                        $saleItem->SalesOrderLineQuantity = $cartItem->qty;
+                        $saleItem->SalesOrderLineRate = $item->SalesPrice;
+                        $saleItem->SalesOrderLineRatePercent =null;
+                        $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
+                        $saleItem->save();
+                    }
+
 
                     $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
                     $saveItem->QuantityOnSalesOrder = $saveItem->QuantityOnSalesOrder + $cartItem->qty;
@@ -271,15 +291,31 @@ class Checkout extends Component
                 $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first();
                 if($cartItem->qty > ($item->QuantityOnHand - $item->QuantityOnSalesOrder))
                 {
-                    $saleItem = new SalesOrderItem();
-                    $saleItem->sales_order_id = $sale->id;
-                    $saleItem->SalesOrderLineItemRefListID = $item->ListID;
-                    $saleItem->SalesOrderLineDesc = $item->Description;
-                    $saleItem->SalesOrderLineQuantity = ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
-                    $saleItem->SalesOrderLineRate = $item->SalesPrice;
-                    $saleItem->SalesOrderLineRatePercent =null;
-                    $saleItem->SalesOrderLineAmount = ($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice;
-                    $saleItem->save();
+                    if ($this->customer_id == '410000-1128694047')
+                    {
+                        $saleItem = new SalesOrderItem();
+                        $saleItem->sales_order_id = $sale->id;
+                        $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                        $saleItem->SalesOrderLineDesc = $item->Description;
+                        $saleItem->SalesOrderLineQuantity = ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
+                        $saleItem->SalesOrderLineRate = $item->CustomBaliPrice;
+                        $saleItem->SalesOrderLineRatePercent =null;
+                        $saleItem->SalesOrderLineAmount = ($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice;
+                        $saleItem->save();
+                    }
+                    else
+                    {
+                        $saleItem = new SalesOrderItem();
+                        $saleItem->sales_order_id = $sale->id;
+                        $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                        $saleItem->SalesOrderLineDesc = $item->Description;
+                        $saleItem->SalesOrderLineQuantity = ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
+                        $saleItem->SalesOrderLineRate = $item->SalesPrice;
+                        $saleItem->SalesOrderLineRatePercent =null;
+                        $saleItem->SalesOrderLineAmount = ($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice;
+                        $saleItem->save();
+                    }
+
 
                     $bo = new BackOrders();
                     $bo->CustomerRefListID = $customer->ListID;
@@ -300,16 +336,31 @@ class Checkout extends Component
                 }
                 if($cartItem->qty <= ($item->QuantityOnHand - $item->QuantityOnSalesOrder))
                 {
-                    $saleItem = new SalesOrderItem();
-                    $saleItem->sales_order_id = $sale->id;
-                    $saleItem->SalesOrderLineItemRefListID = $item->ListID;
-                    $saleItem->SalesOrderLineDesc = $item->Description;
-                    $saleItem->SalesOrderLineQuantity = $cartItem->qty;
-//                    $saleItem->SalesOrderLineRate = $item->SalesPrice;
-                    $saleItem->SalesOrderLineRate = $item->SalesPrice;
-                    $saleItem->SalesOrderLineRatePercent = null;
-                    $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
-                    $saleItem->save();
+                    if ($this->customer_id == '410000-1128694047')
+                    {
+                        $saleItem = new SalesOrderItem();
+                        $saleItem->sales_order_id = $sale->id;
+                        $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                        $saleItem->SalesOrderLineDesc = $item->Description;
+                        $saleItem->SalesOrderLineQuantity = $cartItem->qty;
+                        $saleItem->SalesOrderLineRate = $item->CustomBaliPrice;
+                        $saleItem->SalesOrderLineRatePercent = null;
+                        $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->CustomBaliPrice;
+                        $saleItem->save();
+                    }
+                    else
+                    {
+                        $saleItem = new SalesOrderItem();
+                        $saleItem->sales_order_id = $sale->id;
+                        $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                        $saleItem->SalesOrderLineDesc = $item->Description;
+                        $saleItem->SalesOrderLineQuantity = $cartItem->qty;
+                        $saleItem->SalesOrderLineRate = $item->SalesPrice;
+                        $saleItem->SalesOrderLineRatePercent = null;
+                        $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
+                        $saleItem->save();
+                    }
+
                     $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
                     $saveItem->QuantityOnSalesOrder = $saveItem->QuantityOnSalesOrder + $cartItem->qty;
                     $saveItem->save();
