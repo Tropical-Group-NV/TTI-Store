@@ -156,13 +156,7 @@
                                                     @php($customerAccount = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('users_customer')->where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->first())
                                                     <input type="hidden" id="customer-id-{{ $item->ListID }}" value="{{ $customerAccount->customer_ListID }}">
                                                     <div class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
-                                                        <select id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
-                                                            @php($count=0)
-                                                            @while($count != 1000)
-                                                                @php($count++ )
-                                                                <option value="{{ $count }}">{{ $count }}</option>
-                                                            @endwhile
-                                                        </select>
+                                                        <input type="number" id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="1" name="qty">
                                                         <span class="input-group-btn input-group-append">
                                                     <button style="background-color: #0069AD; font-family: sfsemibold" wire:loading.attr="disabled" onclick="addBackorder('{{ $item->ListID }}')"  class="btn">
                                                         <img wire:loading wire:target="load('add{{ $item->ListID }}')" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
@@ -174,15 +168,7 @@
                                             @else
                                                 <div>
                                                     <div wire:loading.remove  wire:target="load('add{{ $item->ListID }}')" class="input-group bootstrap-touchspin bootstrap-touchspin-injected">
-                                                        <input type="number" id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">
-
-{{--                                                        <select id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" name="qty">--}}
-{{--                                                            @php($count=0)--}}
-{{--                                                            @while($count != 1000)--}}
-{{--                                                                @php($count++ )--}}
-{{--                                                                <option value="{{ $count }}">{{ $count }}</option>--}}
-{{--                                                            @endwhile--}}
-{{--                                                        </select>--}}
+                                                        <input type="number" id="input-{{ $item->ListID }}" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" value="1" name="qty">
                                                         <span wire:click="load('add{{ $item->ListID }}')" class="input-group-btn input-group-append">
                                                     <button style="background-color: #0069AD; font-family: sfsemibold" @if($item->QuantityOnHand <= 0) disabled @endif @if($item->QuantityOnHand > 0) wire:loading.attr="disabled" wire:click="addToCart( '{{ $item->ListID }}', document.getElementById('input-{{ $item->ListID }}').value)" @endif   class="btn hidden sm:block">
                                                         <img wire:loading wire:target="load('add{{ $item->ListID }}')" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">

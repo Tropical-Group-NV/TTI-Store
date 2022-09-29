@@ -91,13 +91,13 @@ class Checkout extends Component
         $item->qty = $qty;
         $item->save();
 
-        if ($qty > $product->QuantityOnHand)
+        if ($qty > $product->QuantityOnHand - $product->QuantityOnSalesOrder)
         {
-            $this->dispatchBrowserEvent('updateCartQty', ['prodID' => $id, 'Qty' => number_format($qty) , 'inStock' =>  number_format($product->QuantityOnHand), 'BO' => $qty-$product->QuantityOnHand, 'addBO' => 1]);
+            $this->dispatchBrowserEvent('updateCartQty', ['prodID' => $id, 'Qty' => number_format($qty) , 'inStock' =>  number_format($product->QuantityOnHand - $product->QuantityOnSalesOrder), 'BO' => $qty-($product->QuantityOnHand - $product->QuantityOnSalesOrder), 'addBO' => 1]);
         }
         else
         {
-            $this->dispatchBrowserEvent('updateCartQty', ['prodID' => $id, 'Qty' => number_format($qty) , 'inStock' =>  number_format($product->QuantityOnHand) , 'addBO' => 0]);
+            $this->dispatchBrowserEvent('updateCartQty', ['prodID' => $id, 'Qty' => number_format($qty) , 'inStock' =>  number_format($product->QuantityOnHand - $product->QuantityOnSalesOrder) , 'addBO' => 0]);
 
         }
 
@@ -166,21 +166,33 @@ class Checkout extends Component
                 $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->first();
                 if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
                 {
+                    if ($this->customer_id == '410000-1128694047')
+                    {
+                        $saleItem = new SalesOrderItem();
+                        $saleItem->sales_order_id = $sale->id;
+                        $saleItem->SalesOrderLineItemRefListID = $item->ListID;
+                        $saleItem->SalesOrderLineDesc = $item->Description;
+                        $saleItem->SalesOrderLineQuantity = ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
+                        $saleItem->SalesOrderLineRate = $item->CustomBaliPrice;
+                        $saleItem->SalesOrderLineRatePercent =null;
+                        $saleItem->SalesOrderLineAmount = ($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice;
+                        $saleItem->save();
+                    }
                     $saleItem = new SalesOrderItem();
                     $saleItem->sales_order_id = $sale->id;
                     $saleItem->SalesOrderLineItemRefListID = $item->ListID;
                     $saleItem->SalesOrderLineDesc = $item->Description;
-                    $saleItem->SalesOrderLineQuantity = $item->QuantityOnHand;
+                    $saleItem->SalesOrderLineQuantity = $item->QuantityOnHand - $item->QuantityOnSalesOrder;
                     $saleItem->SalesOrderLineRate = $item->SalesPrice;
                     $saleItem->SalesOrderLineRatePercent =null;
-                    $saleItem->SalesOrderLineAmount = $item->QuantityOnHand * $item->SalesPrice;
+                    $saleItem->SalesOrderLineAmount = ($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice;
                     $saleItem->save();
 
                     $bo = new BackOrders();
                     $bo->CustomerRefListID = $customer->ListID;
                     $bo->ListID = $item->ListID;
-                    $bo->OrderQuantity = $item->QuantityOnHand;
-                    $bo->BackOrderQuantity = $cartItem->qty - $item->QuantityOnHand;
+                    $bo->OrderQuantity = $item->QuantityOnHand - $item->QuantityOnSalesOrder;
+                    $bo->BackOrderQuantity = $cartItem->qty - ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
                     $bo->uid = Auth::user()->id;
                     $bo->email = $customer->Email;
                     $bo->mail_is_send = null;
@@ -191,7 +203,7 @@ class Checkout extends Component
                     $bo->save();
 
                     $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
-                    $saveItem->QuantityOnSalesOrder = $saveItem->QuantityOnSalesOrder + 1;
+                    $saveItem->QuantityOnSalesOrder = $saveItem->QuantityOnSalesOrder + ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
                     $saveItem->save();
 
 //                    \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->update(['QuantityOnHand' => 0 ]);
@@ -257,23 +269,23 @@ class Checkout extends Component
             foreach ($cartItems as $cartItem)
             {
                 $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first();
-                if($cartItem->qty > $item->QuantityOnHand)
+                if($cartItem->qty > ($item->QuantityOnHand - $item->QuantityOnSalesOrder))
                 {
                     $saleItem = new SalesOrderItem();
                     $saleItem->sales_order_id = $sale->id;
                     $saleItem->SalesOrderLineItemRefListID = $item->ListID;
                     $saleItem->SalesOrderLineDesc = $item->Description;
-                    $saleItem->SalesOrderLineQuantity = $item->QuantityOnHand;
+                    $saleItem->SalesOrderLineQuantity = ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
                     $saleItem->SalesOrderLineRate = $item->SalesPrice;
                     $saleItem->SalesOrderLineRatePercent =null;
-                    $saleItem->SalesOrderLineAmount = $item->QuantityOnHand * $item->SalesPrice;
+                    $saleItem->SalesOrderLineAmount = ($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice;
                     $saleItem->save();
 
                     $bo = new BackOrders();
                     $bo->CustomerRefListID = $customer->ListID;
                     $bo->ListID = $item->ListID;
-                    $bo->OrderQuantity = $item->QuantityOnHand;
-                    $bo->BackOrderQuantity = $cartItem->qty - $item->QuantityOnHand;
+                    $bo->OrderQuantity = ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
+                    $bo->BackOrderQuantity = $cartItem->qty - ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
                     $bo->uid = Auth::user()->id;
                     $bo->email = $customer->Email;
                     $bo->mail_is_send = null;
@@ -283,10 +295,10 @@ class Checkout extends Component
                     $bo->first_mail_is_send = null;
                     $bo->save();
                     $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
-                    $saveItem->QuantityOnHand = '0';
+                    $saveItem->QuantityOnSalesOrder = $saveItem->QuantityOnSalesOrder + ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
                     $saveItem->save();
                 }
-                if($cartItem->qty <= $item->QuantityOnHand)
+                if($cartItem->qty <= ($item->QuantityOnHand - $item->QuantityOnSalesOrder))
                 {
                     $saleItem = new SalesOrderItem();
                     $saleItem->sales_order_id = $sale->id;
@@ -295,11 +307,11 @@ class Checkout extends Component
                     $saleItem->SalesOrderLineQuantity = $cartItem->qty;
                     $saleItem->SalesOrderLineRate = $item->SalesPrice;
                     $saleItem->SalesOrderLineRate = $item->SalesPrice;
-                    $saleItem->SalesOrderLineRatePercent =null;
+                    $saleItem->SalesOrderLineRatePercent = null;
                     $saleItem->SalesOrderLineAmount = $cartItem->qty * $item->SalesPrice;
                     $saleItem->save();
                     $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
-                    $saveItem->QuantityOnHand = $item->QuantityOnHand - $cartItem->qty;
+                    $saveItem->QuantityOnSalesOrder = $item->QuantityOnSalesOrder + $cartItem->qty;
                     $saveItem->save();
                 }
             }

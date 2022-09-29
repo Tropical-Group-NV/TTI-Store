@@ -127,13 +127,21 @@
                             @php($subTotal = 0)
                             @if($cartItemExist)
                                 @foreach($cartItems as $cartItem)
-                                    @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $cartItem->prod_id)->get()->first())
+                                    @php($item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first())
                                     @php($itemdesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $cartItem->prod_id)->get()->first())
                                     @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
-                                    @if($cartItem->qty > $item->QuantityOnHand)
-                                        @php($subTotal = $subTotal + ($item->QuantityOnHand * $item->SalesPrice))
+                                    @if($customer_id == '410000-1128694047')
+                                        @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
+                                            @php($subTotal = $subTotal + (($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice))
+                                        @else
+                                            @php($subTotal = $subTotal + ($cartItem->qty * $item->CustomBaliPrice))
+                                        @endif
+                                    @else
+                                    @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
+                                        @php($subTotal = $subTotal + (($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice))
                                     @else
                                         @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
+                                    @endif
                                     @endif
                                     <tr class="border-b">
                                         <td class="p-6 hidden 2xl:block"  style="font-family: sfsemibold">
@@ -223,13 +231,25 @@
                                             {{--                                        @endif--}}
                                         </td>
                                         <td>
-                                            <span class="hidemobile">SRD</span> {{number_format($item->SalesPrice, 2) }}
+                                            @if($customer_id == '410000-1128694047')
+                                                <span class="hidemobile">SRD</span> {{number_format($item->CustomBaliPrice, 2) }}
+                                            @else
+                                                <span class="hidemobile">SRD</span> {{number_format($item->SalesPrice, 2) }}
+                                            @endif
                                         </td>
                                         <td class="p-6">
-                                            @if($cartItem->qty > $item->QuantityOnHand)
-                                                <span class="hidemobile">SRD</span> {{ number_format($item->QuantityOnHand * $item->SalesPrice , 2)  }}
+                                            @if($customer_id == '410000-1128694047')
+                                                @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
+                                                    <span class="hidemobile">SRD</span> {{ number_format(($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice , 2)  }}
+                                                @else
+                                                    <span class="hidemobile">SRD</span> {{ number_format($cartItem->qty * $item->CustomBaliPrice , 2)  }}
+                                                @endif
+                                            @else
+                                            @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
+                                                <span class="hidemobile">SRD</span> {{ number_format(($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice , 2)  }}
                                             @else
                                                 <span class="hidemobile">SRD</span> {{ number_format($cartItem->qty * $item->SalesPrice , 2)  }}
+                                            @endif
                                             @endif
                                         </td>
                                         <td>
