@@ -279,6 +279,11 @@
         <div class="p-6 sm:px-20 bg-white border-b border-gray-200" style="text-align: center">
             <div style="left: 50%; right: 50%; text-align: center">
                 {{ $items->links('vendor.pagination.bootstrap-52') }}
+                <div>
+                    <img wire:loading wire:target="nextPage" class="w-1/2" src="{{asset('ttistore_loading.gif') }}" alt="">
+                    <img wire:loading wire:target="previousPage" class="w-1/2" src="{{asset('ttistore_loading.gif') }}" alt="">
+                    <img wire:loading wire:target="gotoPage" class="w-1/2" src="{{asset('ttistore_loading.gif') }}" alt="">
+                </div>
             </div>
 
         </div>
