@@ -285,7 +285,6 @@
                     <img wire:loading wire:target="gotoPage" class="w-1/2" src="{{asset('ttistore_loading.gif') }}" alt="">
                 </div>
             </div>
-
         </div>
         <script>
             document.body.addEventListener('click', function ()

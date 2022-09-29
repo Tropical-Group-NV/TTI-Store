@@ -119,15 +119,15 @@
     </main>
 </div>
 
-<div id="godaddy-security-badge" class="fixed bottom-0 left-0 btn" style="background-image: none" target="_blank">
-    <a href="https://seal.godaddy.com/verifySeal?sealID=pIwHVyKG5cIEV9uGI0frERDzgcGFdBuY9WZYHYapnu4r0VKc2hLUukQbyKO9">
-        <span id="siteseal">
+{{--<div id="godaddy-security-badge" class="fixed bottom-0 left-0 btn" style="background-image: none" target="_blank">--}}
+{{--    <a href="https://seal.godaddy.com/verifySeal?sealID=pIwHVyKG5cIEV9uGI0frERDzgcGFdBuY9WZYHYapnu4r0VKc2hLUukQbyKO9">--}}
+{{--        <span id="siteseal">--}}
 {{--        <script async="" type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=pIwHVyKG5cIEV9uGI0frERDzgcGFdBuY9WZYHYapnu4r0VKc2hLUukQbyKO9">--}}
 {{--        </script>--}}
-        <img style="cursor:pointer;cursor:hand" src="https://seal.godaddy.com/images/3/en/siteseal_gd_3_h_l_m.gif" onclick="verifySeal();" alt="SSL site seal - click to verify">
-    </span>
-    </a>
-</div>
+{{--        <img style="cursor:pointer;cursor:hand" src="https://seal.godaddy.com/images/3/en/siteseal_gd_3_h_l_m.gif" onclick="verifySeal();" alt="SSL site seal - click to verify">--}}
+{{--    </span>--}}
+{{--    </a>--}}
+{{--</div>--}}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
 <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
     <!-- Trigger for Modal -->
@@ -178,10 +178,10 @@
 {{--    x-data--}}
 {{--    x-init="window.scrollTo({top: 0, behavior: 'smooth'})"--}}
 {{--    class="fixed bottom-10 left-10"></div>--}}
-{{--<button--}}
-{{--    x-data--}}
-{{--    @click.window="window.scrollTo({top: 0, behavior: 'smooth'})"--}}
-{{--    class="fixed bottom-10 left-10 btn" style="background-color: #0069AD; z-index: 1000; color: white; font-family: sfsemibold">⬆</button>--}}
+<button
+    x-data
+    @click="window.scrollTo({top: 0, behavior: 'smooth'})"
+    class="fixed bottom-10 left-10 btn" style="background-color: #0069AD; z-index: 1000; color: white; font-family: sfsemibold">⬆</button>
 
 {{--<div x-data="{ open: false }">--}}
 {{--    <button @click="open = ! open">Toggle</button>--}}
