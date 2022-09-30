@@ -97,7 +97,7 @@
                                         <h1 style="font-family: sfsemibold">Select quantity:</h1>
                                         <br>
                                         <div class="border-2 border-black" style="border-color: #0069AD; border-radius: 20px">
-                                            <input value="1" type="number" style="border-radius: 20px" class=" btn focus:outline-none focus:ring-2 focus:ring-offset-2 outline-black text-base flex items-center justify-center  w-full" id="input-{{ $item->ListID }}" name="qty"/>
+                                            <input value="1" type="number" style="border-radius: 20px" class=" focus:outline-none focus:ring-2 focus:ring-offset-2 outline-black text-base flex items-center justify-center  w-full" id="input-{{ $item->ListID }}" name="qty"/>
                                         </div>
 
                                         <br>
@@ -111,7 +111,7 @@
                                         @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                                             <h1 style="font-family: sfsemibold">Select customer:</h1>
                                             <input type="hidden" id="customer-id-{{ $item->ListID }}">
-                                            <input value="1" placeholder="Search Customers" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" id="customer-search-{{ $item->ListID }}" onkeyup="searchCustomer('{{ $item->ListID }}')">
+                                            <input placeholder="Search Customers" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" id="customer-search-{{ $item->ListID }}" onkeyup="searchCustomer('{{ $item->ListID }}')">
                                             <div style="position: absolute; z-index: 1000; min-width: 300px; display: none" class="bg-gray-50 border" id="customer-wrap-{{ $item->ListID }}">
                                             </div>
                                             <br>
