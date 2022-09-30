@@ -57,7 +57,7 @@ class Home extends Component
     public function loadRandomItems()
     {
         $this->readyToLoadRandom = true;
-        $this->randomItems = \App\Models\Item::query()->where('IsActive', 1)->where('Type', 'ItemInventory')->where('QuantityOnHand', '>', 0)->limit(8)->inRandomOrder()->get();
+        $this->randomItems = \App\Models\Item::query()->where('IsActive', 1)->where('Type', 'ItemInventory')->where('QuantityOnHand', '>', 0)->whereNot('CustomFieldBranch', 'Mahabier')->whereNot('CustomFieldBranch', 'B2B')->whereNot('CustomFieldBranch', 'Medical')->whereNot('CustomFieldBranch', 'KFC')->whereNot('CustomFieldBranch', 'EXPORT')->whereNot('CustomFieldBranch', 'CDS')->limit(8)->inRandomOrder()->get();
     }
 
     public function hydrate()

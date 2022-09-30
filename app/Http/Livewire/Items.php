@@ -138,7 +138,7 @@ class Items extends Component
             {
                 return view('livewire.items',
                     [
-                        'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('TimeModified', 'DESC')->paginate($this->itemsPerPage)->appends(request()->query())
+                        'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('Description', 'DESC')->paginate($this->itemsPerPage)->appends(request()->query())
                     ]
                 );
             }
@@ -146,7 +146,7 @@ class Items extends Component
             {
                 return view('livewire.items',
                     [
-                        'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->orWhere('BarCodeValue', 'LIKE', '%' . $this->search_str . '%')->orderBy('TimeModified', 'DESC')->paginate($this->itemsPerPage)->appends(request()->query())
+                        'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->orWhere('BarCodeValue', 'LIKE', '%' . $this->search_str . '%')->orderBy('Description', 'ASC')->paginate($this->itemsPerPage)->appends(request()->query())
 
                     ]
                 );

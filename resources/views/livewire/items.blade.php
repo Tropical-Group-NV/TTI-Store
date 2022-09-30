@@ -72,8 +72,8 @@
                             </a>
                         </div>
                         <br>
-                        <div class="card-body" style="position: relative">
-                            <div class="hover:bg-gray-50 hover:text-gray-400" >
+                        <div class="card-body hover:bg-gray-50" style="position: relative">
+                            <div class="hover:bg-gray-50" >
                                 <a style="text-decoration: none" href="{{ route('item', $item->ListID) }}">
                                     <div style="height: 100px" class="">
                                         @if(strlen(trim($item->Description)) > 35)
@@ -89,7 +89,7 @@
                                     @endif
                                 </a>
                             </div>
-                            <ul class="border-top flex justify-between" style="bottom: 0;">
+                            <ul class="border-top flex justify-between hover:bg-gray-50" style="bottom: 0;">
                                 <li>
                                     @if(\Illuminate\Support\Facades\Auth::user() != null)
                                         @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)

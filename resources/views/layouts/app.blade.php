@@ -181,7 +181,7 @@
 <button
     x-data
     @click="window.scrollTo({top: 0, behavior: 'smooth'})"
-    class="fixed bottom-10 left-10 btn" style="background-color: #0069AD; z-index: 1000; color: white; font-family: sfsemibold">⬆</button>
+    class="fixed bottom-10 left-10 btn" style="background-color: #0069AD; z-index: 1000; color: white; font-family: sfsemibold"><i class="fa fa-arrow-up"></i></button>
 
 {{--<div x-data="{ open: false }">--}}
 {{--    <button @click="open = ! open">Toggle</button>--}}

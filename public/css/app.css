@@ -1216,6 +1216,9 @@ select {
 .right-0 {
   right: 0px;
 }
+.top-5 {
+  top: 1.25rem;
+}
 .top-0 {
   top: 0px;
 }
@@ -1225,26 +1228,17 @@ select {
 .left-10 {
   left: 2.5rem;
 }
+.bottom-96 {
+  bottom: 24rem;
+}
+.bottom-0 {
+  bottom: 0px;
+}
 .bottom-1\/2 {
   bottom: 50%;
 }
 .top-1\/2 {
   top: 50%;
-}
-.bottom-0 {
-  bottom: 0px;
-}
-.bottom-96 {
-  bottom: 24rem;
-}
-.top-5 {
-  top: 1.25rem;
-}
-.left-1\/2 {
-  left: 50%;
-}
-.right-1\/2 {
-  right: 50%;
 }
 .z-0 {
   z-index: 0;
@@ -2573,10 +2567,6 @@ select {
   --tw-bg-opacity: 1;
   background-color: rgb(96 165 250 / var(--tw-bg-opacity));
 }
-.hover\:bg-blue-50:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(239 246 255 / var(--tw-bg-opacity));
-}
 .hover\:text-gray-500:hover {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
@@ -3458,10 +3448,6 @@ select {
     visibility: hidden;
   }
 
-  .\32xl\:relative {
-    position: relative;
-  }
-
   .\32xl\:left-auto {
     left: auto;
   }
@@ -3482,20 +3468,12 @@ select {
     width: 75%;
   }
 
-  .\32xl\:w-1\/2 {
-    width: 50%;
-  }
-
-  .\32xl\:w-52 {
-    width: 13rem;
-  }
-
-  .\32xl\:w-96 {
-    width: 24rem;
-  }
-
   .\32xl\:w-80 {
     width: 20rem;
+  }
+
+  .\32xl\:w-1\/2 {
+    width: 50%;
   }
 
   .\32xl\:grid-cols-3 {
