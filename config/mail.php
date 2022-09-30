@@ -36,21 +36,21 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => 'sxb1plvcpnl429021.prod.sxb1.secureserver.net',
+            'host' => 'mail.ttistore.com',
             'port' => '587',
-            'encryption' => 'tls',
+            'encryption' => 'ssl',
             'username' => 'sales@ttistore.com',
             'password' => 'TropicalTrade!',
             'timeout' => null,
             'auth_mode' => null,
             'verify_peer' => false,
-            'stream' => [
-                'ssl' => [
-                    'allow_self_signed' => true,
-                    'verify_peer' => false,
-                    'verify_peer_name' => false,
-                ],
-            ],
+//            'stream' => [
+//                'ssl' => [
+//                    'allow_self_signed' => false,
+//                    'verify_peer' => false,
+//                    'verify_peer_name' => false,
+//                ],
+//            ],
         ],
 
         'ses' => [
@@ -63,6 +63,7 @@ return [
 
         'postmark' => [
             'transport' => 'postmark',
+            'token' => '42d8d87a-c44f-40c9-ab4a-681c174d2300'
         ],
 
         'sendmail' => [

@@ -35,7 +35,11 @@
                             @foreach($cartItems as $cartItem)
                                 @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $cartItem->prod_id)->get()->first())
                                 @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
-                                @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
+                                @if(session()->has('currency'))
+                                    @php($subTotal = ($subTotal + ($cartItem->qty * $item->SalesPrice)) / session()->get('exchangeRate'))
+                                @else
+                                    @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
+                                @endif
                                 <tr class="border-collapse">
                                     <td class="border-collapse">
                                         <a href="{{ route('item', $cartItem->prod_id) }}">
@@ -58,11 +62,15 @@
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.46-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.211-3.015c-.699-.03-1.368-.171-1.992-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-5v-1h5v1z"/></svg>
                                             </button>
                                         </span>
-                                            <input value="{{ $cartItem->qty }}" type="number" wire:loading.attr="disabled" wire:change="changeQuantity( '{{ $cartItem->id }}', document.getElementById('{{ $cartItem->id }}').value)" class="rounded w-1/2" id="{{ $cartItem->id }}" name="qty"/>
+                                            <input value="{{ $cartItem->qty }}" type="number" wire:loading.attr="disabled" wire:keyup.debounce.500ms="changeQuantity( '{{ $cartItem->id }}', document.getElementById('{{ $cartItem->id }}').value)" class="rounded w-1/2" id="{{ $cartItem->id }}" name="qty"/>
                                         </div>
                                     </td>
                                     <td class="border-collapse: separate border-slate-600">
-                                        SRD {{ number_format($cartItem->qty * $item->SalesPrice, 2) }}
+                                        @if(session()->has('currency'))
+                                            {{session()->get('currency')}} {{ number_format(($cartItem->qty * $item->SalesPrice) / session()->get('exchangeRate'), 2) }}
+                                        @else
+                                            SRD {{ number_format(($cartItem->qty * $item->SalesPrice), 2) }}
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -74,7 +82,11 @@
                                 Total
                             </td>
                             <td class="">
-                                SRD {{ number_format($subTotal, 2) }}
+                                @if(session()->has('currency'))
+                                    {{session()->get('currency')}} {{ number_format($subTotal, 2) }}
+                                @else
+                                    SRD {{ number_format($subTotal, 2) }}
+                                @endif
                             </td>
                         </tr>
                         </tfoot>

@@ -226,23 +226,47 @@
                                         </td>
                                         <td>
                                             @if($customer_id == '410000-1128694047')
-                                                <span class="hidemobile">SRD</span> {{number_format($item->CustomBaliPrice, 2) }}
+                                                @if(session()->has('currency'))
+                                                    <span class="hidemobile">{{session()->get('currency')}}</span> {{number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}
+                                                @else
+                                                    <span class="hidemobile">SRD</span> {{number_format($item->CustomBaliPrice, 2) }}
+                                                @endif
                                             @else
-                                                <span class="hidemobile">SRD</span> {{number_format($item->SalesPrice, 2) }}
+                                                @if(session()->has('currency'))
+                                                    <span class="hidemobile">{{session()->get('currency')}}</span> {{number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}
+                                                @else
+                                                    <span class="hidemobile">SRD</span> {{number_format($item->SalesPrice, 2) }}
+                                                @endif
                                             @endif
                                         </td>
                                         <td class="p-6">
                                             @if($customer_id == '410000-1128694047')
                                                 @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
-                                                    <span class="hidemobile">SRD</span> {{ number_format(($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice , 2)  }}
+                                                    @if(session()->has('currency'))
+                                                        <span class="hidemobile">{{ session()->get('currency') }}</span> {{ number_format((($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice) / session()->get('exchangeRate') , 2)  }}
+                                                    @else
+                                                        <span class="hidemobile">SRD</span> {{ number_format(($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice , 2)  }}
+                                                    @endif
                                                 @else
-                                                    <span class="hidemobile">SRD</span> {{ number_format($cartItem->qty * $item->CustomBaliPrice , 2)  }}
+                                                    @if(session()->has('currency'))
+                                                        <span class="hidemobile">{{ session()->get('currency') }}</span> {{ number_format(($cartItem->qty * $item->CustomBaliPrice) / session()->get('exchangeRate') , 2)  }}
+                                                    @else
+                                                        <span class="hidemobile">SRD</span> {{ number_format($cartItem->qty * $item->CustomBaliPrice , 2)  }}
+                                                    @endif
                                                 @endif
                                             @else
                                             @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
-                                                <span class="hidemobile">SRD</span> {{ number_format(($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice , 2)  }}
+                                                    @if(session()->has('currency'))
+                                                        <span class="hidemobile">{{ session()->get('currency') }}</span> {{ number_format((($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice) / session()->get('exchangeRate') , 2)  }}
+                                                    @else
+                                                        <span class="hidemobile">SRD</span> {{ number_format(($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice , 2)  }}
+                                                    @endif
                                             @else
-                                                <span class="hidemobile">SRD</span> {{ number_format($cartItem->qty * $item->SalesPrice , 2)  }}
+                                                    @if(session()->has('currency'))
+                                                        <span class="hidemobile">{{ session()->get('currency') }}</span> {{ number_format(($cartItem->qty * $item->SalesPrice) / session()->get('exchangeRate') , 2)  }}
+                                                    @else
+                                                        <span class="hidemobile">SRD</span> {{ number_format($cartItem->qty * $item->SalesPrice, 2)  }}
+                                                    @endif
                                             @endif
                                             @endif
                                         </td>
@@ -267,7 +291,11 @@
                                 <td class="hidden 2xl:block">
                                 </td>
                                 <td class="p-6">
-                                    <span class="hidemobile">SRD</span> {{ number_format($subTotal, 2) }}
+                                    @if(session()->has('currency'))
+                                        <span class="hidemobile">{{session()->get('currency')}}</span> {{ number_format($subTotal / session()->get('exchangeRate'), 2) }}
+                                    @else
+                                        <span class="hidemobile">SRD</span> {{ number_format($subTotal, 2) }}
+                                    @endif
                                 </td>
                             </tr>
                             </tfoot>

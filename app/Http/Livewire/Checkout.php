@@ -270,7 +270,14 @@ class Checkout extends Component
             }
             CartItem::query()->where('uid', Auth::user()->id)->delete();
             SendFirstOrderMail::dispatch($this->customer_id);
-            Import_Sales_Order_To_QB::dispatch($sale->id);
+            if (session()->has('currency'))
+            {
+                Import_Sales_Order_To_QB::dispatch($sale->id, session()->get('currency'), session()->get('exchangeRate'));
+            }
+            else
+            {
+                Import_Sales_Order_To_QB::dispatch($sale->id, 'SRD', 1);
+            }
             return redirect()->to(route('dashboard') . '?order=' . $sale->id);
         }
         else
@@ -401,7 +408,14 @@ class Checkout extends Component
             }
             CartItem::query()->where('uid', Auth::user()->id)->delete();
             SendFirstOrderMail::dispatch($customerAccount->customer_ListID);
-            Import_Sales_Order_To_QB::dispatch($sale->id);
+            if (session()->has('currency'))
+            {
+                Import_Sales_Order_To_QB::dispatch($sale->id, session()->get('currency'), session()->get('exchangeRate'));
+            }
+            else
+            {
+                Import_Sales_Order_To_QB::dispatch($sale->id, 'SRD', 1);
+            }
             return redirect()->to(route('dashboard') . '?order=' . $sale->id);
         }
     }

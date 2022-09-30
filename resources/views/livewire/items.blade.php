@@ -31,7 +31,6 @@
             <img wire:loading wire:target="previousPage" class="w-1/2 " src="{{asset('ttistore_loading.gif') }}" alt="">
             <img wire:loading wire:target="gotoPage" class="w-1/2" src="{{asset('ttistore_loading.gif') }}" alt="">
         </div>
-        {{ session('key') }}
         <div id="itemWrap" style="" class=" bg-opacity-25 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             {{--        {{ print_r($items) }}--}}
 {{--            @if($loadItems != true)--}}
@@ -57,7 +56,7 @@
                     {{ 'null' }}
                 @endif
             @if($put == 1)
-                    @php($itemDesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->get()->first())
+                    @php($itemDesc = \App\Models\ItemDescription::query()->where('item_id', $item->ListID)->get()->first())
                     @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
                     <div class="" style="width: auto;">
                         <div class="h-28 sm:h-52" style=" margin: auto">
@@ -93,11 +92,20 @@
                                 <li>
                                     @if(\Illuminate\Support\Facades\Auth::user() != null)
                                         @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
-                                            <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: SRD <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
+                                            @if(session()->has('currency'))
+                                                <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
+                                            @else
+                                                <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: SRD <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
+                                            @endif
                                             <br>
                                         @endif
                                     @endif
-                                    <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                        @if(session()->has('currency'))
+                                            <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
+
+                                        @else
+                                            <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                        @endif
                                     <br>
                                     <span class="text-xs sm:text-lg" style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                     <br>

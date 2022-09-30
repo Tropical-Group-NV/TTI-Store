@@ -2,6 +2,18 @@
     <h1 style="font-family: sfsemibold; font-size: 35px" class="p-6">
         Your Orders
     </h1>
+    @php
+        if (session()->has('currency'))
+        {
+            $currency = session()->get('currency');
+            $rate = session()->get('exchangeRate');
+        }
+        else
+        {
+            $currency = 'SRD';
+            $rate = 1;
+        }
+    @endphp
 
     {{--    <div class="bg-white shadow-xl sm:rounded-lg">--}}
     {{--        <div style="" class="py-12 md:px-6  2xl:px-20 ">--}}
@@ -98,7 +110,11 @@
                                     {{ $itemQty }}
                                 </td>
                                 <td class="border border-slate-700">
-                                    SRD {{ $subTotal }}
+                                    @if(session()->has('currency'))
+                                        {{ session()->get('currency') }} {{ number_format($subTotal / $rate, 2) }}
+                                    @else
+                                        SRD {{ $subTotal }}
+                                    @endif
                                 </td>
                                 @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 1 or \Illuminate\Support\Facades\Auth::user()->users_type_id == 5)
                                     <td class="border border-slate-700" style="margin: auto">
@@ -140,14 +156,12 @@
                                             View
                                         </button>
 
-                                        <!-- Whatsapp Modal -->
-                                        <div x-show="showModal"
-                                             class="fixed inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
+                                        <div  style="z-index: 99999999" x-show="showModal"
+                                             class="fixed  inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
                                              x-transition.opacity x-transition:leave.duration.500ms >
                                             <!-- Modal inner -->
-                                            <div x-show="showModal" x-transition:enter.duration.500ms
-                                                 x-transition:leave.duration.400ms
-                                                 class=" max-w-3xl px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg"
+                                            <div x-show="showModal"
+                                                 class="px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg scale-50 sm:scale-100"
                                                  @click.away="showModal = false"
                                             >
                                                 <!-- Title / Close-->
@@ -165,7 +179,17 @@
                                                     $c = \App\Models\QbCustomer::query()->where('ListID', $model->CustomerRefListID)->first();
                                                     $logo = asset('tti-new_email.jpg');
                                                     $qrLogo = asset('tti-email-qr');
-                                                    $currency = 'SRD';
+                                                    if (session()->has('currency'))
+                                                    {
+                                                            $currency = session()->get('currency');
+                                                            $rate = $rate;
+                                                    }
+                                                    else
+                                                    {
+                                                        $currency = 'SRD';
+                                                        $rate = 1;
+                                                    }
+
 
                                                     ?>
                                                     <br><br>
@@ -181,14 +205,14 @@
                                                                                     <td style="border: none; vertical-align: top;">
                                                                                         <table style="border: none;" cellpadding="0" cellspacing="0">
                                                                                             <tr>
-                                                                                                <td colspan="2" style="margin: 0px 0px 15px 0px;padding: 0px 0px 15px 0px;"><h1><b><?=$currency=='USD'?'Order Confirmation':'Order Confirmation'?></b></h1></td>
+                                                                                                <td colspan="2" style="margin: 0px 0px 15px 0px;padding: 0px 0px 15px 0px;"><h1><b><?=$currency!='SRD'?'Order Confirmation':'Order Confirmation'?></b></h1></td>
                                                                                             </tr>
                                                                                             <tr>
                                                                                                 <td style="padding-bottom: 5px;width: 80px">S.O. No.</td>
                                                                                                 <td style="padding-bottom: 5px"><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$order->RefNumber?:'&nbsp;'?></div></td>
                                                                                             </tr>
                                                                                             <tr>
-                                                                                                <td style="width: 80px"><?=$currency=='USD'?'Date':'Datum'?></td>
+                                                                                                <td style="width: 80px"><?=$currency!='SRD'?'Date':'Datum'?></td>
                                                                                                 <td><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?php echo $order->TxnDate ?></div></td>
                                                                                             </tr>
                                                                                         </table>
@@ -199,7 +223,7 @@
                                                                                                 <td style="width: 50%;border: none; vertical-align: top">
                                                                                                     <table width="100%" cellpadding="5" cellspacing="0">
                                                                                                         <tr>
-                                                                                                            <td style="text-align:left;height: 25px;font-weight: bold"><?=$currency=='USD'?'Bill To':'Afnemer'?></td>
+                                                                                                            <td style="text-align:left;height: 25px;font-weight: bold"><?=$currency!='SRD'?'Bill To':'Afnemer'?></td>
                                                                                                         </tr>
                                                                                                         <tr>
                                                                                                             <td style="text-align:left;vertical-align: top;">
@@ -227,7 +251,7 @@
                                                                                                 <td style="width: 50%;border: none; vertical-align: top">
                                                                                                     <table width="100%" cellpadding="5" cellspacing="0">
                                                                                                         <tr>
-                                                                                                            <td style="text-align:left;height: 25px;font-weight: bold"><?=$currency=='USD'?'Ship To':'Leveringsadres'?></td>
+                                                                                                            <td style="text-align:left;height: 25px;font-weight: bold"><?=$currency!='SRD'?'Ship To':'Leveringsadres'?></td>
                                                                                                         </tr>
                                                                                                         <tr>
                                                                                                             <td style="text-align:left;vertical-align: top;">
@@ -264,10 +288,10 @@
                                                                                             <thead>
                                                                                             <tr>
                                                                                                 <td style="text-align: center">P.O. No.</td>
-                                                                                                <td style="text-align: center; width: 250px"><?=$currency=='USD'?'Ship&nbsp;Date':'Leveringsdatum'?></td>
-                                                                                                <td style="text-align: center"><?=$currency=='USD'?'Terms':'Voorwaarde'?></td>
-                                                                                                <td style="text-align: center"><?=$currency=='USD'?'Vert.':'Vert.'?></td>
-                                                                                                <td style="text-align: center"><?=$currency=='USD'?'Customer&nbsp;Type':'Klanttype'?></td>
+                                                                                                <td style="text-align: center; width: 250px"><?=$currency!='SRD'?'Ship&nbsp;Date':'Leveringsdatum'?></td>
+                                                                                                <td style="text-align: center"><?=$currency!='SRD'?'Terms':'Voorwaarde'?></td>
+                                                                                                <td style="text-align: center"><?=$currency!='SRD'?'Vert.':'Vert.'?></td>
+                                                                                                <td style="text-align: center"><?=$currency!='SRD'?'Customer&nbsp;Type':'Klanttype'?></td>
                                                                                             </tr>
                                                                                             </thead>
                                                                                             <tbody>
@@ -285,12 +309,12 @@
                                                                                 </thead>
                                                                                 <thead>
                                                                                 <tr style="background-color: #DDD">
-                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Item&nbsp;#':'Artikel&nbsp;Code'?></th>
-                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Description':'Omschrijving'?></th>
-                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Quantity':'Aantal'?></th>
-                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Unit&nbsp;of&nbsp;Measure':'Eeheid'?></th>
-                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Rate':'Prijs&nbsp;per&nbsp;stuk'?></th>
-                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Total':'Totaal'?></th>
+                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Item&nbsp;#':'Artikel&nbsp;Code'?></th>
+                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Description':'Omschrijving'?></th>
+                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Quantity':'Aantal'?></th>
+                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Unit&nbsp;of&nbsp;Measure':'Eeheid'?></th>
+                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Rate':'Prijs&nbsp;per&nbsp;stuk'?></th>
+                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Total':'Totaal'?></th>
                                                                                 </tr>
                                                                                 </thead>
                                                                                 <tbody>
@@ -304,8 +328,8 @@
                                                                                         '<td style="padding: 2px;text-align: left;border: 1px solid #ddd;">'.$salesOrderItem->SalesOrderLineDesc.'</td>'.
                                                                                         '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'.$salesOrderItem->SalesOrderLineQuantity.'</td>'.
                                                                                         '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'.$item->UnitOfMeasureSetRefFullName.'</td>'.
-                                                                                        '<td style="padding: 2px;text-align: right;border: 1px solid #ddd;">'.number_format((float)$salesOrderItem->SalesOrderLineRate, 2, '.', '').'</td>'.
-                                                                                        '<td style="padding: 2px;text-align: right;border: 1px solid #ddd">' . $salesOrderItem->SalesOrderLineAmount . '</td></tr>';
+                                                                                        '<td style="padding: 2px;text-align: right;border: 1px solid #ddd;">'. number_format((float)$currency!='SRD'?$salesOrderItem->SalesOrderLineRate / $rate: $salesOrderItem->SalesOrderLineRate, 2, '.', '').'</td>'.
+                                                                                        '<td style="padding: 2px;text-align: right;border: 1px solid #ddd">' . number_format((float)$currency!='SRD'?$salesOrderItem->SalesOrderLineAmount / $rate: $salesOrderItem->SalesOrderLineAmount, 2, '.', '')  . '</td></tr>';
                                                                                     $total = $total + $salesOrderItem->SalesOrderLineAmount;
                                                                                 }
                                                                                 ?>
@@ -316,8 +340,8 @@
                                                                                         <?=$model->CustomerMsgRefListID?\app\models\QbCustomerMsg::findOne($model->CustomerMsgRefListID)->Name.'<br>':''?>
                                                                                         <?=$model->Memo?nl2br($model->Memo).'<br>':''?>
                                                                                         <br><br>
-                                                                                        <?=$currency=='USD'?'Scan the QR code to go to':'Scan de code om direct naar'?><br>
-                                                                                        www.ttistore.com <?=$currency=='USD'?'':'te gaan'?>.<br>
+                                                                                        <?=$currency!='SRD'?'Scan the QR code to go to':'Scan de code om direct naar'?><br>
+                                                                                        www.ttistore.com <?=$currency!='SRD'?'':'te gaan'?>.<br>
                                                                                         <img src="{{ asset('tti-email-qr.png') }}"><br>
                                                                                         Fabrikant van voedings- en farmaceutische producten.<br>
                                                                                         Manufacturer of Food and Pharmaceutical products.

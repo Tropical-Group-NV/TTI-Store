@@ -57,6 +57,9 @@
     <form method="GET" action="{{ route('dashboard') }}">
         <aside class="w-full border border-black shadow-xl sm:rounded-lg">
             <div class="overflow-y-auto py-4 px-3 bg-gray-50">
+                <button type="button" class="block 2xl:hidden" style="position: relative; z-index: 1000" onclick="document.getElementById('filters').style.display = 'none'; document.getElementById('toggleFilters').style.display = 'block'" data-modal-toggle="shoppingCart">
+                    <img style="width: 30px" src="https://www.svgrepo.com/show/273966/close.svg">
+                </button>
                 <div style="z-index: 5;max-height: 700px;">
                 <span style="font-family: sfsemibold; font-size: 20px" class="p-6 hidden md:hidden lg:block">
                    Filters
@@ -174,11 +177,13 @@
                             Apply filters
                         </button>
                     </div>
-                    <div class="block 2xl:hidden" style="float: left;">
-                        <button type="button" onclick="document.getElementById('filters').style.display = 'none'; document.getElementById('toggleFilters').style.display = 'block'" class="btn" style="background-color: #0069AD; color: white">
-                            Close
-                        </button>
-                    </div>
+                    @if(isset($_REQUEST['totalpage']) or isset($_REQUEST['brand']) or isset($_REQUEST['branch']) or isset($_REQUEST['unit']))
+                        <div class="block 2xl:block" style="float: left;">
+                            <a href="{{ route('dashboard') }}" class="btn btn-danger">
+                                Clear filters
+                            </a>
+                        </div>
+                    @endif
                 </div>
                 <br>
             </div>

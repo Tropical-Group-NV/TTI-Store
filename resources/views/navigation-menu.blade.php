@@ -6,7 +6,7 @@
     @endif
 
     <!-- Primary Navigation Menu -->
-    <div class="px-3 hidden md:block">
+    <div class="px-3 hidden md:block ">
         <div class="flex justify-between h-20 items-center">
             <a href="{{ route('home') }}">
                 <img src="{{ asset('Logo-05-min.png') }}" alt="" class="block lg:block" style="height: 50px">
@@ -106,17 +106,13 @@
                 @else
                     <div class="flex">
                         <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
-                            <div @click="open = ! open">
                                 <a class="text-white" href="{{ route('login') }}"><p>Log in</p></a>
-                            </div>
                         </div>
                         <h1 style="font-size: 20px; color: white; padding-left: 10px; padding-right: 10px">
                             |
                         </h1>
                         <div class="relative" x-data="{ open: false }" @click.away="open = false" @close.stop="open = false">
-                            <div @click="open = ! open">
                                 <a class="text-white" href="{{ route('customer-registration.index') }}"><p>Register</p></a>
-                            </div>
                         </div>
                     </div>
                 @endif
@@ -124,7 +120,7 @@
             </div>
         </div>
     </div>
-    <div class="px-3 hidden sm:block 2xl:hidden">
+    <div class="px-3  hidden sm:block 2xl:hidden">
         <div class=" justify-center h-20 items-center">
             <div>
                 <form class="" id="searchform" action="{{ route('dashboard') }}">
@@ -144,6 +140,102 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="place-items-center px-3 hidden sm:block">
+        <div class="flex justify-between">
+            <div
+                x-data="{
+            open: false,
+            toggle() {
+                if (this.open) {
+                    return this.close()
+                }
+
+                this.$refs.button.focus()
+
+                this.open = true
+            },
+            close(focusAfter) {
+                if (! this.open) return
+
+                this.open = false
+
+                focusAfter && focusAfter.focus()
+            }
+        }"
+                x-on:keydown.escape.prevent.stop="close($refs.button)"
+                x-on:focusin.window="! $refs.panel.contains($event.target) && close()"
+                x-id="['dropdown-button']"
+                class="relative"
+            >
+                <!-- Button -->
+                <button
+                    x-ref="button"
+                    x-on:click="toggle()"
+                    :aria-expanded="open"
+                    :aria-controls="$id('dropdown-button')"
+                    type="button"
+                    class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-md shadow"
+                >
+                    @if(session()->has('currency'))
+                        @if(session()->get('currency') == 'EUR')
+                            EUR🇪🇺
+                        @endif
+                            @if(session()->get('currency') == 'USD')
+                            USD🇺🇸
+                        @endif
+                    @else
+                        SRD🇸🇷
+                    @endif
+
+
+                    <!-- Heroicon: chevron-down -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                    </svg>
+                </button>
+
+                <!-- Panel -->
+                <div
+                    x-ref="panel"
+                    x-show="open"
+                    x-transition.origin.top.left
+                    x-on:click.outside="close($refs.button)"
+                    :id="$id('dropdown-button')"
+                    style="display: none; z-index: 999999"
+                    class="absolute left-0 mt-2 w-40 rounded-md bg-white shadow-md"
+                >
+                    <form action="{{ route('setCurrency') }}" method="post">
+                        @csrf
+                        <input name="currency" type="hidden" value="USD">
+                        <button class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                            USD🇺🇸
+                        </button>
+                    </form>
+                    <form action="{{ route('setCurrency') }}" method="post">
+                        @csrf
+                        <input name="currency" type="hidden" value="EUR">
+                        <button class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                            EUR🇪🇺
+                        </button>
+                    </form>
+                    <form action="{{ route('setCurrency') }}" method="post">
+                        @csrf
+                        <input name="currency" type="hidden" value="SRD">
+                        <button class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                            SRD🇸🇷
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="hidden 2xl:block">
+{{--                <a class="flex items-center gap-2 px-5 py-2.5 rounded-md shadow btn-primary" style="font-family: sfsemibold; text-decoration: none" href="{{ route('dashboard') }}">All Items--}}
+{{--                </a>--}}
+{{--                <a class="text-white" href="{{ route('dashboard') }}"><p>All Items</p></a>--}}
+            </div>
+            <div>
             </div>
         </div>
     </div>
@@ -312,6 +404,44 @@
                     {{ __('Register') }}
                 </x-jet-responsive-nav-link>
             @endif
+            <x-jet-responsive-nav-link x-data="{ expanded: false }">
+                <button @click="expanded = ! expanded">
+                    @if(session()->has('currency'))
+                        @if(session()->get('currency') == 'EUR')
+                            EUR🇪🇺
+                        @endif
+                        @if(session()->get('currency') == 'USD')
+                            USD🇺🇸
+                        @endif
+                    @else
+                        SRD🇸🇷
+                    @endif
+                </button>
+
+                <div @click.away="expanded= false" class="px-8" x-show="expanded" x-collapse>
+                    <form action="{{ route('setCurrency') }}" method="post">
+                        @csrf
+                        <input name="currency" type="hidden" value="USD">
+                        <button class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                            USD🇺🇸
+                        </button>
+                    </form>
+                    <form action="{{ route('setCurrency') }}" method="post">
+                        @csrf
+                        <input name="currency" type="hidden" value="EUR">
+                        <button class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                            EUR🇪🇺
+                        </button>
+                    </form>
+                    <form action="{{ route('setCurrency') }}" method="post">
+                        @csrf
+                        <input name="currency" type="hidden" value="SRD">
+                        <button class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
+                            SRD🇸🇷
+                        </button>
+                    </form>
+                </div>
+            </x-jet-responsive-nav-link>
         </div>
 
         <!-- Responsive Settings Options -->

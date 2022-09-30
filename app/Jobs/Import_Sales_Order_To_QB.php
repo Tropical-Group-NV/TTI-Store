@@ -21,15 +21,19 @@ class Import_Sales_Order_To_QB implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     private $sales_order_id;
+    private $currency;
+    private $currencyRate;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($order_id)
+    public function __construct($order_id, $curr, $cuRate)
     {
         $this->sales_order_id = $order_id;
+        $this->currency = $curr;
+        $this->currencyRate = $cuRate;
     }
 
     /**
@@ -39,6 +43,7 @@ class Import_Sales_Order_To_QB implements ShouldQueue
      */
     public function handle()
     {
+
         if (ImportSoInProcess::query()->count() == 0)
         {
             $in_process = new ImportSoInProcess();
@@ -54,7 +59,7 @@ class Import_Sales_Order_To_QB implements ShouldQueue
                 DB::connection('qb_sales')->update( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $this->sales_order_id. '; SET NOCOUNT ON;');
                 if ($c->Email != '' or $c->Email != null)
                 {
-                    Mail::to($c->Email)->send(new OrderNew($this->sales_order_id));
+                    Mail::to($c->Email)->send(new OrderNew($this->sales_order_id, $this->currency, $this->currencyRate));
                 }
                 ImportSoInProcess::query()->delete();
             }
@@ -67,7 +72,7 @@ class Import_Sales_Order_To_QB implements ShouldQueue
         }
         else
         {
-            Import_Sales_Order_To_QB::dispatch($this->sales_order_id)->delay(now()->addMinutes(5));
+            Import_Sales_Order_To_QB::dispatch($this->sales_order_id, $this->currency, $this->currencyRate)->delay(now()->addMinutes(5));
         }
 
 

@@ -2,6 +2,10 @@
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
         <div style="" class="items-start justify-center sm:py-12 sm:px-4 md:px-6  2xl:px-20">
             <div class="">
+                <button class="btn btn-primary" onclick="window.location.href = '{{ route('dashboard') }}'">
+                    <i class="fa fa-arrow-left"></i>
+                    Go back
+                </button>
                 <div class="block md:flex">
                     <div style="overflow-x: auto">
                         <div style="overflow-x: auto" class="w-full">
@@ -51,7 +55,11 @@
                                 <p class="text-base leading-4 text-gray-800"><b>{{ $item->FullName }}</b></p>
                             </div>
                             <div class="py-4 border-b border-gray-200 ">
-                                <p class="text-base leading-4 text-gray-800">{!! $itemdesc->description !!}  </p>
+                                @if(session()->has('currency'))
+                                    <p class="text-base leading-4 text-gray-800">{!! $itemdesc->english_description !!}  </p>
+                                @else
+                                    <p class="text-base leading-4 text-gray-800">{!! $itemdesc->description !!}  </p>
+                                @endif
                                 <div class="flex items-center justify-center">
                                     <p class="text-sm leading-none text-gray-600 dark:text-gray-300 mr-3"></p>
                                 </div>
@@ -59,11 +67,19 @@
                             <div class="py-4 border-b border-gray-200 ">
                                 @if(\Illuminate\Support\Facades\Auth::user() != null)
                                     @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
-                                        <span>Sales price: SRD <b style="color: #0069ad; font-size: 30px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
+                                        @if(session()->has('currency'))
+                                            <span>Sales price: {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 30px">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
+                                        @else
+                                            <span>Sales price: SRD <b style="color: #0069ad; font-size: 30px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
+                                        @endif
                                         <br>
                                     @endif
                                 @endif
-                                <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                    @if(session()->has('currency'))
+                                        <span style="padding-top: 10px">Retail price:  {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 20px">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
+                                    @else
+                                        <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                    @endif
                                 <br>
                             </div>
                             <div class="py-4 border-b border-gray-200">

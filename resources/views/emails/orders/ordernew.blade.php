@@ -7,7 +7,7 @@
 /* @var $currency */
 
 ?>
-<?=$currency=='USD'?
+<?=$currency!='SRD'?
     'Dear '.(trim($customer->FirstName.' '.$customer->LastName)!=''?($customer->FirstName.' '.$customer->LastName):$customer->FullName).',<br><br>
 Thank you for your order.<br>
 Your order is being processed and will be delivered as soon as possible<br>
@@ -29,14 +29,14 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                 <td style="border: none; vertical-align: top;">
                                     <table style="border: none;" cellpadding="0" cellspacing="0">
                                         <tr>
-                                            <td colspan="2" style="margin: 0px 0px 15px 0px;padding: 0px 0px 15px 0px;"><h1><b><?=$currency=='USD'?'Order Confirmation':'Order Confirmation'?></b></h1></td>
+                                            <td colspan="2" style="margin: 0px 0px 15px 0px;padding: 0px 0px 15px 0px;"><h1><b><?=$currency!='SRD'?'Order Confirmation':'Order Confirmation'?></b></h1></td>
                                         </tr>
                                         <tr>
                                             <td style="padding-bottom: 5px;width: 80px">S.O. No.</td>
                                             <td style="padding-bottom: 5px"><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$model->RefNumber?:'&nbsp;'?></div></td>
                                         </tr>
                                         <tr>
-                                            <td style="width: 80px"><?=$currency=='USD'?'Date':'Datum'?></td>
+                                            <td style="width: 80px"><?=$currency!='SRD'?'Date':'Datum'?></td>
                                             <td><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?php echo $model->TxnDate ?></div></td>
                                         </tr>
                                     </table>
@@ -47,7 +47,7 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                             <td style="width: 50%;border: none; vertical-align: top">
                                                 <table width="100%" cellpadding="5" cellspacing="0">
                                                     <tr>
-                                                        <td style="text-align:left;height: 25px;font-weight: bold"><?=$currency=='USD'?'Bill To':'Afnemer'?></td>
+                                                        <td style="text-align:left;height: 25px;font-weight: bold"><?=$currency!='SRD'?'Bill To':'Afnemer'?></td>
                                                     </tr>
                                                     <tr>
                                                         <td style="text-align:left;vertical-align: top;">
@@ -66,7 +66,7 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                             <td style="width: 50%;border: none; vertical-align: top">
                                                 <table width="100%" cellpadding="5" cellspacing="0">
                                                     <tr>
-                                                        <td style="text-align:left;height: 25px;font-weight: bold"><?=$currency=='USD'?'Ship To':'Leveringsadres'?></td>
+                                                        <td style="text-align:left;height: 25px;font-weight: bold"><?=$currency!='SRD'?'Ship To':'Leveringsadres'?></td>
                                                     </tr>
                                                     <tr>
                                                         <td style="text-align:left;vertical-align: top;">
@@ -103,10 +103,10 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                         <thead>
                                         <tr>
                                             <td style="text-align: center">P.O. No.</td>
-                                            <td style="text-align: center"><?=$currency=='USD'?'Ship&nbsp;Date':'Leveringsdatum'?></td>
-                                            <td style="text-align: center"><?=$currency=='USD'?'Terms':'Voorwaarde'?></td>
-                                            <td style="text-align: center"><?=$currency=='USD'?'Vert.':'Vert.'?></td>
-                                            <td style="text-align: center"><?=$currency=='USD'?'Customer&nbsp;Type':'Klanttype'?></td>
+                                            <td style="text-align: center"><?=$currency!='SRD'?'Ship&nbsp;Date':'Leveringsdatum'?></td>
+                                            <td style="text-align: center"><?=$currency!='SRD'?'Terms':'Voorwaarde'?></td>
+                                            <td style="text-align: center"><?=$currency!='SRD'?'Vert.':'Vert.'?></td>
+                                            <td style="text-align: center"><?=$currency!='SRD'?'Customer&nbsp;Type':'Klanttype'?></td>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -124,12 +124,12 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                             </thead>
                             <thead>
                             <tr style="background-color: #DDD">
-                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Item&nbsp;#':'Artikel&nbsp;Code'?></th>
-                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Description':'Omschrijving'?></th>
-                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Quantity':'Aantal'?></th>
-                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Unit&nbsp;of&nbsp;Measure':'Eeheid'?></th>
-                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Rate':'Prijs&nbsp;per&nbsp;stuk'?></th>
-                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Total':'Totaal'?></th>
+                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Item&nbsp;#':'Artikel&nbsp;Code'?></th>
+                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Description':'Omschrijving'?></th>
+                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Quantity':'Aantal'?></th>
+                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Unit&nbsp;of&nbsp;Measure':'Eeheid'?></th>
+                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Rate':'Prijs&nbsp;per&nbsp;stuk'?></th>
+                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Total':'Totaal'?></th>
                             </tr>
                             </thead>
                             <tbody>
@@ -143,8 +143,8 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                         '<td style="padding: 2px;text-align: left;border: 1px solid #ddd;">'.$salesOrderItem->SalesOrderLineDesc.'</td>'.
                                         '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'.$salesOrderItem->SalesOrderLineQuantity.'</td>'.
                                         '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'.$item->UnitOfMeasureSetRefFullName.'</td>'.
-                                        '<td style="padding: 2px;text-align: right;border: 1px solid #ddd;">'.number_format((float)$salesOrderItem->SalesOrderLineRate, 2, '.', '').'</td>'.
-                                        '<td style="padding: 2px;text-align: right;border: 1px solid #ddd">' . $salesOrderItem->SalesOrderLineAmount . '</td></tr>';
+                                        '<td style="padding: 2px;text-align: right;border: 1px solid #ddd;">'. number_format((float)$currency!='SRD'?$salesOrderItem->SalesOrderLineRate / $rate: $salesOrderItem->SalesOrderLineRate, 2, '.', '').'</td>'.
+                                        '<td style="padding: 2px;text-align: right;border: 1px solid #ddd">' . number_format((float)$currency!='SRD'?$salesOrderItem->SalesOrderLineAmount / $rate: $salesOrderItem->SalesOrderLineAmount, 2, '.', '')  . '</td></tr>';
                                         $total = $total + $salesOrderItem->SalesOrderLineAmount;
                                 }
                             ?>
@@ -155,8 +155,8 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                     <?=$model->CustomerMsgRefListID?\app\models\QbCustomerMsg::findOne($model->CustomerMsgRefListID)->Name.'<br>':''?>
                                     <?=$model->Memo?nl2br($model->Memo).'<br>':''?>
                                     <br><br>
-                                    <?=$currency=='USD'?'Scan the QR code to go to':'Scan de code om direct naar'?><br>
-                                    www.ttistore.com <?=$currency=='USD'?'':'te gaan'?>.<br>
+                                    <?=$currency!='SRD'?'Scan the QR code to go to':'Scan de code om direct naar'?><br>
+                                    www.ttistore.com <?=$currency!='SRD'?'':'te gaan'?>.<br>
                                     <img src="<?= $message->embed($qrLogo); ?>"><br>
                                     Fabrikant van voedings- en farmaceutische producten.<br>
                                     Manufacturer of Food and Pharmaceutical products.
@@ -173,6 +173,6 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
     </tr>
 </table>
 <br>
-<?=$currency=='USD'?
+<?=$currency!='SRD'?
     'Thank you for choosing Tropical Trade & Industries NV as your trusted partner and supplier.':
     'Bedankt voor het kiezen van Tropical Trade & Industries NV als uw partner en leverancier.'?>

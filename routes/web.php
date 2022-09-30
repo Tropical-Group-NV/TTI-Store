@@ -25,6 +25,7 @@ Route::get('/', function ()
 
 Route::get('/home', function ()
 {
+    session('currency', 'SRD');
    return view('home');
 })->name('home');
 
@@ -94,6 +95,34 @@ Route::get('backorders', function( Request $request)
 {
     return view('backorders');
 })->middleware('auth')->name('backorders');
+
+Route::get('session-info', function( Request $request)
+{
+//    $request->session()->remove('currency');
+    return session()->all();
+});
+Route::get('currency/set-usd', function( Request $request)
+{
+    $request->session()->put('currency', 'USD');
+    $request->session()->put('exchangeRate', '27.500000');
+    return session()->all();
+});
+Route::post('currency/set', function( Request $request)
+{
+    if ($request->currency == 'SRD')
+    {
+        $request->session()->remove('currency');
+        $request->session()->remove('exchangeRate');
+    }
+    else
+    {
+        $currency = DB::connection('qb_sales')->table('qb_currency')->where('CurrencyCode', $request->currency)->first();
+         $request->session()->put('currency', $request->currency);
+         $request->session()->put('exchangeRate', $currency->ExchangeRate);
+
+    }
+    return redirect(session()->get('_previous')['url']);
+})->name('setCurrency');
 
 //Route::get('customer/register', function( Request $request)
 //{

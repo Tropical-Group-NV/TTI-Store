@@ -20,6 +20,7 @@ class Items extends Component
     public $unitsearch;
     public $branchsearch;
     public $search_str;
+    public $exchangeRate;
 
     protected $listeners =
         [
@@ -53,6 +54,10 @@ class Items extends Component
         else
         {
             $this->itemsPerPage = 24;
+        }
+        if (session()->has('currency') and session()->has('exchangeRate'))
+        {
+            $this->exchangeRate = session()->get('exchangeRate');
         }
 
     }
