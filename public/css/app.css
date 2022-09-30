@@ -1240,6 +1240,15 @@ select {
 .top-1\/2 {
   top: 50%;
 }
+.bottom-4 {
+  bottom: 1rem;
+}
+.left-4 {
+  left: 1rem;
+}
+.bottom-5 {
+  bottom: 1.25rem;
+}
 .z-0 {
   z-index: 0;
 }
