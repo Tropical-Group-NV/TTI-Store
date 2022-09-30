@@ -37,7 +37,7 @@
                             <div style="; right: 0;" class=" 2xl:block left-0 2xl:w-80 2xl:left-auto top-5 2xl:top-auto sm:top-45">
                             </div>
                         </div>
-                        @livewire('sidebar')
+                            @livewire('sidebar')
                     </div>
                 @endif
             </div>
