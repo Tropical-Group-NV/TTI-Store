@@ -82,12 +82,12 @@
                                         {{ __('Backorders') }}
                                     </x-jet-dropdown-link>
                                     @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 2)
-                                        <x-jet-dropdown-link target="_blank" href="https://v1.ttistore.com/index.php?r=viewqbcustomer%2Fcustomer-near-me">
+                                        <x-jet-dropdown-link target="_blank" href="https://v1.ttistore.com:463/index.php?r=viewqbcustomer%2Fcustomer-near-me">
                                             {{ __('Customer Near Me') }}
                                         </x-jet-dropdown-link>
                                     @endif
                                 @endauth
-                                <x-jet-dropdown-link target="_blank" href="https://v1.ttistore.com">
+                                <x-jet-dropdown-link target="_blank" href="https://v1.ttistore.com:463">
                                     {{ __('Go to TTISTORE 1.0') }}
                                 </x-jet-dropdown-link>
                                 <!-- Authentication -->
@@ -389,11 +389,11 @@
                     {{ __('Backorders') }}
                 </x-jet-responsive-nav-link>
             @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 2)
-                <x-jet-responsive-nav-link target="_blank" href="https://v1.ttistore.com/index.php?r=viewqbcustomer%2Fcustomer-near-me">
+                <x-jet-responsive-nav-link target="_blank" href="https://v1.ttistore.com:463/index.php?r=viewqbcustomer%2Fcustomer-near-me">
                     {{ __('Customers Near Me') }}
                 </x-jet-responsive-nav-link>
                 @endif
-                <x-jet-responsive-nav-link target="_blank" href="https://v1.ttistore.com">
+                <x-jet-responsive-nav-link target="_blank" href="https://v1.ttistore.com:463">
                     {{ __('Go to TTISTORE 1.0') }}
                 </x-jet-responsive-nav-link>
             @else
