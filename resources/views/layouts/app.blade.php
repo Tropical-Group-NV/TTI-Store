@@ -145,7 +145,6 @@
             class="max-w-3xl px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg"
             @click.away="showModal = false"
             >
-            <!-- Title / Close-->
             <div class="flex items-center justify-between">
                 <button type="button" class="z-50 cursor-pointer" @click="showModal = false">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#25D366" stroke="currentColor">
@@ -153,7 +152,6 @@
                     </svg>
                 </button>
             </div>
-            <!-- content -->
             <div>
                 <div class="flex justify-center">
                     <img class="w-3/4" style="width: 300px" src="{{ asset('TTI-Whatsapp-svg.svg') }}" alt="">
@@ -166,6 +164,42 @@
         </div>
     </div>
 </div>
+
+{{--<div x-data="{ 'showModal': true }" @keydown.escape="showModal = false" @close.stop="showModal = false">--}}
+{{--    <!-- Trigger for Modal -->--}}
+{{--    <button  @click="showModal =  ! showModal" class="float hover:text-white items-center pb-2">--}}
+{{--        <i class="fa fa-whatsapp active:text-white my-float"></i>--}}
+{{--    </button>--}}
+
+{{--    <!-- Whatsapp Modal -->--}}
+{{--    <div x-show="showModal"--}}
+{{--        class="fixed inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"--}}
+{{--         x-transition.opacity x-transition:leave.duration.500ms >--}}
+{{--        <!-- Modal inner -->--}}
+{{--        <div x-show="showModal" x-transition:enter.duration.500ms--}}
+{{--             x-transition:leave.duration.400ms--}}
+{{--            class="max-w-3xl px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg"--}}
+{{--            @click.away="showModal = false"--}}
+{{--            >--}}
+{{--            <div class="flex items-center justify-between">--}}
+{{--                <button type="button" class="z-50 cursor-pointer" @click="showModal = false">--}}
+{{--                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#25D366" stroke="currentColor">--}}
+{{--                        <path fill="#25D366" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />--}}
+{{--                    </svg>--}}
+{{--                </button>--}}
+{{--            </div>--}}
+{{--            <div>--}}
+{{--                <div class="flex justify-center">--}}
+{{--                    Welcome to our new and improved ttistore🎉--}}
+{{--                </div>--}}
+{{--                <br>--}}
+{{--                <div class="flex justify-center">--}}
+{{--                    <a href="https://wa.me/5978691600" class="btn text-white" style="background-color: #0069ad" target="_blank"><b>TEST</b></a>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
 {{--<a href="https://wa.me/5978691600" class="float active:text-white hover:text-white" target="_blank">--}}
 {{--    <i class="fa fa-whatsapp active:text-white my-float"></i>--}}
 {{--</a>--}}
