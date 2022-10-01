@@ -99,7 +99,7 @@
                                     <ul class="border-top flex justify-between" style="bottom: 0;">
                                         <li>
                                             @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                                @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
+                                                @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                                                     @if(session()->has('currency'))
                                                         <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                                     @else
@@ -292,7 +292,7 @@
                                 <ul class="border-top flex justify-between" style="bottom: 0;">
                                     <li>
                                         @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                            @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
+                                            @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                                                 @if(session()->has('currency'))
                                                     <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                                 @else
@@ -476,7 +476,7 @@
                                 <ul class="border-top flex justify-between" style="bottom: 0;">
                                     <li>
                                         @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                            @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
+                                            @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                                                 @if(session()->has('currency'))
                                                     <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                                 @else
@@ -653,7 +653,7 @@
                             <ul class="border-top flex justify-between" style="bottom: 0;">
                                 <li>
                                     @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                        @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
+                                        @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                                             @if(session()->has('currency'))
                                                 <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                             @else

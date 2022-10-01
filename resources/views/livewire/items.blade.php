@@ -91,7 +91,7 @@
                             <ul class="border-top flex justify-between hover:bg-gray-50" style="bottom: 0;">
                                 <li>
                                     @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                        @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
+                                        @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != '3')
                                             @if(session()->has('currency'))
                                                 <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                             @else
@@ -115,20 +115,14 @@
                                                 <span class="text-xs sm:text-lg" style="color: green">In stock: <b>{{ $item->QuantityOnHand - $item->QuantityOnSalesOrder}}</b></span>
                                             @else
                                                 <span class="text-xs sm:text-lg" style="color: green">In stock</span>
-
                                             @endif
-
                                         @else
                                             <span class="text-xs sm:text-lg" style="color: green">In stock</span>
-
                                         @endif
                                     @else
                                         <span class="text-xs sm:text-lg" style="color: red">Out of stock</span>
                                     @endif
-
-
                                 </li>
-
                             </ul>
                             {{--                <button class="btn btn-primary" id="add:{{ $item->ListID }}" onclick="added('add:{{ $item->ListID }}')">Add to CartItem</button>--}}
                             <div>

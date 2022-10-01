@@ -66,7 +66,7 @@
                             </div>
                             <div class="py-4 border-b border-gray-200 ">
                                 @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                    @if( \Illuminate\Support\Facades\Auth::user()->user_type_id != 3)
+                                    @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                                         @if(session()->has('currency'))
                                             <span>Sales price: {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 30px">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                         @else
