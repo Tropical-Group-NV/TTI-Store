@@ -65,7 +65,7 @@ Route::get('api/customers', function ()
 Route::get('orders', function( Request $request)
 {
     return view('orders');
-})->name('orders');
+})->middleware('auth')->name('orders');
 
 Route::get('api/get-customers',
     function( Request $request)

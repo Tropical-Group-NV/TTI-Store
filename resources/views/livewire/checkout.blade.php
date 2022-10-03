@@ -155,7 +155,7 @@
                                                     {{--                                                <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 150px; width: auto" alt="Card image cap">--}}
                                                     <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
                                                         <!-- Trigger for Modal -->
-                                                        <button  @click="showModal =  ! showModal">
+                                                        <button type="button"  @click="showModal =  ! showModal">
                                                             <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 150px; width: auto" alt="Card image cap">
                                                             {{--                                                        <i class="fa fa-whatsapp active:text-white my-float"></i>--}}
                                                         </button>

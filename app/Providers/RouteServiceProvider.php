@@ -18,7 +18,8 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
 
-    // Replace home page by JK
+    // Replace home page by JK\
+
     public const HOME = '/home';
 
     /**
@@ -37,6 +38,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         $this->configureRateLimiting();
 
         $this->routes(function () {
