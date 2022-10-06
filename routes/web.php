@@ -29,6 +29,18 @@ Route::get('/home', function ()
    return view('home');
 })->name('home');
 
+Route::get('/audits', function ()
+{
+    if (Auth::user()->users_type_id == 1)
+    {
+        return view('audits');
+    }
+   else
+   {
+       return die('Access Denied');
+   }
+})->name('audits');
+
 Route::middleware([
 ])->group(function () {
     Route::get('/items', function () {

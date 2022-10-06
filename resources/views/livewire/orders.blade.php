@@ -31,54 +31,61 @@
 
 
 
-        <div style="overflow-x: auto" class="  py-12 2xl:px-20 md:px-6 px-4">
-            <form action="{{ route('orders') }}">
-                <div class="flex">
-                    <div class="relative w-full">
-                        <input value="{{ $search }}" name="search" type="search" id="search-dropdown" class="rounded-l-lg block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Search Orders" required>
-                        <button style="background-color: #0069ad" type="submit" class="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 ">
-                            <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                            <span class="sr-only">Search</span>
-                        </button>
+        <div style="overflow-x: auto" >
+            <div class="  py-12 2xl:px-20 md:px-6 px-4">
+                <form action="{{ route('orders') }}">
+                    <div class="flex">
+                        <div class="relative w-full">
+                            <input value="{{ $search }}" name="search" type="search" id="search-dropdown" class="rounded-l-lg block p-2.5 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-r-lg border-l-gray-50 border-l-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Search Orders" required>
+                            <button style="background-color: #0069ad" type="submit" class="absolute top-0 right-0 p-2.5 text-sm font-medium text-white bg-blue-700 rounded-r-lg border border-blue-700 hover:bg-blue-800 ">
+                                <svg aria-hidden="true" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                                <span class="sr-only">Search</span>
+                            </button>
+                        </div>
                     </div>
-                </div>
-            </form>
-            <br>
+                </form>
+            </div>
             <div style="overflow-x: auto">
                 <div style="overflow-x: auto">
-                    <table style="margin: auto" class="table-auto" id="dataTable">
-                        <thead class="bg-gray-100">
+                    <table style="font-family: sflight" class="w-full text-sm text-left text-gray-500 whitespace-nowrap " id="dataTable">
+                        <thead style="background-color: #0069ad; color: white; opacity: 0.8" class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
-                            <th style="width: 350px" class="border border-slate-600">
+                            <th class="py-3 px-6">
                                 Delivery date
                             </th>
-                            <th  style="width: 350px" class="border border-slate-600">
+                            <th class="py-3 px-6">
+                                S.O. No.
+                            </th>
+                            <th  class="py-3 px-6">
                                 Customer
                             </th>
-                            <th style="width: 350px" class="border border-slate-600 ">
+                            <th class="py-3 px-6">
                                 Adres
                             </th>
-                            <th style="width: 350px" class="border border-slate-600">
+                            <th class="py-3 px-6">
                                 Terms
                             </th>
-                            <th style="width: 350px" class="border border-slate-600">
+                            <th class="py-3 px-6">
                                 Total Items
                             </th>
-                            <th style="width: 350px" class="border border-slate-600">
+                            <th class="py-3 px-6">
                                 Amount
                             </th>
+                            <th class="py-3 px-6">
+                                Ordered by
+                            </th>
                             @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 1 or \Illuminate\Support\Facades\Auth::user()->users_type_id == 5)
-                                <th style="width: 150px" class="border border-slate-600">
+                                <th class="py-3 px-6">
                                     In QB
                                 </th>
-                                <th style="width: 150px" class="border border-slate-600">
+                                <th class="py-3 px-6">
                                     In QB Date
                                 </th>
                             @endif
-                            <th style="width: 150px" class="border border-slate-600">
+                            <th class="py-3 px-6">
                                 Reorder
                             </th>
-                            <th style="width: 150px" class="border border-slate-600">
+                            <th class="py-3 px-6">
                                 View
                             </th>
                         </tr>
@@ -86,21 +93,25 @@
                         <tbody class="">
                         @foreach($orders as $order)
                             @php($customer = \App\Models\Customer::query()->where('ListID', $order->CustomerRefListID)->first())
+                            @php($salesRep = \App\Models\User::query()->where('id', $order->uid)->first())
                             @php($items = \App\Models\SalesOrderItem::query()->where('sales_order_id', $order->id)->get())
-                            <tr class="bg-gray-50">
-                                <td class="border">
+                            <tr style="color: black" class="bg-white border-b">
+                                <td class="py-4 px-6" >
                                     {{ $order->TxnDate }}
                                 </td>
-                                <td class="border border-slate-700">
+                                <th style="color: #0069ad" scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
+                                    <b>{{ $order->RefNumber }}</b>
+                                </th>
+                                <td class="py-4 px-6">
                                     {{ $customer->Name }}
                                 </td>
-                                <td class="border border-slate-700">
+                                <td class="py-4 px-6">
                                     {{ $customer->BillAddressBlockAddr1 . ' ' .  $customer->BillAddressBlockAddr2 . ' ' . $customer->BillAddressBlockAddr3 . ' ' . $customer->BillAddressBlockAddr4 . ' ' . $customer->BillAddressBlockAddr5}}
                                 </td>
-                                <td class="border border-slate-700">
+                                <td class="py-4 px-6">
                                     {{ $order->TermsRefFullName }}
                                 </td>
-                                <td class="border border-slate-700">
+                                <td class="py-4 px-6">
                                     @php($itemQty = 0)
                                     @php($subTotal = 0)
                                     @foreach($items as $item)
@@ -109,15 +120,18 @@
                                     @endforeach
                                     {{ $itemQty }}
                                 </td>
-                                <td class="border border-slate-700">
+                                <td class="py-4 px-6">
                                     @if(session()->has('currency'))
                                         {{ session()->get('currency') }} {{ number_format($subTotal / $rate, 2) }}
                                     @else
                                         SRD {{ $subTotal }}
                                     @endif
                                 </td>
+                                <td class="py-4 px-6">
+                                    {{ $salesRep->name }} {{ $salesRep->last_name }}
+                                </td>
                                 @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 1 or \Illuminate\Support\Facades\Auth::user()->users_type_id == 5)
-                                    <td class="border border-slate-700" style="margin: auto">
+                                    <td class="py-4 px-6">
                                         @if($order->write_to_quickbook == 1)
                                             <span>
                                                  <button style="background-color: rgb(22 163 74)" type="button" class="rounded-full px-4 mr-2 bg-green-600 text-white p-2 rounded  leading-none flex items-center">
@@ -138,18 +152,18 @@
                                         @endif
                                         {{--                                        SRD {{ $subTotal }}--}}
                                     </td>
-                                    <td class="border border-slate-700">
+                                    <td class="py-4 px-6">
                                         @if($order->datetime_to_quickbook != null)
                                             {{ date('Y-m-d', strtotime($order->datetime_to_quickbook)) }}
                                         @endif
                                     </td>
                                 @endif
-                                <td class="border border-indigo-400">
+                                <td class="py-4 px-6">
                                     <button wire:click="reorder('{{ $order->id }}')" style="background-color: #0069AD; color: white" class="btn ">
                                         Reorder
                                     </button>
                                 </td>
-                                <td class="border" style="margin: auto">
+                                <td class="py-4 px-6">
                                     <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
                                         <!-- Trigger for Modal -->
                                         <button @click="showModal =  ! showModal" style="background-color: #0069AD; color: white" class="btn ">
@@ -157,8 +171,8 @@
                                         </button>
 
                                         <div  style="z-index: 99999999" x-show="showModal"
-                                             class="fixed  inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
-                                             x-transition.opacity x-transition:leave.duration.500ms >
+                                              class="fixed  inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
+                                              x-transition.opacity x-transition:leave.duration.500ms >
                                             <!-- Modal inner -->
                                             <div x-show="showModal"
                                                  class="px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg scale-50 sm:scale-100"
@@ -181,8 +195,8 @@
                                                     $qrLogo = asset('tti-email-qr');
                                                     if (session()->has('currency'))
                                                     {
-                                                            $currency = session()->get('currency');
-                                                            $rate = $rate;
+                                                        $currency = session()->get('currency');
+                                                        $rate = $rate;
                                                     }
                                                     else
                                                     {
@@ -379,10 +393,15 @@
                     </table>
                 </div>
             </div>
-            <div class="w-20">
+            <br>
+            <div class="  2xl:px-20 md:px-6 px-4">
                 {{ $orders->links('vendor.pagination.bootstrap-52') }}
             </div>
+            <br>
         </div>
     </div>
+    <br>
+    <br>
+    <br>
 </div>
 

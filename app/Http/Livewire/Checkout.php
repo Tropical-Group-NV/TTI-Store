@@ -268,7 +268,10 @@ class Checkout extends Component
 //                    \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->update(['QuantityOnHand' => $item->QuantityOnHand - $cartItem->qty  ]);
                 }
             }
-            CartItem::query()->where('uid', Auth::user()->id)->delete();
+            foreach ($cartItems as $cartItem)
+            {
+                CartItem::find($cartItem->id)->delete();
+            }
             SendFirstOrderMail::dispatch($this->customer_id);
             if (session()->has('currency'))
             {
@@ -406,7 +409,11 @@ class Checkout extends Component
                     $saveItem->save();
                 }
             }
-            CartItem::query()->where('uid', Auth::user()->id)->delete();
+
+            foreach ($cartItems as $cartItem)
+            {
+                CartItem::find($cartItem->id)->delete();
+            }
             SendFirstOrderMail::dispatch($customerAccount->customer_ListID);
             if (session()->has('currency'))
             {

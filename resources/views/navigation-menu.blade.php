@@ -15,7 +15,7 @@
             <div class="hidden 2xl:block">
                 <form class="flex-shrink-0" id="searchform" action="{{ route('dashboard') }}">
                     <ul class="flex">
-                        <input onkeyup="searchItem2()" style="height:50px; width: 1000px" id="search_input2" placeholder="Search..." name="search" class="w-96 rounded-md flex-shrink-0" autocomplete="false" type="search">
+                        <input onkeyup="searchItem2()" style="height:50px; width: 1000px" id="search_input2" placeholder="Search..." name="search" class="w-96 rounded-md flex-shrink-0" @isset($_REQUEST['search']) value="{{ $_REQUEST['search'] }}" @endisset autocomplete="false" type="search">
                         <button class="btn " style="background-color: #0069AD; height: 50px">
                             <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
                         </button>
@@ -81,9 +81,15 @@
                                     <x-jet-dropdown-link href="{{ route('backorders') }}">
                                         {{ __('Backorders') }}
                                     </x-jet-dropdown-link>
+
                                     @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 2)
                                         <x-jet-dropdown-link target="_blank" href="https://v1.ttistore.com:463/index.php?r=viewqbcustomer%2Fcustomer-near-me">
                                             {{ __('Customer Near Me') }}
+                                        </x-jet-dropdown-link>
+                                    @endif
+                                    @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 1)
+                                        <x-jet-dropdown-link href="{{ route('audits') }}">
+                                            {{ __('Audit trail') }}
                                         </x-jet-dropdown-link>
                                     @endif
                                 @endauth
@@ -125,7 +131,7 @@
             <div>
                 <form class="" id="searchform" action="{{ route('dashboard') }}">
                     <ul class="flex">
-                        <input onkeyup="searchItem4()" style="height:50px; width: 100%" id="search_input4" placeholder="Search..." name="search" class="w-96 rounded-md" autocomplete="false" type="search">
+                        <input onkeyup="searchItem4()" style="height:50px; width: 100%" id="search_input4" placeholder="Search..." name="search" @isset($_REQUEST['search']) value="{{ $_REQUEST['search'] }}" @endisset class="w-96 rounded-md" autocomplete="false" type="search">
                         <button class="btn " style="background-color: #0069AD; height: 50px">
                             <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
                         </button>
@@ -391,6 +397,11 @@
             @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 2)
                 <x-jet-responsive-nav-link target="_blank" href="https://v1.ttistore.com:463/index.php?r=viewqbcustomer%2Fcustomer-near-me">
                     {{ __('Customers Near Me') }}
+                </x-jet-responsive-nav-link>
+                @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 1)
+                <x-jet-responsive-nav-link href="{{ route('audits') }}">
+                    {{ __('Audit trail') }}
                 </x-jet-responsive-nav-link>
                 @endif
                 <x-jet-responsive-nav-link target="_blank" href="https://v1.ttistore.com:463">

@@ -58,7 +58,12 @@ class Sidebar extends Component
 
     public function clearCart()
     {
-        $item = CartItem::query()->where('uid', Auth::user()->id)->delete();
+
+        $items = CartItem::query()->where('uid', Auth::user()->id)->get();
+        foreach ($items as $item)
+        {
+            CartItem::find($item->id)->delete();
+        }
         $this->emit('updateCart');
         $this->dispatchBrowserEvent('clearcart', ['message' => 'Added to cart']);
 

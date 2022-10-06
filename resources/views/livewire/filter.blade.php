@@ -55,6 +55,9 @@
 {{--    </script>--}}
 
     <form method="GET" action="{{ route('dashboard') }}">
+        @isset($_REQUEST['search'])
+            <input type="hidden" name="search" value="{{$_REQUEST['search']}}">
+        @endisset
         <aside class="w-full border border-black shadow-xl sm:rounded-lg">
             <div class="overflow-y-auto py-4 px-3 bg-gray-50">
                 <button type="button" class="block 2xl:hidden" style="position: relative; z-index: 1000" onclick="document.getElementById('filters').style.display = 'none'; document.getElementById('toggleFilters').style.display = 'block'" data-modal-toggle="shoppingCart">

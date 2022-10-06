@@ -4,7 +4,6 @@ namespace App\Http\Livewire;
 use App\Models\BackOrders;
 use App\Models\CartItem;
 use App\Models\Customer;
-use http\Params;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -35,9 +34,17 @@ class Items extends Component
             $this->search_str = $_REQUEST['search'];
 
         }
+        else
+        {
+            $this->search_str = '';
+        }
         if (isset($_REQUEST['brand']))
         {
             $this->brand_srch = $_REQUEST['brand'];
+        }
+        else
+        {
+            $this->brand_srch = '';
         }
         if (isset($_REQUEST['branch']))
         {
@@ -66,114 +73,31 @@ class Items extends Component
 
     public function render(Request $request)
     {
-        if ($this->brand_srch != '' or $this->brand_srch != null)
+        if($this->brand_srch == '' and $this->branchsearch== '' and $this->unitsearch == '')
         {
-            if ($this->branchsearch != null and $this->branchsearch != '')
-            {
-                if ($this->unitsearch != null and $this->unitsearch != '')
-                {
-
-                    return view('livewire.items',
-                        [
-                            'items' =>  DB::connection('qb_sales')->table('view_item')->where('CustomFieldBranch', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orWhere('CustomFieldBranch2', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orWhere('CustomFieldBranch3', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orWhere('CustomFieldBranch4', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orWhere('CustomFieldBranch5', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orderBy('Description')->paginate($this->itemsPerPage)
-                        ]
-                    );
-                }
-                else
-                {
-                    return view('livewire.items',
-                        [
-                            'items' =>  DB::connection('qb_sales')->table('view_item')->where('CustomFieldBranch', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orWhere('CustomFieldBranch2', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orWhere('CustomFieldBranch3', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orWhere('CustomFieldBranch4', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orWhere('CustomFieldBranch5', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('Description')->paginate($this->itemsPerPage)
-                        ]
-                    );
-                }
-            }
-            else
-            {
-                if ($this->unitsearch != null and $this->unitsearch != '') {
-
-                    return view('livewire.items',
-                        [
-                            'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orderBy('Description')->paginate($this->itemsPerPage)
-                        ]
-                    );
-
-                }
-                return view('livewire.items',
+            return view('livewire.items',
                     [
-                        'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('Description')->paginate($this->itemsPerPage)
+                        'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->orWhere('FullName', 'LIKE', '%' . $this->search_str . '%')->orderBy('Description', 'ASC')->paginate($this->itemsPerPage)->appends(request()->query())
+
                     ]
                 );
-            }
-
+        }
+        if ($this->unitsearch != '')
+        {
+            return view('livewire.items',
+                [
+                    'items' =>  DB::connection('qb_sales')->table('view_item')->where('CustomFieldBranch', 'LIKE', '%' . $this->branchsearch . '%')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('FullName', 'LIKE', '%' . $this->search_str . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orWhere('CustomFieldBranch2', 'LIKE', '%' . $this->branchsearch . '%')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orWhere('CustomFieldBranch3', 'LIKE', '%' . $this->branchsearch . '%')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orWhere('CustomFieldBranch4', 'LIKE', '%' . $this->branchsearch . '%')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orWhere('CustomFieldBranch5', 'LIKE', '%' . $this->branchsearch . '%')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orderBy('Description')->paginate($this->itemsPerPage)
+                ]
+            );
         }
         else
         {
-            if ($this->unitsearch != null and $this->unitsearch != '')
-            {
-                if ($this->branchsearch != null and $this->branchsearch != '')
-                {
-                    return view('livewire.items',
-                        [
-                            'items' => DB::connection('qb_sales')->table('view_item')->where('CustomFieldBranch', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orWhere('CustomFieldBranch2', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orWhere('CustomFieldBranch3', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orWhere('CustomFieldBranch4', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orWhere('CustomFieldBranch5', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orderBy('Description')->paginate($this->itemsPerPage)
-                        ]
-                    );
-                }
-                return view('livewire.items',
-                    [
-                        'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('UnitOfMeasureSetRefFullName', $this->unitsearch)->orderBy('Description')->paginate($this->itemsPerPage)
-                    ]
-                );
-            }
-            else
-            {
-                if ($this->branchsearch != null and $this->branchsearch != '')
-                {
-                    return view('livewire.items',
-                        [
-                            'items' => DB::connection('qb_sales')->table('view_item')->where('CustomFieldBranch', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->orWhere('CustomFieldBranch2', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->orWhere('CustomFieldBranch3', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->orWhere('CustomFieldBranch4', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->orWhere('CustomFieldBranch5', 'LIKE', '%' . $this->branchsearch . '%')->where('IsActive', '1')->paginate($this->itemsPerPage)
-                        ]
-                    );
-                }
-            }
+            return view('livewire.items',
+                [
+                    'items' =>  DB::connection('qb_sales')->table('view_item')->where('CustomFieldBranch', 'LIKE', '%' . $this->branchsearch . '%')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orWhere('CustomFieldBranch2', 'LIKE', '%' . $this->branchsearch . '%')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orWhere('CustomFieldBranch3', 'LIKE', '%' . $this->branchsearch . '%')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orWhere('CustomFieldBranch4', 'LIKE', '%' . $this->branchsearch . '%')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orWhere('CustomFieldBranch5', 'LIKE', '%' . $this->branchsearch . '%')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('Description')->paginate($this->itemsPerPage)
+                ]
+            );
         }
-        if ($this->search_str != null or $this->search_str != '')
-        {
-            if ($this->brand_srch != '' or $this->brand_srch != null)
-            {
-                return view('livewire.items',
-                    [
-                        'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->orderBy('Description', 'DESC')->paginate($this->itemsPerPage)->appends(request()->query())
-                    ]
-                );
-            }
-            else
-            {
-                return view('livewire.items',
-                    [
-                        'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->orWhere('BarCodeValue', 'LIKE', '%' . $this->search_str . '%')->orderBy('Description', 'ASC')->paginate($this->itemsPerPage)->appends(request()->query())
-
-                    ]
-                );
-            }
-        }
-        else
-        {
-            if ($this->search_str == null or $this->search_str == '')
-            {
-                if ($this->brand_srch != '' or $this->brand_srch != null)
-                {
-                    return view('livewire.items',
-                        [
-                            'items' =>  DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('description', 'LIKE', '%' . $this->brand_srch . '%')->where('type', 'ItemInventory')->orderBy('TimeModified', 'DESC')->paginate($this->itemsPerPage)->appends(request()->query())
-                        ]
-                    );
-                }
-            }
-
-        }
-        return view('livewire.items', ['items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('type', 'ItemInventory')->orderBy('description', 'ASC')->paginate($this->itemsPerPage)->appends(request()->query())]);
-
     }
 
     public function addToCart($prod, $qty, Request $request)

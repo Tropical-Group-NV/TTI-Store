@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\CartItem;
+use App\Models\BackOrders as BO;
 use App\Models\SalesOrder;
 use App\Models\SalesOrderItem;
 use Illuminate\Support\Facades\Auth;
@@ -38,7 +39,8 @@ class BackOrders extends Component
 
     public function delete($itemID)
     {
-        \App\Models\BackOrders::query()->where('id', $itemID)->delete();
+        BO::find($itemID)->delete($itemID);
+//        BO::query()->where('id', $itemID)->delete();
         $this->emit('deletedBO');
     }
     public function createOrder($itemID, $qty, $customerID)
