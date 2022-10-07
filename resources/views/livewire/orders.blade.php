@@ -196,7 +196,7 @@
                                                     if (session()->has('currency'))
                                                     {
                                                         $currency = session()->get('currency');
-                                                        $rate = $rate;
+                                                        $rate = session()->get('exchangeRate');
                                                     }
                                                     else
                                                     {
@@ -361,7 +361,7 @@
                                                                                         Manufacturer of Food and Pharmaceutical products.
                                                                                     </td>
                                                                                     <th style="padding: 2px;text-align: right;vertical-align: top">Totaal&nbsp;<?=$currency?></th>
-                                                                                    <th style="padding: 2px;text-align: right;vertical-align: top"><?php echo number_format((float)$total, 2, '.', '');?></th>
+                                                                                    <th style="padding: 2px;text-align: right;vertical-align: top"><?php echo number_format((float)($total / $rate) , 2, '.', '');?></th>
                                                                                 </tr>
                                                                                 </tfoot>
                                                                             </table>

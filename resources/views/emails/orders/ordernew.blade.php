@@ -162,7 +162,7 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                     Manufacturer of Food and Pharmaceutical products.
                                 </td>
                                 <th style="padding: 2px;text-align: right;vertical-align: top">Totaal&nbsp;<?=$currency?></th>
-                                <th style="padding: 2px;text-align: right;vertical-align: top"><?php echo number_format((float)$total, 2, '.', '');?></th>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"><?php echo number_format((float)$total / $rate, 2, '.', '');?></th>
                             </tr>
                             </tfoot>
                         </table>
