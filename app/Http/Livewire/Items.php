@@ -13,20 +13,16 @@ use Livewire\WithPagination;
 class Items extends Component
 {
     use WithPagination;
-
     public $itemsPerPage;
     public $brand_srch;
     public $unitsearch;
     public $branchsearch;
     public $search_str;
     public $exchangeRate;
-
     protected $listeners =
         [
             'updateCart' => 'render'
-        ]
-    ;
-
+        ];
     public function mount()
     {
         if (isset($_REQUEST['search']))
@@ -77,7 +73,8 @@ class Items extends Component
         {
             return view('livewire.items',
                     [
-                        'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('type', 'ItemInventory')->orWhere('FullName', 'LIKE', '%' . $this->search_str . '%')->where('type', 'ItemInventory')->orderBy('Description', 'ASC')->paginate($this->itemsPerPage)->appends(request()->query())
+//                        'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('type', 'ItemInventory')->orWhere('FullName', 'LIKE', '%' . $this->search_str . '%')->where('type', 'ItemInventory')->orderBy('Description', 'ASC')->paginate($this->itemsPerPage)->appends(request()->query())
+                        'items' => DB::table('most_sold_items')->paginate(48)->appends(request()->query())
 
                     ]
                 );
