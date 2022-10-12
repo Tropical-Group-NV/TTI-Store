@@ -30,7 +30,11 @@
         <div id="itemWrap" style="" class=" bg-opacity-25 grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
             @if(1 == 1)
                 @foreach($items as $item)
-                    @php($item = \App\Models\Item::query()->where('ListID', $item->itemID)->get()->first())
+                    @if($brand_srch =='' and $unitsearch == '' and $branchsearch == '' and $search_str == '')
+                        @php($item = \App\Models\Item::query()->where('ListID', $item->itemID)->get()->first())
+                    @else
+                        @php($item = \App\Models\Item::query()->where('ListID', $item->ListID)->get()->first())
+                    @endif
                 @if($item!= null)
                         @if(\Illuminate\Support\Facades\Auth::user()!= null and \Illuminate\Support\Facades\Auth::user()->users_type_id != 3 or \Illuminate\Support\Facades\Auth::user()!= null and !str_contains($item->FullName, 'INRUIL') and  \Illuminate\Support\Facades\Auth::user()->users_type_id == 3 or \Illuminate\Support\Facades\Auth::user() == null and !str_contains($item->FullName, 'INRUIL'))
                             @php($put = 1)
