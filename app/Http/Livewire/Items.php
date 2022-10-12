@@ -71,13 +71,27 @@ class Items extends Component
     {
         if($this->brand_srch == '' and $this->branchsearch== '' and $this->unitsearch == '')
         {
-            return view('livewire.items',
+            if ($this->search_str == '')
+            {
+                return view('livewire.items',
                     [
 //                        'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('type', 'ItemInventory')->orWhere('FullName', 'LIKE', '%' . $this->search_str . '%')->where('type', 'ItemInventory')->orderBy('Description', 'ASC')->paginate($this->itemsPerPage)->appends(request()->query())
                         'items' => DB::table('most_sold_items')->paginate($this->itemsPerPage)->appends(request()->query())
 
                     ]
                 );
+            }
+            else
+            {
+                return view('livewire.items',
+                    [
+                        'items' => DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('type', 'ItemInventory')->orWhere('FullName', 'LIKE', '%' . $this->search_str . '%')->where('type', 'ItemInventory')->orderBy('Description', 'ASC')->paginate($this->itemsPerPage)->appends(request()->query())
+//                        'items' => DB::table('most_sold_items')->paginate($this->itemsPerPage)->appends(request()->query())
+
+                    ]
+                );
+            }
+
         }
         if ($this->unitsearch != '')
         {
