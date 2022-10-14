@@ -76,7 +76,7 @@
                             @endforeach
                         @endif
                         </tbody>
-                        <tfoot>
+                        <tfoot> n
                         <tr>
                             <td class="">
                                 Total
@@ -99,11 +99,31 @@
                         <button style="float: left" wire:loading.attr="disabled" wire:click="clearCart" class="btn btn-danger">
                             Clear cart
                         </button>
-                        <a style="float: right" href="{{ route('checkout') }}">
-                            <button style="right: 0; background-color: #0069AD; color: white" class="btn">
-                                Checkout
-                            </button >
-                        </a>
+
+                            @if(Auth::user()->users_type_id == 1)
+                                @php($userCustomer = DB::connection('qb_sales')->table('view_customer_list')->where('text', 'LIKE', '%' . Auth::user()->name . ' ' . Auth::user()->last_name .'%')->first())
+                        @if($userCustomer != null)
+                                <a style="float: right" href="{{ route('checkout') }}?customerid={!! $userCustomer->id !!}">
+                                    <button style="right: 0; background-color: #0069AD; color: white" class="btn">
+                                        Checkout
+                                    </button >
+                                </a>
+                            @else
+                                <a style="float: right" href="{{ route('checkout') }}">
+                                    <button style="right: 0; background-color: #0069AD; color: white" class="btn">
+                                        Checkout
+                                    </button >
+                                </a>
+                            @endif
+                            @else
+                            <a style="float: right" href="{{ route('checkout') }}">
+                                <button style="right: 0; background-color: #0069AD; color: white" class="btn">
+                                    Checkout
+                                </button >
+                            </a>
+                            @endif
+
+
                     @endif
                 </div>
             </div>
