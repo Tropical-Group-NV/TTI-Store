@@ -18,34 +18,19 @@
     </div>
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg hidden sm:block">
         <div id="itemWrap"  class="bg-gray-200 bg-opacity-25 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
-            <div class="" style="width: auto;">
-                <div style="margin: auto">
-                    <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ads/spierbalsem.jpg') }}" alt="">
+            @foreach($ads as $ad)
+                <div class="" style="width: auto;">
+                    <div style="margin: auto">
+                        <div class="card-body" style="position: relative">
+                            @if($ad->type == 1)
+                                <a href="{{ route('item', $ad->prodID) }}">
+                                    <img src="{{ asset('storage/ads/' . $ad->fileName) }}" alt="">
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="" style="width: auto;">
-                <div style="margin: auto">
-                    <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ads/TP_Kola.jpg') }}" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="" style="width: auto;">
-                <div style="margin: auto">
-                    <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ads/TP_Essence.jpg') }}" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="" style="width: auto;">
-                <div style="margin: auto">
-                    <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ads/vaporub.jpg') }}" alt="">
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
 
@@ -826,46 +811,22 @@
     {{--    Add images here for advertisement--}}
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg sm:hidden">
         <div id="itemWrap"  class="bg-opacity-25 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4">
-            <div class="" style="width: auto;">
-                <div style="margin: auto">
-                    <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ads/spierbalsem.jpg') }}" alt="">
+            @foreach($ads as $ad)
+                <div class="" style="width: auto;">
+                    <div style="margin: auto">
+                        <div class="card-body" style="position: relative">
+                            @if($ad->type == 1)
+                                <a href="{{ route('item', $ad->prodID) }}">
+                                    <img src="{{ asset('storage/ads/' . $ad->fileName) }}" alt="">
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="" style="width: auto;">
-                <div style="margin: auto">
-                    <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ads/TP_Kola.jpg') }}" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="" style="width: auto;">
-                <div style="margin: auto">
-                    <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ads/TP_Essence.jpg') }}" alt="">
-                    </div>
-                </div>
-            </div>
-            <div class="" style="width: auto;">
-                <div style="margin: auto">
-                    <div class="card-body" style="position: relative">
-                        <img src="{{ asset('ads/vaporub.jpg') }}" alt="">
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
     </div>
     <br>
-{{--    <div class="overflow-hidden sm:rounded-lg sm:hidden" style="text-align: center">--}}
-{{--        <a href="{{ route('dashboard') }}">--}}
-{{--            <button style="background-color: #0069ad; color: white" class="w-3/4 rounded-lg">--}}
-{{--                <h1 style="font-family: sfsemibold; font-size: 35px;" class="p-6">--}}
-{{--                    View all items--}}
-{{--                </h1>--}}
-{{--            </button>--}}
-{{--        </a>--}}
-{{--    </div>--}}
     <script>
         function addBackorder(elID)
         {

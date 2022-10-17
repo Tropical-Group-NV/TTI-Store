@@ -96,6 +96,13 @@ Route::get('api/get-items',
         return view('api.item-search', compact('search'));
     })->name('getItems');
 
+Route::get('api/get-items-ads',
+    function( Request $request)
+    {
+        $search = $_REQUEST['search'];
+        return view('api.item-search-ad', compact('search'));
+    })->name('getItemsAds');
+
 
 Route::get('orders/{id}', function( Request $request)
 {
@@ -146,14 +153,18 @@ Route::resources
 (
     [
         'customer-registration' => \App\Http\Controllers\CustomerRegistration::class,
-        'new-customers' => \App\Http\Controllers\TemporaryUserInfoController::class
+        'new-customers' => \App\Http\Controllers\TemporaryUserInfoController::class,
+        'upload/ads' => \App\Http\Controllers\AdsController::class
     ]
 );
+
+
 
 Route::get('vue/home', function( Request $request)
 {
     return view('test-home');
 })->name('vue-home');
+
 
 
 

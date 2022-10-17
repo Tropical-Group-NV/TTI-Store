@@ -76,7 +76,7 @@
                             @endforeach
                         @endif
                         </tbody>
-                        <tfoot> n
+                        <tfoot>
                         <tr>
                             <td class="">
                                 Total
@@ -122,8 +122,6 @@
                                 </button >
                             </a>
                             @endif
-
-
                     @endif
                 </div>
             </div>

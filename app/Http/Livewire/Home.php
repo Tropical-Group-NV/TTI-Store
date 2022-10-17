@@ -22,6 +22,7 @@ class Home extends Component
     public $popularItems;
     protected $popularItemsCount = 8;
     public $randomItems;
+    public $ads;
 
     protected $listeners =
         [
@@ -67,6 +68,7 @@ class Home extends Component
 
     public function boot()
     {
+        $this->ads =  \App\Models\Ad::query()->limit(4)->inRandomOrder()->get();
         $this->randomItems = [];
         $this->popularItems = [];
     }

@@ -91,6 +91,9 @@
                                         <x-jet-dropdown-link href="{{ route('audits') }}">
                                             {{ __('Audit trail') }}
                                         </x-jet-dropdown-link>
+                                        <x-jet-dropdown-link href="{{ URL::to('upload/ads')}}">
+                                            {{ __('Ads') }}
+                                        </x-jet-dropdown-link>
                                     @endif
                                 @endauth
                                 <x-jet-dropdown-link target="_blank" href="https://v1.ttistore.com:463">

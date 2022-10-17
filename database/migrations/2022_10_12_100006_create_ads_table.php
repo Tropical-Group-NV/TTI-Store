@@ -19,9 +19,8 @@ return new class extends Migration
             $table->integer('type');
             $table->text('typeFullName');
             $table->text('fileName');
-            $table->text('url');
-            $table->text('prodID');
-
+            $table->text('url')->nullable();
+            $table->text('prodID')->nullable();
         });
     }
 
