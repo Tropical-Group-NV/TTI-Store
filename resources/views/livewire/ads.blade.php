@@ -57,24 +57,11 @@
 
                                     </div>
                                         <div class="pt-5">
-                                            <label class="block mb-2 text-sm font-medium text-gray-900" for="multiple_files">Upload product ad</label>
+                                            <label class="block mb-2 text-sm font-medium text-gray-900">Upload product ad</label>
                                             <input wire:model="file1" class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer focus:outline-none" accept="image/*" type="file" >
                                         </div>
                                     </div>
                                     <br>
-
-                                        <div class="flex justify-between">
-                                    <div>
-                                        <button class="btn btn-danger">
-                                            Cancel
-                                        </button>
-                                    </div>
-                                            @if($file1 != null)
-                                    <button class="btn" style="background-color: #0069ad; color: white">
-                                        Save
-                                    </button>
-                                            @endif
-                                </div>
                                 @endif
 
                             @endif
@@ -84,6 +71,18 @@
                                 </div>
                                 hello
                             @endif
+                             <div class="flex justify-between">
+                                    <div>
+                                        <button type="button" @click="open = ! open" class="btn btn-danger bg-red-700">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                            @if($file1 != null)
+                                     <button class="btn" style="background-color: #0069ad; color: white">
+                                        Save
+                                    </button>
+                                 @endif
+                                </div>
                         </form>
                     </span>
                 </div>
@@ -95,13 +94,10 @@
                         <thead style="background-color: #0069ad; color: white; opacity: 0.8" class="text-xs text-gray-700 uppercase bg-gray-50">
                         <tr>
                             <th class="py-3 px-6">
-                                Ad type
+{{--                                Ad type--}}
                             </th>
                             <th class="py-3 px-6">
-                                File name
-                            </th>
-                            <th  class="py-3 px-6">
-                                View image
+                               Name
                             </th>
                             <th class="py-3 px-6">
                                 Delete
@@ -112,13 +108,15 @@
                         @foreach($ads as $ad)
                             <tr style="color: black" class="bg-white border-b">
                                 <td class="py-4 px-6" >
-                                    {{ $ad->typeFullName }}
+                                    <img src="{{ asset('storage/ads/' . $ad->fileName) }}" alt="" style="width: 150px">
+{{--                                    {{ $ad->typeFullName }}--}}
                                 </td>
                                 <td class="py-4 px-6">
-                                    {{ $ad->fileName }}
-                                </td>
-                                <td class="py-4 px-6">
-                                    <a target="_blank" href="{{ asset('storage/ads/' . $ad->fileName) }}" class="btn" style="background-color: #0069ad; color: white">View</a>
+                                    @if($ad->type == 1)
+                                        @php($item = \App\Models\Item::query()->where('ListID', $ad->prodID)->first())
+                                    @endif
+                                    {{ $item->Description }}
+{{--                                    {{ $ad->fileName }}--}}
                                 </td>
                                 <td class="py-4 px-6">
                                     <button wire:click="deleteAd('{{ $ad->id }}')" class="btn btn-danger">

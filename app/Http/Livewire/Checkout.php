@@ -272,7 +272,7 @@ class Checkout extends Component
             {
                 CartItem::find($cartItem->id)->delete();
             }
-            SendFirstOrderMail::dispatch($this->customer_id);
+            SendFirstOrderMail::dispatch($this->customer_id, Auth::user()->id);
             if (session()->has('currency'))
             {
                 Import_Sales_Order_To_QB::dispatch($sale->id, session()->get('currency'), session()->get('exchangeRate'));
@@ -414,7 +414,7 @@ class Checkout extends Component
             {
                 CartItem::find($cartItem->id)->delete();
             }
-            SendFirstOrderMail::dispatch($customerAccount->customer_ListID);
+            SendFirstOrderMail::dispatch($customerAccount->customer_ListID, Auth::user()->id);
             if (session()->has('currency'))
             {
                 Import_Sales_Order_To_QB::dispatch($sale->id, session()->get('currency'), session()->get('exchangeRate'));

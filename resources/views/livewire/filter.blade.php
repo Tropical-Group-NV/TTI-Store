@@ -1,58 +1,7 @@
 <div style="min-width: 300px; z-index: 1200">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
-    {{--    <link rel="stylesheet" href="{{ asset('css/jquery_ui/custom.css') }}">--}}
     <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-{{--    <script>--}}
-{{--        $( function() {--}}
-{{--            $( "#slider-range" ).slider({--}}
-{{--                range: true,--}}
-{{--                min: 0,--}}
-{{--                max: 10000,--}}
-{{--                @if(isset($_REQUEST['brand']))--}}
-{{--                values: [ '{{ $_REQUEST['min'] }}', '{{ $_REQUEST['max'] }}' ],--}}
-{{--                @else--}}
-{{--                values: [ 0, 10000 ],--}}
-{{--                @endif--}}
-{{--                slide: function( event, ui ) {--}}
-{{--                    // $( "#amount" ).val( "SRD" + ui.values[ 0 ] + " - SRD" + ui.values[ 1 ] );--}}
-{{--                    $( "#min" ).text( "SRD " + ui.values[ 0 ]);--}}
-{{--                    $( "#min-value" ).val(ui.values[ 0 ]);--}}
-{{--                    $( "#max" ).text( "SRD " + ui.values[ 1 ]);--}}
-{{--                    $( "#max-value" ).val( ui.values[ 1 ]);--}}
-{{--                    --}}{{--                    @if(isset($_REQUEST['brand']))--}}
-{{--                    --}}{{--                    $( "#min" ).text( "SRD " + '{{ $_REQUEST['min'] }}');--}}
-{{--                    --}}{{--                    $( "#min-value" ).val('{{ $_REQUEST['min'] }}');--}}
-{{--                    --}}{{--                    $( "#max" ).text( "SRD " + '{{ $_REQUEST['max'] }}');--}}
-{{--                    --}}{{--                    $( "#max-value" ).val( '{{ $_REQUEST['max'] }}');--}}
-{{--                    --}}{{--                    @else--}}
-{{--                    --}}{{--                    $( "#min" ).text( "SRD " + ui.values[ 0 ]);--}}
-{{--                    --}}{{--                    $( "#min-value" ).val(ui.values[ 0 ]);--}}
-{{--                    --}}{{--                    $( "#max" ).text( "SRD " + ui.values[ 1 ]);--}}
-{{--                    --}}{{--                    $( "#max-value" ).val( ui.values[ 1 ]);--}}
-{{--                    --}}{{--                    @endif--}}
-
-{{--                }--}}
-{{--            });--}}
-{{--            // $( "#min" ).text( "SRD " + $( "#slider-range" ).slider( "values", 0 )  );--}}
-{{--            // $( "#min-value" ).val( $( "#slider-range" ).slider( "values", 0 )  );--}}
-{{--            // $( "#max" ).text( "SRD " + $( "#slider-range" ).slider( "values", 1 )  );--}}
-{{--            // $( "#max-value" ).val( $( "#slider-range" ).slider( "values", 1 )  );--}}
-{{--            @if(isset($_REQUEST['brand']))--}}
-{{--            $( "#min" ).text( "SRD " + '{{ $_REQUEST['min'] }}'  );--}}
-{{--            $( "#min-value" ).val( '{{ $_REQUEST['min'] }} ' );--}}
-{{--            $( "#max" ).text( "SRD " + '{{ $_REQUEST['max'] }}'   );--}}
-{{--            $( "#max-value" ).val( '{{ $_REQUEST['max'] }}'  );--}}
-{{--            @else--}}
-{{--            $( "#min" ).text( "SRD " + $( "#slider-range" ).slider( "values", 0 )  );--}}
-{{--            $( "#min-value" ).val( $( "#slider-range" ).slider( "values", 0 )  );--}}
-{{--            $( "#max" ).text( "SRD " + $( "#slider-range" ).slider( "values", 1 )  );--}}
-{{--            $( "#max-value" ).val( $( "#slider-range" ).slider( "values", 1 )  );--}}
-{{--            @endif--}}
-
-{{--            // $( "#min" ).val( "$" + $( "#slider-range" ).slider( "values", 0 ));--}}
-{{--        } );--}}
-{{--    </script>--}}
 
     <form method="GET" action="{{ route('dashboard') }}">
         @isset($_REQUEST['search'])
