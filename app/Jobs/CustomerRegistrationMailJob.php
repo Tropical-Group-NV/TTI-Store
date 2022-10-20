@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Mail;
 
 class CustomerRegistrationMailJob implements ShouldQueue
 {
+//    TODO Job for sending customer registration mail
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**

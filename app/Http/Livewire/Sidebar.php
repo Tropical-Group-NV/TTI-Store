@@ -8,6 +8,8 @@ use Livewire\Component;
 
 class Sidebar extends Component
 {
+
+//    TODO Controller for Cart on sidebar
     protected $listeners =
         [
             'updateCart' => 'render'

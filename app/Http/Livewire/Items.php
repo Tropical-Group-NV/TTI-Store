@@ -12,6 +12,8 @@ use Livewire\WithPagination;
 
 class Items extends Component
 {
+
+//    TODO Controller for items
     use WithPagination;
     public $itemsPerPage;
     public $brand_srch;

@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class registrationCustomer extends Mailable
 {
+//    TODO Customer mail for customer registration
     use Queueable, SerializesModels;
 
     public $userID;

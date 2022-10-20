@@ -20,6 +20,8 @@ class BackOrdersNotification implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+//    TODO Inactive
+
     /**
      * Create a new job instance.
      *

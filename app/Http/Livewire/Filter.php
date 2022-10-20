@@ -8,6 +8,8 @@ use Livewire\Component;
 
 class Filter extends Component
 {
+
+//    TODO Controller for filters
     public $brands;
     public $branches;
     public $privateBranches;

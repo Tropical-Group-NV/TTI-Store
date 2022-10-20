@@ -10,6 +10,11 @@ use Livewire\WithFileUploads;
 
 class Ads extends Component
 {
+
+    /** TODO Controller for ads */
+
+
+    /** TODO public variables */
     use WithFileUploads;
     public $ads;
     public $searchstr;
@@ -20,6 +25,7 @@ class Ads extends Component
     public $file1;
     public $fileName;
 
+//    TODO Eventlisteners
     public $listeners =
         [
             'uploaded' => 'render'
@@ -33,6 +39,7 @@ class Ads extends Component
 
     public function searchItem()
     {
+//        TODO search for products for ads
         $this->itemArray = \App\Models\Item::query()->where('Description', 'LIKE', '%' . $this->searchstr .'%')->orWhere('FullName', 'LIKE', '%' . $this->searchstr .'%')->limit(5)->get();
 //        $this->itemArray = DB::connection('qb_sales')->table('view_item')->where('IsActive', '1')->where('description', 'LIKE', '%' . $this->search_str . '%')->where('type', 'ItemInventory')->orWhere('FullName', 'LIKE', '%' . $this->searchstr . '%')->where('type', 'ItemInventory')->orderBy('Description', 'ASC')->limit(5)->get();
     }
@@ -47,6 +54,7 @@ class Ads extends Component
     }
     public function addItem($prodID)
     {
+//        TODO link product to ad
         $this->itemID = $prodID;
         $this->itemArray = [];
     }

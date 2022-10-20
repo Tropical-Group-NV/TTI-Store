@@ -13,6 +13,8 @@ use Livewire\Component;
 
 class Home extends Component
 {
+
+//    TODO Controller for viewing home page
     public $saleUnlimit;
 //    public $onSale;
     public $readyToLoadRandom = false;

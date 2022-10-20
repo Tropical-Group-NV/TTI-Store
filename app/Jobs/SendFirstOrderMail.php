@@ -19,6 +19,8 @@ class SendFirstOrderMail implements ShouldQueue
     public $customerID;
     public $userID;
 
+//    TODO Job for sending first mail when order is created
+
     /**
      * Create a new job instance.
      *

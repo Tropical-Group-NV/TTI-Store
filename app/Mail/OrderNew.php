@@ -11,6 +11,8 @@ use Illuminate\Queue\SerializesModels;
 
 class OrderNew extends Mailable
 {
+
+//    TODO SO mail with invoice
     use Queueable, SerializesModels;
     public $SalesOrderID;
     public $currency;

@@ -12,6 +12,8 @@ class registrationAdmin extends Mailable
 {
     use Queueable, SerializesModels;
 
+//    TODO admin mail for customer registration
+
     /**
      * Create a new message instance.
      *

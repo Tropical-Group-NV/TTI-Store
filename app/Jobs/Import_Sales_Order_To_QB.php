@@ -20,6 +20,7 @@ class Import_Sales_Order_To_QB implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+//    TODO Job for sending confirmation SO mail with invoice
     private $sales_order_id;
     private $currency;
     private $currencyRate;

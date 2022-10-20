@@ -70,6 +70,7 @@ class Checkout extends Component
     }
 
 
+//    TODO change Cart Item qty
     public function changeQuantityCart($cartItemID, $qty)
     {
         if ($qty <= 0 or is_int($qty))
@@ -105,10 +106,6 @@ class Checkout extends Component
 
             }
         }
-//        else
-//        {
-//            $this->dispatchBrowserEvent('updateCartQty', ['prodID' => $id, 'Qty' => number_format($qty) , 'inStock' =>  number_format($product->QuantityOnHand - $product->QuantityOnSalesOrder), 'BO' => $qty-($product->QuantityOnHand - $product->QuantityOnSalesOrder), 'addBO' => 1]);
-//        }
     }
 
     public function clearCart()
@@ -120,6 +117,7 @@ class Checkout extends Component
 
     public function search()
     {
+//        TODO search customers
             $this->search_sw = 1;
             if (Auth::user()->users_type_id == 2)
             {
@@ -134,6 +132,8 @@ class Checkout extends Component
 
     public function createSalesOrder(Request $request)
     {
+
+//        TODO Create SalesOrder
 
         if (Auth::user()->users_type_id != 3)
         {

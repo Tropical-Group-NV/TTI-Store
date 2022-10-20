@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 
 class Item extends Component
 {
+
+//    TODO Controller for single item page
     protected $listeners =
         [
             'updateCart' => 'render'

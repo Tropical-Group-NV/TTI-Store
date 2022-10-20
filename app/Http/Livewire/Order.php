@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 
 class Order extends Component
 {
+
+//    TODO Controller for single order view
     public $order_id;
     public $order;
     public $order_items;

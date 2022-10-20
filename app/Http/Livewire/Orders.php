@@ -12,6 +12,8 @@ use Livewire\WithPagination;
 
 class Orders extends Component
 {
+
+//    TODO Controller for orders view
     public $search;
     use WithPagination;
 //    public $orders;

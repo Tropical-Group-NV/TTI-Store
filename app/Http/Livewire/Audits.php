@@ -9,6 +9,8 @@ use Livewire\WithPagination;
 
 class Audits extends Component
 {
+
+    /** TODO: Livewire controller for audits */
     use WithPagination;
 
     public $auditType;
@@ -22,11 +24,15 @@ class Audits extends Component
     }
     public function render()
     {
+        /** TODO: view audits */
         $audits2 = Audit::query()->orderBy('id', 'DESC')->paginate(10);
         $audits = Audit::query()->paginate(10);
         $auditMails = AuditMail::query()->latest()->paginate(10);
         return view('livewire.audits',['audits' => $audits2, 'auditMails' => $auditMails]);
     }
+
+    /** TODO: toggle audits */
+
 
     public function mailAudit()
     {
