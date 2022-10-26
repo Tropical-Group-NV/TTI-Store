@@ -66,7 +66,7 @@
                             </div>
                             <div class="py-4 border-b border-gray-200 ">
                                 @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                    @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                    @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3 and \Illuminate\Support\Facades\Auth::user()->users_type_id != 7)
                                         @if(session()->has('currency'))
                                             <span>Sales price: {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 30px">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                         @else
@@ -88,7 +88,7 @@
                             @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0)
                                 <div class="py-4  border-gray-200 items-center justify-between">
                                     <p class="text-base leading-4 text-green-600">In stock @auth
-                                            @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                            @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3 and \Illuminate\Support\Facades\Auth::user()->users_type_id != 7)
                                                 {{  $item->QuantityOnHand - $item->QuantityOnSalesOrder }}
                                             @endif
                                         @endauth</p>
@@ -137,7 +137,7 @@
                                         @endif
                                         <h1 style="font-family: sfsemibold">Select quantity:</h1>
                                         <div class="border-2 border-black" style="border-color: #0069AD; border-radius: 20px">
-                                            <input type="number" style="border-radius: 20px" class=" btn focus:outline-none focus:ring-2 focus:ring-offset-2 outline-black text-base flex items-center justify-center  w-full" id="input-{{ $item->ListID }}" name="qty"/>
+                                            <input type="number" style="border-radius: 20px" class="focus:outline-none focus:ring-2 focus:ring-offset-2 outline-black text-base flex items-center justify-center  w-full" id="input-{{ $item->ListID }}" name="qty"/>
 
                                         </div>
 
