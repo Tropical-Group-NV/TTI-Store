@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('ads', function (Blueprint $table) {
-            $table->integer('active');
+            $table->integer('active')->nullable();
         });
     }
 
