@@ -50,7 +50,7 @@ class CustomerRegistration extends Controller
     {
         if($request->surname == '')
         {
-            if (!TemporaryUserInfo::query()->where('email', $request->email)->exists() or !User::where('id', $request->username)->exists())
+            if (!TemporaryUserInfo::query()->where('email', $request->email)->exists() or !User::where('username', $request->username)->exists())
             {
                 $user = new User();
                 $user->username = $request->username;
