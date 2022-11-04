@@ -70,7 +70,7 @@ class Home extends Component
 
     public function boot()
     {
-        $this->ads =  \App\Models\Ad::query()->limit(4)->inRandomOrder()->get();
+        $this->ads =  \App\Models\Ad::query()->where('active', 1)->limit(4)->inRandomOrder()->get();
         $this->randomItems = [];
         $this->popularItems = [];
     }

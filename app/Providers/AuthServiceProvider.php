@@ -45,12 +45,20 @@ class AuthServiceProvider extends ServiceProvider
                         $findCustomer = DB::connection('qb_sales')->table('users_customer')->where('user_id', $user->id)->exists();
                         if ($findCustomer)
                         {
-                            Auth::guard('eloquent');
-                            $validated = Auth::guard('eloquent')->attempt(['username' => $request->username, 'password' => $request->password]);
-                            if ($validated)
-                            {
-                                Auth::loginUsingId($user->id);
-                            }
+//                            if ($user->active == 1)
+//                            {
+                                Auth::guard('eloquent');
+                                $validated = Auth::guard('eloquent')->attempt(['username' => $request->username, 'password' => $request->password]);
+                                if ($validated)
+                                {
+                                    Auth::loginUsingId($user->id);
+                                }
+//                            }
+//                            else
+//                            {
+//                                session()->flash('accountInactive','Your account is not verified. please check your mailbox for registration mail');
+//                            }
+
                         }
                         else
                         {

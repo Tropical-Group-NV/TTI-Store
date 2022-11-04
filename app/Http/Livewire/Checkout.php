@@ -9,6 +9,7 @@ use App\Models\CartItem;
 use App\Models\CustomerMessage;
 use App\Models\QbCustomer;
 use App\Models\SalesOrderItem;
+use App\Models\UserCustomer;
 use Illuminate\Http\Request;
 use App\Models\Customer;
 use App\Models\SalesOrder;
@@ -28,6 +29,7 @@ class Checkout extends Component
     public $memo;
     public $date;
     public $customers;
+    public $saleCustomer;
     public $search_customer;
     public $search_sw;
     public $terms;
@@ -37,9 +39,37 @@ class Checkout extends Component
     public $ship3;
     public $ship4;
     public $ship5;
+    public $retail;
 
+    public function boot()
+    {
+        if ($this->customer_id != '')
+        {
+            $this->saleCustomer = QbCustomer::query()->where('ListID', $this->customer_id)->first();
+        }
+        if (Auth::user()->user_type_id == 3)
+        {
+            $customerAccount = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('users_customer')->where('user_id', \Illuminate\Support\Facades\Auth::user()->id)->first();
+            $cartItems = CartItem::query()->where('uid', Auth::user()->id)->get();
+            $customer = DB::connection('epas')->table('QB_Customer')->where('ListID', $customerAccount->customer_ListID)->first();
+            $this->customer_id = $customerAccount->customer_ListID;
+        }
+    }
     public function mount()
     {
+        if (Auth::user()->users_type_id == 3)
+        {
+            $usercustomer = UserCustomer::query()->where('user_id', Auth::user()->id)->first();
+            $customeraccount = QbCustomer::where('ListID', $usercustomer->customer_ListID)->first();
+            if ($customeraccount->PriceLevelRefFullName == 'Retail')
+            {
+                $this->retail = 1;
+            }
+        }
+
+
+
+
         $this->date= date('Y-m-d');
 
         if (isset($_REQUEST['customerid']))
@@ -130,6 +160,11 @@ class Checkout extends Component
             }
     }
 
+    public function addCustomer($cID)
+    {
+        $this->saleCustomer = QbCustomer::where('ListID',$cID)->first();
+    }
+
     public function createSalesOrder(Request $request)
     {
 
@@ -153,7 +188,7 @@ class Checkout extends Component
             $sale->BillAddressAddr3 = $customer->BillAddressBlockAddr3;
             $sale->BillAddressAddr4 = $customer->BillAddressBlockAddr4;
             $sale->BillAddressAddr5 = $customer->BillAddressBlockAddr5;
-            if ($this->customer_id == '410000-1128694047')
+            if ($this->customer_id == '410000-1128694047' )
             {
                 $sale->ShipAddressAddr1 = $shipping_array[0] ?? null;
                 $sale->ShipAddressAddr2 = $shipping_array[1] ?? null;
@@ -188,7 +223,7 @@ class Checkout extends Component
                 $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->first();
                 if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
                 {
-                    if ($this->customer_id == '410000-1128694047')
+                    if ($this->customer_id == '410000-1128694047' or $this->retail == 1)
                     {
                         $saleItem = new SalesOrderItem();
                         $saleItem->sales_order_id = $sale->id;
@@ -236,7 +271,7 @@ class Checkout extends Component
                 }
                 else
                 {
-                    if ($this->customer_id == '410000-1128694047')
+                    if ($this->customer_id == '410000-1128694047' or $this->retail == 1)
                     {
                         $saleItem = new SalesOrderItem();
                         $saleItem->sales_order_id = $sale->id;
@@ -301,7 +336,7 @@ class Checkout extends Component
             $sale->BillAddressAddr3 = $customer->BillAddressBlockAddr3;
             $sale->BillAddressAddr4 = $customer->BillAddressBlockAddr4;
             $sale->BillAddressAddr5 = $customer->BillAddressBlockAddr5;
-            if ($this->customer_id == '410000-1128694047')
+            if ($this->customer_id == '410000-1128694047' )
             {
                 $sale->ShipAddressAddr1 = $shipping_array[0] ?? null;
                 $sale->ShipAddressAddr2 = $shipping_array[1] ?? null;
@@ -334,7 +369,7 @@ class Checkout extends Component
                 $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first();
                 if($cartItem->qty > ($item->QuantityOnHand - $item->QuantityOnSalesOrder))
                 {
-                    if ($this->customer_id == '410000-1128694047')
+                    if ($this->customer_id == '410000-1128694047' or $this->retail == 1)
                     {
                         $saleItem = new SalesOrderItem();
                         $saleItem->sales_order_id = $sale->id;
@@ -379,7 +414,7 @@ class Checkout extends Component
                 }
                 if($cartItem->qty <= ($item->QuantityOnHand - $item->QuantityOnSalesOrder))
                 {
-                    if ($this->customer_id == '410000-1128694047')
+                    if ($this->customer_id == '410000-1128694047' or $this->retail == 1)
                     {
                         $saleItem = new SalesOrderItem();
                         $saleItem->sales_order_id = $sale->id;

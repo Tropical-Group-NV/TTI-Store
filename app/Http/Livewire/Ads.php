@@ -69,6 +69,7 @@ class Ads extends Component
             $this->file1->store('public/ads');
             $adv->fileName = $this->file1->hashName();
             $adv->prodID = $this->itemID;
+            $adv->active = 1;
             $adv->save();
             $this->emit('uploaded');
 
@@ -80,5 +81,18 @@ class Ads extends Component
     public function deleteAd($adID)
     {
         Ad::query()->where('id', $adID)->delete();
+    }
+
+    public function changeStatus($id)
+    {
+        $ad = Ad::query()->where('id', $id)->first();
+        if ($ad->active == 0)
+        {
+            Ad::query()->where('id', $id)->update(['active' => 1]);
+        }
+        else
+        {
+            Ad::query()->where('id', $id)->update(['active' => 0]);
+        }
     }
 }

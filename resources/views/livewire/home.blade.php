@@ -2,6 +2,16 @@
     <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    @php($retail = 0)
+    @auth()
+        @if(Auth::user()->users_type_id == 3)
+            @php($customerAccount = \App\Models\UserCustomer::query()->where('user_id', Auth::user()->id)->first())
+            @php($QbCustomer = \App\Models\QbCustomer::query()->where('ListID', $customerAccount->customer_ListID)->first())
+            @if($QbCustomer->PriceLevelRefFullName == 'Retail')
+                @php($retail = 1)
+            @endif
+        @endif
+    @endauth
     @php($brands = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('filter_brand')->get())
     {{--    Add images here for advertisement--}}
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg block 2xl:hidden">
@@ -84,26 +94,30 @@
                                     <ul class="border-top flex justify-between" style="bottom: 0;">
                                         <li>
                                             @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                                @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                                @if($retail != 1)
                                                     @if(session()->has('currency'))
                                                         <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                                     @else
                                                         <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: SRD <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                                     @endif
                                                     <br>
+
                                                 @endif
                                             @endif
-                                            @if(session()->has('currency'))
-                                                <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
+                                            @if(\Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id == '3' and $retail == 1 or \Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id != '3' or \Illuminate\Support\Facades\Auth::user() == null)
+                                                @if(session()->has('currency'))
+                                                    <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
 
-                                            @else
-                                                <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
-                                            @endif                                            <br>
+                                                @else
+                                                    <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                                @endif
+                                                <br>
+                                            @endif
                                             <span class="text-xs sm:text-lg" style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                             <br>
                                             @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0)
                                                 @if(\Illuminate\Support\Facades\Auth::user() != null )
-                                                    @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                                    @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3 and \Illuminate\Support\Facades\Auth::user()->users_type_id != 7)
                                                         <span class="text-xs sm:text-lg" style="color: green">In stock: <b>{{ $item->QuantityOnHand - $item->QuantityOnSalesOrder}}</b></span>
                                                     @else
                                                         <span class="text-xs sm:text-lg" style="color: green">In stock</span>
@@ -277,26 +291,30 @@
                                 <ul class="border-top flex justify-between" style="bottom: 0;">
                                     <li>
                                         @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                            @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                            @if($retail != 1)
                                                 @if(session()->has('currency'))
                                                     <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                                 @else
                                                     <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: SRD <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                                 @endif
                                                 <br>
+
                                             @endif
                                         @endif
-                                        @if(session()->has('currency'))
-                                            <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
+                                        @if(\Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id == '3' and $retail == 1 or \Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id != '3' or \Illuminate\Support\Facades\Auth::user() == null)
+                                            @if(session()->has('currency'))
+                                                <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
 
-                                        @else
-                                            <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
-                                        @endif                                        <br>
+                                            @else
+                                                <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                            @endif
+                                            <br>
+                                        @endif
                                         <span class="text-xs sm:text-lg" style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                         <br>
                                         @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0)
                                             @if(\Illuminate\Support\Facades\Auth::user() != null )
-                                                @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                                @if(      \Illuminate\Support\Facades\Auth::user()->users_type_id != 3 and \Illuminate\Support\Facades\Auth::user()->users_type_id != 7)
                                                     <span class="text-xs sm:text-lg" style="color: green">In stock: <b>{{ $item->QuantityOnHand - $item->QuantityOnSalesOrder}}</b></span>
                                                 @else
                                                     <span class="text-xs sm:text-lg" style="color: green">In stock</span>
@@ -461,26 +479,30 @@
                                 <ul class="border-top flex justify-between" style="bottom: 0;">
                                     <li>
                                         @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                            @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                            @if($retail != 1)
                                                 @if(session()->has('currency'))
                                                     <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                                 @else
                                                     <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: SRD <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                                 @endif
                                                 <br>
+
                                             @endif
                                         @endif
-                                        @if(session()->has('currency'))
-                                            <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
+                                        @if(\Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id == '3' and $retail == 1 or \Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id != '3' or \Illuminate\Support\Facades\Auth::user() == null)
+                                            @if(session()->has('currency'))
+                                                <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
 
-                                        @else
-                                            <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
-                                        @endif                                        <br>
+                                            @else
+                                                <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                            @endif
+                                            <br>
+                                        @endif
                                         <span class="text-xs sm:text-lg" style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                         <br>
                                         @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0)
                                             @if(\Illuminate\Support\Facades\Auth::user() != null )
-                                                @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                                @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3 and \Illuminate\Support\Facades\Auth::user()->users_type_id != 7)
                                                     <span class="text-xs sm:text-lg" style="color: green">In stock: <b>{{ $item->QuantityOnHand - $item->QuantityOnSalesOrder}}</b></span>
                                                 @else
                                                     <span class="text-xs sm:text-lg" style="color: green">In stock</span>
@@ -614,7 +636,6 @@
                                 @else
                                     <img class="card-img-top grayscale" src="https://www.ttistore.com/foto/tti-noimage.png" style="width: 350px" alt="Card image cap">
                                 @endif
-
                             </a>
                         </div>
                         <br>
@@ -638,27 +659,30 @@
                             <ul class="border-top flex justify-between" style="bottom: 0;">
                                 <li>
                                     @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                        @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                        @if($retail != 1)
                                             @if(session()->has('currency'))
                                                 <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                             @else
                                                 <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: SRD <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                             @endif
                                             <br>
+
                                         @endif
                                     @endif
-                                    @if(session()->has('currency'))
-                                        <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
+                                    @if(\Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id == '3' and $retail == 1 or \Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id != '3' or \Illuminate\Support\Facades\Auth::user() == null)
+                                        @if(session()->has('currency'))
+                                            <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
 
-                                    @else
-                                        <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                        @else
+                                            <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                        @endif
+                                        <br>
                                     @endif
-                                    <br>
                                     <span class="text-xs sm:text-lg" style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                     <br>
                                     @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0)
                                         @if(\Illuminate\Support\Facades\Auth::user() != null )
-                                            @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                            @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3 and \Illuminate\Support\Facades\Auth::user()->users_type_id != 7)
                                                 <span class="text-xs sm:text-lg" style="color: green">In stock: <b>{{ $item->QuantityOnHand - $item->QuantityOnSalesOrder}}</b></span>
                                             @else
                                                 <span class="text-xs sm:text-lg" style="color: green">In stock</span>

@@ -1,4 +1,14 @@
 <div class="">
+    @php($retail = 0)
+    @auth()
+        @if(Auth::user()->users_type_id == 3)
+            @php($customerAccount = \App\Models\UserCustomer::query()->where('user_id', Auth::user()->id)->first())
+            @php($QbCustomer = \App\Models\QbCustomer::query()->where('ListID', $customerAccount->customer_ListID)->first())
+            @if($QbCustomer->PriceLevelRefFullName == 'Retail')
+                @php($retail = 1)
+            @endif
+        @endif
+    @endauth
     <div style="; right: 0;" class=" 2xl:block fixed left-0 2xl:w-80 2xl:left-auto top-5 2xl:top-auto sm:top-45">
         <aside class="shadow-xl sm:rounded-lg">
             <div class="overflow-y-auto py-4 px-3 bg-white rounded w-full" style="">
@@ -33,13 +43,22 @@
                         @php($subTotal = 0)
                         @if($cartItemExist)
                             @foreach($cartItems as $cartItem)
-                                @php($item = \Illuminate\Support\Facades\DB::connection('epas')->table('item')->where('ListID', $cartItem->prod_id)->get()->first())
+                                @php($item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first())
                                 @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
-                                @if(session()->has('currency'))
-                                    @php($subTotal = ($subTotal + ($cartItem->qty * $item->SalesPrice)) / session()->get('exchangeRate'))
+                                @if($retail != 1)
+                                    @if(session()->has('currency'))
+                                        @php($subTotal = ($subTotal + ($cartItem->qty * $item->SalesPrice)) / session()->get('exchangeRate'))
+                                    @else
+                                        @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
+                                    @endif
                                 @else
-                                    @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
+                                    @if(session()->has('currency'))
+                                        @php($subTotal = ($subTotal + ($cartItem->qty * $item->CustomBaliPrice)) / session()->get('exchangeRate'))
+                                    @else
+                                        @php($subTotal = $subTotal + ($cartItem->qty * $item->CustomBaliPrice))
+                                    @endif
                                 @endif
+
                                 <tr class="border-collapse">
                                     <td class="border-collapse">
                                         <a href="{{ route('item', $cartItem->prod_id) }}">
@@ -66,11 +85,20 @@
                                         </div>
                                     </td>
                                     <td class="border-collapse: separate border-slate-600">
-                                        @if(session()->has('currency'))
-                                            {{session()->get('currency')}} {{ number_format(($cartItem->qty * $item->SalesPrice) / session()->get('exchangeRate'), 2) }}
+                                        @if($retail != 1)
+                                            @if(session()->has('currency'))
+                                                {{session()->get('currency')}} {{ number_format(($cartItem->qty * $item->SalesPrice) / session()->get('exchangeRate'), 2) }}
+                                            @else
+                                                SRD {{ number_format(($cartItem->qty * $item->SalesPrice), 2) }}
+                                            @endif
                                         @else
-                                            SRD {{ number_format(($cartItem->qty * $item->SalesPrice), 2) }}
+                                            @if(session()->has('currency'))
+                                                {{session()->get('currency')}} {{ number_format(($cartItem->qty * $item->CustomBaliPrice) / session()->get('exchangeRate'), 2) }}
+                                            @else
+                                                SRD {{ number_format(($cartItem->qty * $item->CustomBaliPrice), 2) }}
+                                            @endif
                                         @endif
+
                                     </td>
                                 </tr>
                             @endforeach

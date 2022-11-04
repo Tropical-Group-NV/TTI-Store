@@ -15,13 +15,18 @@
                 {{ session('status') }}
             </div>
         @endif
+        @if (session()->has('accountInactive'))
+            <div class="mb-4 font-medium text-sm text-red-500">
+                {{ session()->get('accountInactive') }}
+            </div>
+        @endif
 
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
             <div>
-                <x-jet-label for="email" value="{{ __('Username') }}" />
-                <x-jet-input id="email" class="block mt-1 w-full" type="text" name="username" :value="old('email')" required autofocus />
+                <x-jet-label for="username" value="{{ __('Username') }}" />
+                <x-jet-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus />
             </div>
 
             <div class="mt-4">
@@ -37,8 +42,8 @@
 {{--            </div>--}}
 
             <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+                @if (Route::has('password-reset.index'))
+                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password-reset.index') }}">
                         {{ __('Forgot your password?') }}
                     </a>
                 @endif

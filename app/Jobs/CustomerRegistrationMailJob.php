@@ -43,7 +43,7 @@ class CustomerRegistrationMailJob implements ShouldQueue
         {
             Mail::to($admin->email)->send(new registrationAdmin($this->customerID));
         }
-        Mail::to($newUser->email)->send(new registrationCustomer($this->customerID));
+//        Mail::to($newUser->email)->send(new registrationCustomer($this->customerID));
 
     }
 }

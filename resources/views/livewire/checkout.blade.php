@@ -24,21 +24,20 @@
                                             @foreach($customers as $customer)
 {{--                                                @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 3)--}}
                                                 @if(is_array($customer))
-                                                    <a onclick='addAddress("{{$customer['BillAddressBlockAddr1']}}", "{{$customer['BillAddressBlockAddr2']}}", "{{$customer['BillAddressBlockAddr3']}}", "{{$customer['BillAddressBlockAddr4']}}", "{{$customer['BillAddressBlockAddr5']}}", "{{$customer['ListID']}}", "{{ $customer['Name'] }}", "{{ $customer['TermsRefListID'] }}")' href="#">
+                                                    <a wire:click="addCustomer('{{ $customer['ListID'] }}')" onclick='addAddress("{{$customer['BillAddressBlockAddr1']}}", "{{$customer['BillAddressBlockAddr2']}}", "{{$customer['BillAddressBlockAddr3']}}", "{{$customer['BillAddressBlockAddr4']}}", "{{$customer['BillAddressBlockAddr5']}}", "{{$customer['ListID']}}", "{{ $customer['Name'] }}", "{{ $customer['TermsRefListID'] }}")' href="#">
                                                         <br>
                                                         <div class="border-b">
                                                             <span>{{ $customer['Name'] }}, {{$customer['BillAddressBlockAddr1']}} {{$customer['BillAddressBlockAddr2']}} {{$customer['BillAddressBlockAddr3']}} {{$customer['BillAddressBlockAddr4']}} {{$customer['BillAddressBlockAddr5']}}</span>
                                                         </div>
                                                     </a>
                                                 @else
-                                                    <a href="#" onclick='addAddress("{{$customer->BillAddressBlockAddr1}}", "{{$customer->BillAddressBlockAddr2}}", "{{$customer->BillAddressBlockAddr3}}", "{{$customer->BillAddressBlockAddr4}}", "{{$customer->BillAddressBlockAddr5}}", "{{$customer->ListID}}", "{{ $customer->Name }}", "{{$customer->TermsRefListID}}")'>
+                                                    <a wire:click="addCustomer('{{ $customer->ListID }}')" href="#" onclick='addAddress("{{$customer->BillAddressBlockAddr1}}", "{{$customer->BillAddressBlockAddr2}}", "{{$customer->BillAddressBlockAddr3}}", "{{$customer->BillAddressBlockAddr4}}", "{{$customer->BillAddressBlockAddr5}}", "{{$customer->ListID}}", "{{ $customer->Name }}", "{{$customer->TermsRefListID}}")'>
                                                         <br>
                                                         <div class="border-b">
                                                             <span>{{ $customer->Name }}, {{$customer->BillAddressBlockAddr1}} {{$customer->BillAddressBlockAddr2}} {{$customer->BillAddressBlockAddr3}} {{$customer->BillAddressBlockAddr4}}, {{$customer->BillAddressBlockAddr5}}</span>
                                                         </div>
                                                     </a>
                                                 @endif
-
                                             @endforeach
                                         @endif
                                     </div>
@@ -73,16 +72,16 @@
                     <br>
 
                     <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
-
+                        @if(Auth::user()->users_type_id != 3)
                         <input type="text" required name="custname" id="custname" style="width: 300px; display: none" class=" border border-gray-200 bg-gray-50 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
-
+                        @endif
                         <div>
                             <label  style="font-family: sflight; font-size: 20px" for="">Adress
                                 <br>
                                 <textarea readonly style="width: 500px; font-family: sflight; font-size: 20px" class="w-full block appearance-none  border border-gray-200 bg-gray-50 text-gray-700 rounded leading-tight focus:outline-none focus:border-gray-500" name="adress" id="adress" cols="30" rows="6"></textarea>
                             </label>
                         </div>
-                        <div>
+                        <div class="@if(Auth::user()->users_type_id == 3) hidden @endif">
                             <label style="font-family: sflight; font-size: 20px" for="">Ship to
                                 <br>
                                 <textarea style="width: 500px; font-family: sflight; font-size: 20px" class="w-full block border border-gray-200 text-gray-700 rounded focus:outline-none focus:bg-white focus:border-gray-500" onkeyup="checkShipping()" name="shipto" id="shipto" cols="30" rows="6"></textarea>
@@ -130,7 +129,7 @@
                                     @php($item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first())
                                     @php($itemdesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $cartItem->prod_id)->get()->first())
                                     @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
-                                    @if($customer_id == '410000-1128694047')
+                                    @if($customer_id == '410000-1128694047' or $retail == 1)
                                         @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
                                             @php($subTotal = $subTotal + (($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice))
                                         @else
@@ -190,7 +189,6 @@
                                                                         <h1>
                                                                             {{ $item->Description }}
                                                                         </h1>
-                                                                        {{--                                                                    <a href="https://wa.me/5978691600" class="btn text-white" style="background-color: #0069ad" target="_blank"><b>Contact us on Whatsapp</b></a>--}}
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -204,28 +202,19 @@
                                         </td>
                                         <td>
                                             <div class="flex">
-                                                {{--                                            @if($cartItem->qty <= $item->QuantityOnHand)--}}
                                                 <input type="number" value="1" wire:loading.attr="disabled" wire:keyup.debounce.500ms="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" style="width: 100%" class="form-control border-indigo-400 w-full rounded-l" id="ordered-{{ $cartItem->id }}" name="qty"/>
-                                                {{--                                            @else--}}
-                                                {{--                                                <input wire:loading.attr="disabled" wire:keydown.debounce.1100ms="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" class="form-control border-indigo-400 w-1/4" id="ordered-{{ $cartItem->id }}" name="qty">--}}
-                                                {{--                                            @endif--}}
                                                 <button type="button" onclick="Livewire.emit('updateCart')" wire:loading.attr="disabled" wire:click="removeFromCart('{{$cartItem->id}}')" class="btn btn-danger bg-danger ">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.46-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.211-3.015c-.699-.03-1.368-.171-1.992-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-5v-1h5v1z"/></svg>
                                                 </button>
                                             </div>
                                         </td>
                                         <td>
-                                            {{--                                        @if($cartItem->qty > $item->QuantityOnHand)--}}
                                             <div class="flex">
                                                 <input class="form-control border-indigo-400 w-1/4" readonly disabled id="backordered-{{ $cartItem->id }}" name="">
-                                                {{--                                            <button type="button" onclick="Livewire.emit('updateCart')" wire:loading.attr="disabled" wire:click="removeFromCart('{{$cartItem->id}}')" class="btn btn-danger bg-danger ">--}}
-                                                {{--                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.46-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.211-3.015c-.699-.03-1.368-.171-1.992-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-5v-1h5v1z"/></svg>--}}
-                                                {{--                                            </button>--}}
                                             </div>
-                                            {{--                                        @endif--}}
                                         </td>
                                         <td>
-                                            @if($customer_id == '410000-1128694047')
+                                            @if($customer_id == '410000-1128694047' or $retail == 1)
                                                 @if(session()->has('currency'))
                                                     <span class="hidemobile">{{session()->get('currency')}}</span> {{number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}
                                                 @else
@@ -240,7 +229,7 @@
                                             @endif
                                         </td>
                                         <td class="p-6">
-                                            @if($customer_id == '410000-1128694047')
+                                            @if($customer_id == '410000-1128694047' or $retail == 1)
                                                 @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
                                                     @if(session()->has('currency'))
                                                         <span class="hidemobile">{{ session()->get('currency') }}</span> {{ number_format((($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice) / session()->get('exchangeRate') , 2)  }}
@@ -275,6 +264,38 @@
                                         </td>
                                     </tr>
                                 @endforeach
+                                @if($saleCustomer != '')
+                                    @if($saleCustomer->PriceLevelRefListID == '60000-1139229677')
+                                        <tr class="border-b">
+                                            <td class="p-6 hidden 2xl:block"  style="font-family: sfsemibold">
+                                                Korting(Discount)
+                                            </td>
+                                            <td>
+                                                Korting(Discount)
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                -10%
+                                            </td>
+                                            <td class="p-6">
+                                                -@if(session()->has('currency'))
+                                                    <span class="hidemobile">{{session()->get('currency')}}</span> {{number_format(($subTotal * 0.1 )/ session()->get('exchangeRate'), 2) }}
+                                                @else
+                                                    <span class="hidemobile">SRD</span> {{number_format($subTotal * 0.1, 2) }}
+                                                @endif
+                                                @php($subTotal = $subTotal - ($subTotal * 0.1))
+                                            </td>
+                                            <td>
+
+                                            </td>
+                                        </tr>
+                                    @endif
+                                @endif
                             @endif
                             </tbody>
                             <tfoot>
@@ -369,11 +390,22 @@
         <script>
             // document.getElementById('searchWrap').style.display = 'none';
             document.getElementById('date').value = {{ date('Y-m-d') }};
+            @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 3)
+                @if($saleCustomer != '')
+            @php($customerUser = \App\Models\UserCustomer::query()->where('user_id', Auth::user()->id)->first())
+            @this.saleCustomer = '{{ \App\Models\QbCustomer::query()->where('ListID', $customerUser->customer_ListID)->first() }}';
+            document.getElementById('adress').value = '{{ $saleCustomer->BillAddressBlockAddr1 }},' + '\r\n' +'{{ $saleCustomer->BillAddressBlockAddr2 }},' + '\r\n' +'{{ $saleCustomer->BillAddressBlockAddr3 }},' + '\r\n' + '{{ $saleCustomer->BillAddressBlockAddr4 }},' + '\r\n' +'{{ $saleCustomer->BillAddressBlockAddr5 }}';
+            document.getElementById('shipto').value = '{{ $saleCustomer->BillAddressBlockAddr1 }},' + '\r\n' +'{{ $saleCustomer->BillAddressBlockAddr2 }},' + '\r\n' +'{{ $saleCustomer->BillAddressBlockAddr3 }},' + '\r\n' + '{{ $saleCustomer->BillAddressBlockAddr4 }},' + '\r\n' +'{{ $saleCustomer->BillAddressBlockAddr5 }}';
+            document.getElementById('customer_id').value = '{{ $saleCustomer->ListID }}';
+            document.getElementById('custname').value = '{{ $saleCustomer->ListID }}';
 
+            @this.customer_id = {{ $customerUser->customer_ListID }}
+                @endif
+            @endif
             @if(isset($_REQUEST['customerid']))
             @php($customerBO = \Illuminate\Support\Facades\DB::connection('epas')->table('QB_Customer')->where('ListID', $_REQUEST['customerid'])->first())
-            document.getElementById('adress').value = '{{ $customerBO->ShipAddressBlockAddr1 }},' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr2 }},' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr3 }},' + '\r\n' + '{{ $customerBO->ShipAddressBlockAddr4 }},' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr5 }}';
-            document.getElementById('shipto').value = '{{ $customerBO->ShipAddressBlockAddr1 }},' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr2 }},' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr3 }},' + '\r\n' + '{{ $customerBO->ShipAddressBlockAddr4 }},' + '\r\n' +'{{ $customerBO->ShipAddressBlockAddr5 }}';
+            document.getElementById('adress').value = '{{ $customerBO->BillAddressBlockAddr1 }},' + '\r\n' +'{{ $customerBO->BillAddressBlockAddr2 }},' + '\r\n' +'{{ $customerBO->BillAddressBlockAddr3 }},' + '\r\n' + '{{ $customerBO->BillAddressBlockAddr4 }},' + '\r\n' +'{{ $customerBO->BillAddressBlockAddr5 }}';
+            document.getElementById('shipto').value = '{{ $customerBO->BillAddressBlockAddr1 }},' + '\r\n' +'{{ $customerBO->BillAddressBlockAddr2 }},' + '\r\n' +'{{ $customerBO->BillAddressBlockAddr3 }},' + '\r\n' + '{{ $customerBO->BillAddressBlockAddr4 }},' + '\r\n' +'{{ $customerBO->BillAddressBlockAddr5 }}';
             document.getElementById('customer_id').value = '{{ $_REQUEST['customerid'] }}';
             document.getElementById('custname').value = '{{ $customerBO->Name }}';
             {{--@this.customer_id = '{{ $_REQUEST['customerid'] }}';--}}

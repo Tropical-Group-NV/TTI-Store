@@ -35,12 +35,13 @@
             <form method="POST" action="{{ route('customer-registration.store') }}">
                 @csrf
                 <div>
-                    <x-jet-label for="naam" value="{{ __('Naam') }}" />
-                    <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                    <x-jet-label for="firstname" value="{{ __('Voornaam') }}" />
+                    <x-jet-input id="firstname" class="block mt-1 w-full" type="text" name="firstname" :value="old('firstname')" required autofocus />
                 </div>
                 <div>
-                    <x-jet-label for="firstname" value="{{ __('Voornamen') }}" />
-                    <x-jet-input id="firstname" class="block mt-1 w-full" type="text" name="firstname" :value="old('firstname')" required autofocus />
+                    <x-jet-label for="naam" value="{{ __('Naam') }}" />
+                    <x-jet-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                    <x-jet-input id="surname" class="block mt-1 w-full hidden" type="text" name="surname" :value="old('surname')" autofocus />
                 </div>
                 <br>
                 <hr>
@@ -63,10 +64,12 @@
                                 @endforeach
                             </select>
                         </div>
+                        <br>
                         <div class="hidden" id="type2">
                             <x-jet-label for="company_type" value="{{ __('Soort Bedrijf') }}" />
                             <x-jet-input id="company_type2" class="block mt-1 w-full" type="text" :value="old('company_type')" autofocus />
                         </div>
+                        <br>
                         <div class="flex items-center p-2">
                             <input onclick="toggleCompanyType()"  id="company_type_check" name="company_type_check" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                             <label for="checked-checkbox" class="ml-2 text-sm font-medium">Check hier om uw eigen bedrijfsoort te typen.</label>
@@ -80,20 +83,44 @@
                     <x-jet-label for="address" value="{{ __('Adres') }}" />
                     <x-jet-input id="address" class="block mt-1 w-full" type="text" name="address" :value="old('address')" required autofocus />
                 </div>
+                <br>
+                <x-jet-label for="country" value="{{ __('Country') }}" />
+                <select required name="country" class="border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 rounded-md shadow-sm mt-1 block w-full">
+                    <option value="">Select Country</option>
+
+                    @foreach($countries['data'] as $country)
+                            <option value="{{ $country['country']  }}">{{ $country['country']  }}</option>
+                    @endforeach
+                </select>
+                <br>
                 <div>
                     <x-jet-label for="phone" value="{{ __('Telefoonnummer') }}" />
                     <x-jet-input id="phone" class="block mt-1 w-full" type="text" name="phone" :value="old('phone')" required autofocus />
                 </div>
+                <br>
                 <div>
                     <x-jet-label for="email" value="{{ __('Email adres') }}" />
                     <x-jet-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
                 </div>
+                <br>
+                <div>
+                    <x-jet-label for="email" value="{{ __('Username') }}" />
+                    <x-jet-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus />
+                </div>
+                <br>
+                <div>
+                    <x-jet-label for="password" value="{{ __('Password') }}" />
+                    <x-jet-input id="password" class="block mt-1 w-full" type="password" name="password" :value="old('password')" required autofocus />
+                </div>
+                <br>
                 <div class="flex items-center justify-end mt-4">
                     <x-jet-button class="ml-4">
                         {{ __('Sign up') }}
                     </x-jet-button>
                 </div>
+                <br>
             </form>
+
         @endif
 
 
@@ -129,5 +156,8 @@
                 }
             }
         </script>
+        <br>
+        <br>
+        <br>
     </x-jet-authentication-card>
 </x-guest-layout>

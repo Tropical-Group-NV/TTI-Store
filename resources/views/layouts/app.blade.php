@@ -28,6 +28,21 @@
         body #toast-container > div {
             opacity: 1;
         }
+        .icon{
+            /*position:fixed;*/
+            width:40px;
+            height:40px;
+            font-size: 20px;
+            /*bottom:15px;*/
+            /*right:25px;*/
+            background-color:#0069ad;
+            color:#FFF;
+            border-radius:50px;
+            text-align:center;
+            /*font-size:30px;*/
+            box-shadow: 2px 2px 3px #999;
+            z-index:0;
+        }
         .float{
             position:fixed;
             width:60px;
@@ -42,19 +57,55 @@
             box-shadow: 2px 2px 3px #999;
             z-index:100;
         }
+        .float-info{
+            position:fixed;
+            /*width:60px;*/
+            /*height:60px;*/
+            bottom:15px;
+            right:90px;
+            background-color:#0069ad;
+            color:#FFF;
+            border-radius:10px;
+            text-align:center;
+            font-size:30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index:100;
+        }
         .float2{
             position:fixed;
             width:60px;
             height:60px;
             bottom:15px;
-            left:25px;
+            right:90px;
+            background-color:#0069ad;
+            color:#FFF;
+            border-radius:50px;
             text-align:center;
             font-size:30px;
+            box-shadow: 2px 2px 3px #999;
+            z-index:100;
+        }
+        .float2-info{
+            position:fixed;
+            /*width:60px;*/
+            /*height:60px;*/
+            bottom:90px;
+            right:90px;
+            background-color:#0069ad;
+            color:#FFF;
+            border-radius:10px;
+            text-align:center;
+            font-size:30px;
+            box-shadow: 2px 2px 3px #999;
             z-index:100;
         }
 
         .my-float{
             margin-top:16px;
+        }
+
+        .my-float2{
+            margin-top:10px;
         }
     </style>
     <meta charset="utf-8">
@@ -129,6 +180,34 @@
 {{--    </a>--}}
 {{--</div>--}}
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+{{--<div x-data="{ open: false }" class="ml-4" @mouseleave="open = false">--}}
+{{--    <a href="{{route('contact-page')}}" @mouseover="open = true" class="float2 hover:text-white items-center pb-2">--}}
+{{--        <i style="color: white" class="fa fa-envelope active:text-white my-float"></i>--}}
+{{--    </a>--}}
+{{--    <div x-show="open" x-transition:enter.duration.500ms x-transition:leave.duration.500ms>--}}
+{{--        <div class="float2-info">--}}
+{{--        <span style="font-size: 20px; padding-bottom: 20px; margin: auto; padding-left: 10px; padding-right: 10px">--}}
+{{--             Contact us--}}
+{{--        </span>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--</div>--}}
+<a href="{{route('contact-page')}}" class="float2 hover:text-white items-center pb-2">
+    <i style="color: white" class="fa fa-envelope active:text-white my-float"></i>
+</a>
+{{--<div class="group">--}}
+{{--    <div class="float2-info">--}}
+{{--        <span class="my-float">--}}
+{{--             Hello World--}}
+{{--        </span>--}}
+{{--    </div>--}}
+{{--    <button  @click="showModal =  ! showModal" class="float2 hover:text-white items-center pb-2">--}}
+{{--        <i class="fa fa-envelope active:text-white my-float"></i>--}}
+{{--    </button>--}}
+{{--</div>--}}
+{{--<button  @click="showModal =  ! showModal" class="float2 hover:text-white items-center pb-2">--}}
+{{--    <i class="fa fa-envelope active:text-white my-float"></i>--}}
+{{--</button>--}}
 <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
     <!-- Trigger for Modal -->
     <button  @click="showModal =  ! showModal" class="float hover:text-white items-center pb-2">

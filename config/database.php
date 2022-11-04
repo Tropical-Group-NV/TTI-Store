@@ -145,6 +145,19 @@ return [
             'prefix_indexes' => true,
             'trust_server_certificate' => true
         ],
+        'master' => [
+            'driver' => 'sqlsrv',
+            'url' => env('DATABASE_URL'),
+            'host' => 'DB_HOST2',
+            'port' => env('DB_PORT2', '1433'),
+            'database' => 'master',
+            'username' => env('DB_USERNAME2', 'forge'),
+            'password' => env('DB_PASSWORD2', ''),
+            'charset' => 'utf8',
+            'prefix' => '',
+            'prefix_indexes' => true,
+            'trust_server_certificate' => true
+        ],
 
 
 

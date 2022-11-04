@@ -1,4 +1,14 @@
 <x-app-layout>
+    @php($retail = 0)
+    @auth()
+        @if(Auth::user()->users_type_id == 3)
+            @php($customerAccount = \App\Models\UserCustomer::query()->where('user_id', Auth::user()->id)->first())
+            @php($QbCustomer = \App\Models\QbCustomer::query()->where('ListID', $customerAccount->customer_ListID)->first())
+            @if($QbCustomer->PriceLevelRefFullName == 'Retail')
+                @php($retail = 1)
+            @endif
+        @endif
+    @endauth
     <div class="" >
         @if(isset($_REQUEST['order']))
             <div class="flex justify-center pt-5">

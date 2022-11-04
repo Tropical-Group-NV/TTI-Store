@@ -1,4 +1,14 @@
 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+    @php($retail = 0)
+    @auth()
+        @if(Auth::user()->users_type_id == 3)
+            @php($customerAccount = \App\Models\UserCustomer::query()->where('user_id', Auth::user()->id)->first())
+            @php($QbCustomer = \App\Models\QbCustomer::query()->where('ListID', $customerAccount->customer_ListID)->first())
+            @if($QbCustomer->PriceLevelRefFullName == 'Retail')
+                @php($retail = 1)
+            @endif
+        @endif
+    @endauth
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <div>
@@ -35,9 +45,8 @@
                     @else
                         @php($item = \App\Models\Item::query()->where('ListID', $item->ListID)->get()->first())
                     @endif
-                @if($item!= null)
-                        @if(\Illuminate\Support\Facades\Auth::user()!= null and \Illuminate\Support\Facades\Auth::user()->users_type_id != 3 or \Illuminate\Support\Facades\Auth::user()!= null and !str_contains($item->FullName, 'INRUIL') and  \Illuminate\Support\Facades\Auth::user()->users_type_id == 3 or \Illuminate\Support\Facades\Auth::user() == null and !str_contains($item->FullName, 'INRUIL'))
-                            @php($put = 1)
+                        @if($item!= null)
+                            @if(\Illuminate\Support\Facades\Auth::user()!= null and \Illuminate\Support\Facades\Auth::user()->users_type_id != 3  or \Illuminate\Support\Facades\Auth::user()!= null and !str_contains($item->FullName, 'INRUIL') and  \Illuminate\Support\Facades\Auth::user()->users_type_id == 3 or \Illuminate\Support\Facades\Auth::user() == null and !str_contains($item->FullName, 'INRUIL'))                            @php($put = 1)
                             @php($currentPrivateBranch = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('settings_branch_view_item_on_user')->where('branch', $item->CustomFieldBranch)->get())
                             @foreach($currentPrivateBranch as $pb)
                                 @php($put = 0)
@@ -87,27 +96,30 @@
                                         <ul class="border-top flex justify-between hover:bg-gray-50" style="bottom: 0;">
                                             <li>
                                                 @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                                    @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != '3')
+                                                    @if($retail != 1)
                                                         @if(session()->has('currency'))
                                                             <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                                         @else
                                                             <span class="text-xs sm:text-lg" style="padding-top: 10px">Sales price: SRD <b class="font-extrabold text-xs sm:text-2xl" style="color: #0069ad; ">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                                         @endif
-                                                        <br>
+                                                            <br>
+
                                                     @endif
                                                 @endif
-                                                @if(session()->has('currency'))
-                                                    <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
+                                                    @if(\Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id == '3' and $retail == 1 or \Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id != '3' or \Illuminate\Support\Facades\Auth::user() == null)
+                                                            @if(session()->has('currency'))
+                                                                <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: {{ session()->get('currency') }} <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
 
-                                                @else
-                                                    <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
-                                                @endif
-                                                <br>
+                                                            @else
+                                                                <span  class="text-xs sm:text-lg" style="padding-top: 10px">Retail price: SRD <b class="font-extrabold text-xs sm:text-xl" style="color: #0069ad;">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                                            @endif
+                                                                <br>
+                                                        @endif
                                                 <span class="text-xs sm:text-lg" style="padding-top: 10px">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>
                                                 <br>
                                                 @if($item->QuantityOnHand - $item->QuantityOnSalesOrder > 0)
                                                     @if(\Illuminate\Support\Facades\Auth::user() != null )
-                                                        @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                                        @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3 and \Illuminate\Support\Facades\Auth::user()->users_type_id != 7 and \Illuminate\Support\Facades\Auth::user()->users_type_id != 7)
                                                             <span class="text-xs sm:text-lg" style="color: green">In stock: <b>{{ $item->QuantityOnHand - $item->QuantityOnSalesOrder}}</b></span>
                                                         @else
                                                             <span class="text-xs sm:text-lg" style="color: green">In stock</span>
@@ -135,7 +147,7 @@
                                                 @else
                                                     <div>
                                                         @if($item->QuantityOnHand - $item->QuantityOnSalesOrder <= 0)
-                                                            @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                                            @if( \Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                                                                 <input type="hidden" id="customer-id-{{ $item->ListID }}">
                                                                 <input placeholder="Search Customers" class="form-control block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text" id="customer-search-{{ $item->ListID }}" onkeyup="searchCustomer('{{ $item->ListID }}')">
                                                                 <div style="position: absolute; z-index: 1000; min-width: 300px; display: none" class="bg-gray-50 border" id="customer-wrap-{{ $item->ListID }}">

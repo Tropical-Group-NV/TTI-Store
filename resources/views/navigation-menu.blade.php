@@ -1,6 +1,16 @@
 <nav x-data="{ open: false }" class="border-b border-gray-100" style="background-color: #0069AD; z-index: 1000">
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    @php($retail = 0)
+    @auth()
+        @if(Auth::user()->users_type_id == 3)
+            @php($customerAccount = \App\Models\UserCustomer::query()->where('user_id', Auth::user()->id)->first())
+            @php($QbCustomer = \App\Models\QbCustomer::query()->where('ListID', $customerAccount->customer_ListID)->first())
+            @if($QbCustomer->PriceLevelRefFullName == 'Retail')
+                @php($retail = 1)
+            @endif
+        @endif
+    @endauth
     @if(\Illuminate\Support\Facades\Auth::user() != null)
         @php($usertypes = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('users_type')->where('id', \Illuminate\Support\Facades\Auth::user()->users_type_id)->first())
     @endif
@@ -44,13 +54,21 @@
                                 @else
                                     <span class="inline-flex rounded-md">
                                     <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition">
-                                        <span class=""> {{ Auth::user()->name }}({{ $usertypes->name }}) </span> <i class="fa fa-user" style="color: #0069ad" aria-hidden="true"></i>
-
+                                        @if(Auth::user()->users_type_id == 3)
+                                            @php($customerAccount = \App\Models\UserCustomer::query()->where('user_id', Auth::user()->id)->first())
+                                            @php($QbCustomer = \App\Models\QbCustomer::query()->where('ListID', $customerAccount->customer_ListID)->first())
+                                            @if($QbCustomer->CompanyName != '')
+                                                {{$QbCustomer->CompanyName}}
+                                            @else
+                                                {{ $QbCustomer->Name }}
+                                            @endif
+                                        @else
+                                            <span class=""> {{ Auth::user()->name }}({{ $usertypes->name }}) </span> <i class="fa fa-user" style="color: #0069ad" aria-hidden="true"></i>
+                                        @endif
                                         <svg class="ml-2 -mr-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
                                         </svg>
                                     </button>
-
                                 </span>
                                 @endif
                             </x-slot>
@@ -59,7 +77,13 @@
                             <x-slot name="content" style="z-index: 100000">
                                 <!-- Account Management -->
                                 <div class="block px-4 py-2 text-xs text-gray-400" style="z-index:100">
-                                    {{ \Illuminate\Support\Facades\Auth::user()->name . ' ' .  \Illuminate\Support\Facades\Auth::user()->last_name . '(' . $usertypes->name . ')'}}
+                                    @if(Auth::user()->users_type_id == 3)
+                                        @php($customerAccount = \App\Models\UserCustomer::query()->where('user_id', Auth::user()->id)->first())
+                                        @php($QbCustomer = \App\Models\QbCustomer::query()->where('ListID', $customerAccount->customer_ListID)->first())
+
+                                            {{$QbCustomer->Name}}
+                                    @endif
+{{--                                    {{ \Illuminate\Support\Facades\Auth::user()->name . ' ' .  \Illuminate\Support\Facades\Auth::user()->last_name . '(' . $usertypes->name . ')'}}--}}
                                 </div>
 
                                 {{--                            <x-jet-dropdown-link href="{{ route('profile.show') }}">--}}
@@ -76,6 +100,11 @@
                                     <x-jet-dropdown-link href="{{ route('dashboard') }}">
                                         {{ __('All items') }}
                                     </x-jet-dropdown-link>
+                                @if(Auth::user()->users_type_id == 3)
+                                        <x-jet-dropdown-link href="{{ route('customer-profile.index') }}">
+                                            {{ __('Profile') }}
+                                        </x-jet-dropdown-link>
+                                @endif
                                     <x-jet-dropdown-link href="{{ route('orders') }}">
                                         {{ __('Orders') }}
                                     </x-jet-dropdown-link>

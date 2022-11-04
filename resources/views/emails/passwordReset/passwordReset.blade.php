@@ -1,13 +1,13 @@
 <html>
 <body style="">
 <p style="font-size: 15px">
-    Thank you for registering at ttistore.com. Please click on the following link te verify your account.
+    You have requested to reset your password. Please click the following link to reset it.
 </p>
 <br>
 <b>
-    <a href="https://ttistore-front/login-token/{{$token->token}}">Verify and login</a>
-{{--    https://--}}
-{{--    {{ route('login-token', $token->token) }}--}}
+    <a href="{{ $link }}">Reset Password</a>
+    {{--    https://--}}
+    {{--    {{ route('login-token', $token->token) }}--}}
 </b>
 {{--Uw gegevens:--}}
 {{--<br>--}}

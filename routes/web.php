@@ -148,13 +148,18 @@ Route::post('currency/set', function( Request $request)
 //    return view('customer-register');
 //})->name('customer-registration');
 
+Route::get('login-token/{token}', [\App\Http\Controllers\LoginTokenController::class, 'index'])->name('login-token');
+Route::get('password-reset/{token}', [\App\Http\Controllers\PasswordResetController::class, 'show'])->name('reset-token');
+
 
 Route::resources
 (
     [
         'customer-registration' => \App\Http\Controllers\CustomerRegistration::class,
         'new-customers' => \App\Http\Controllers\TemporaryUserInfoController::class,
-        'upload/ads' => \App\Http\Controllers\AdsController::class
+        'upload/ads' => \App\Http\Controllers\AdsController::class,
+        'password-reset' => \App\Http\Controllers\PasswordResetController::class,
+        'customer-profile' => \App\Http\Controllers\CustomerProfileController::class
     ]
 );
 
@@ -164,6 +169,17 @@ Route::get('vue/home', function( Request $request)
 {
     return view('test-home');
 })->name('vue-home');
+
+Route::get('customer/profile', function( Request $request)
+{
+    return view('profile.profile');
+})->name('vue-home');
+
+Route::get('contact-us', function ()
+{
+    return view('contact');
+}
+)->name('contact-page');
 
 
 

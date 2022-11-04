@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\LoginToken;
 use App\Models\TemporaryUserInfo;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,6 +35,7 @@ class registrationCustomer extends Mailable
     public function build()
     {
         $cInfo = DB::table('temporary_user_infos')->where('id', $this->userID)->get()->first();
-        return $this->view('emails.registration.registration-customer', ['request' => $cInfo])->subject('Uw TTISTore registratie gegevens.');
+        $loginToken = LoginToken::query()->where('uid', $cInfo->uid)->first();
+        return $this->view('emails.registration.registration-customer', ['request' => $cInfo, 'token' => $loginToken])->subject('Dankuwel voor het registreren bij TTISTORE');
     }
 }

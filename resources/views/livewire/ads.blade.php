@@ -102,6 +102,9 @@
                             <th class="py-3 px-6">
                                 Delete
                             </th>
+                            <th class="py-3 px-6">
+                                Active
+                            </th>
                         </tr>
                         </thead>
                         <tbody class="">
@@ -122,6 +125,15 @@
                                     <button wire:click="deleteAd('{{ $ad->id }}')" class="btn btn-danger">
                                         Delete
                                     </button>
+                                </td>
+                                <td class="py-4 px-6">
+                                    @if($ad->active == 0)
+                                        <input wire:click="changeStatus({{$ad->id}})" id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    @else
+                                        <input wire:click="changeStatus({{$ad->id}})" checked id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                                    @endif
+
+
                                 </td>
                             </tr>
                         @endforeach

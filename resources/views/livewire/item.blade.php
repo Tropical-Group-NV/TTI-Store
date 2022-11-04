@@ -1,4 +1,14 @@
 <div style="font-family: sfsemibold">
+    @auth()
+        @php($retail = 0)
+        @if(Auth::user()->users_type_id == 3)
+            @php($customerAccount = \App\Models\UserCustomer::query()->where('user_id', Auth::user()->id)->first())
+            @php($QbCustomer = \App\Models\QbCustomer::query()->where('ListID', $customerAccount->customer_ListID)->first())
+            @if($QbCustomer->PriceLevelRefFullName == 'Retail')
+                @php($retail = 1)
+            @endif
+        @endif
+    @endauth
     <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
         <div style="" class="items-start justify-center sm:py-12 sm:px-4 md:px-6  2xl:px-20">
             <div class="">
@@ -65,22 +75,24 @@
                                 </div>
                             </div>
                             <div class="py-4 border-b border-gray-200 ">
-                                @if(\Illuminate\Support\Facades\Auth::user() != null)
-                                    @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3 and \Illuminate\Support\Facades\Auth::user()->users_type_id != 7)
-                                        @if(session()->has('currency'))
-                                            <span>Sales price: {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 30px">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
-                                        @else
-                                            <span>Sales price: SRD <b style="color: #0069ad; font-size: 30px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
-                                        @endif
-                                        <br>
+                                @if(\Illuminate\Support\Facades\Auth::user() != null and $retail != 1)
+
+                                    @if(session()->has('currency'))
+                                        <span>Sales price: {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 30px">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
+                                    @else
+                                        <span>Sales price: SRD <b style="color: #0069ad; font-size: 30px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
                                     @endif
+                                    <br>
+
                                 @endif
+                                @if(\Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id == '3' and $retail == 1 or \Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id != '3' or \Illuminate\Support\Facades\Auth::user() == null)
                                     @if(session()->has('currency'))
                                         <span style="padding-top: 10px">Retail price:  {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 20px">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
                                     @else
                                         <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
                                     @endif
-                                <br>
+                                    <br>
+                                @endif
                             </div>
                             <div class="py-4 border-b border-gray-200">
                                 <span style="padding-top: 10px" class="text-base leading-4">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>

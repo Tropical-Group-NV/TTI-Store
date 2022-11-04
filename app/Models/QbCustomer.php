@@ -9,8 +9,9 @@ class QbCustomer extends Model
 {
     use HasFactory;
     use HasFactory;
-    protected $connection='qb_sales';
-    protected $table= 'view_qb_customer';
+    protected $connection='epas';
+    protected $table= 'QB_customer';
     protected $primaryKey = 'ListID';
     public $incrementing = false;
+    public $timestamps = false;
 }
