@@ -3,9 +3,12 @@
 namespace App\Jobs;
 
 use App\Mail\OrderNew;
+use App\Mail\registrationAdmin;
+use App\Models\AdminEmail;
 use App\Models\ImportSoInProcess;
 use App\Models\QbCustomer;
 use App\Models\SalesOrder;
+use App\Models\TemporaryUserInfo;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -66,6 +69,18 @@ class Import_Sales_Order_To_QB implements ShouldQueue
             }
             catch (\Exception $e)
             {
+                $admins = AdminEmail::all();
+                $newUser = TemporaryUserInfo::query()->where('id', $this->customerID)->first();
+                foreach ($admins as $admin)
+                {
+                    $mail = Mail::raw('Failed to import order "' . $this->sales_order_id . '" to Quickbooks please inspect this error.',
+                        function($msg)
+                        {
+                            $customer = QbCustomer::query()->where('ListID', $this->customerID)->first();
+                            $msg->to($customer->Email)->subject('Failed Sales Order Import');
+                        });
+                }
+                $this->release(5);
                 ImportSoInProcess::query()->delete();
             }
 
