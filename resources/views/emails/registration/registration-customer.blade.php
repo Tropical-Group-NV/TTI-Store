@@ -5,7 +5,7 @@
 </p>
 <br>
 <b>
-    <a href="https://ttistore-front/login-token/{{$token->token}}">Verify and login</a>
+    <a href="https://ttistore.com/login-token/{{$token->token}}">Verify and login</a>
 {{--    https://--}}
 {{--    {{ route('login-token', $token->token) }}--}}
 </b>
