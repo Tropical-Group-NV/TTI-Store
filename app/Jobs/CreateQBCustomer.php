@@ -48,7 +48,7 @@ class CreateQBCustomer implements ShouldQueue
     {
         if (ImportSoInProcess::exists())
         {
-            ImportSoInProcess::delete();
+            ImportSoInProcess::where('in_process', 1)->delete();
         }
         $uInfo = TemporaryUserInfo::query()->where('id', $this->uid)->first();
         if ($this->corporate != 1)
