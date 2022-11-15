@@ -69,17 +69,21 @@ class Import_Sales_Order_To_QB implements ShouldQueue
             }
             catch (\Exception $e)
             {
-                $admins = AdminEmail::all();
-                $newUser = TemporaryUserInfo::query()->where('id', $this->customerID)->first();
-                foreach ($admins as $admin)
-                {
-                    $mail = Mail::raw('Failed to import order "' . $this->sales_order_id . '" to Quickbooks please inspect this error.',
-                        function($msg)
-                        {
-                            $customer = QbCustomer::query()->where('ListID', $this->customerID)->first();
-                            $msg->to($customer->Email)->subject('Failed Sales Order Import');
-                        });
-                }
+//                $model = SalesOrder::query()->where('id', $this->sales_order_id)->first();
+//                $c = QbCustomer::query()->where('ListID', $model->CustomerRefListID)->first();
+//                $admins = AdminEmail::all();
+//                $newUser = TemporaryUserInfo::query()->where('id', $c)->first();
+//                foreach ($admins as $admin)
+//                {
+//
+//                    $mail = Mail::raw('Failed to import order "' . $this->sales_order_id . '" to Quickbooks please inspect this error.',
+//                        function($msg)
+//                        {
+//                            $model = SalesOrder::query()->where('id', $this->sales_order_id)->first();
+//                            $customer = QbCustomer::query()->where('ListID',  $model->CustomerRefListID)->first();
+//                            $msg->to($admin->email)->subject('Failed Sales Order Import');
+//                        });
+//                }
                 $this->release(5);
                 ImportSoInProcess::query()->delete();
             }
