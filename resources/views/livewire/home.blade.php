@@ -58,9 +58,9 @@
                 @foreach($onSale as $sale_item)
                     @if(!is_array($sale_item))
                         @if($sale_item->onsale == 1)
-                            @php($item = \App\Models\Item::query()->where('ListID', $sale_item->ListID)->first(['ListID', 'Name', 'FullName', 'Description', 'UnitOfMeasureSetRefFullName', 'SalesPrice', 'QuantityOnHand', 'QuantityOnSalesOrder', 'CustomFieldBranch', 'CustomBaliPrice']))
-                            @php($itemDesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->first())
-                            @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->first())
+                            @php($item = \App\Models\Item::query()->where('ListID', $sale_item->ListID)->get()->first())
+                            @php($itemDesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->get()->first())
+                            @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
                             <div class="" style="width: auto;">
                                 <div class="h-28 sm:h-52" style=" margin: auto">
                                     {{--                        <div  style="height: 20rem; margin: auto">--}}
@@ -86,6 +86,9 @@
                                                 <h5 class="card-title text-xs sm:text-lg  xl:text-sm"><b>{{$item->FullName}}</b></h5>
                                                 <br>
                                             </div>
+                                            @if($itemDesc != null)
+                                                {{--                            <span id="item:{{ $item->ListID }}" class="card-text">{{ strip_tags($itemDesc->descriptio  n)  }}</span>--}}
+                                            @endif
                                         </a>
                                     </div>
                                     <ul class="border-top flex justify-between" style="bottom: 0;">
@@ -252,7 +255,7 @@
             <div  style="overflow-x: auto" class="bg-opacity-25 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 @foreach($restocked as $sale_item)
                     @if(!is_array($sale_item))
-                        @php($item = \App\Models\Item::query()->where('ListID', $sale_item->ListID)->first(['ListID', 'Name', 'FullName', 'Description', 'UnitOfMeasureSetRefFullName', 'SalesPrice', 'QuantityOnHand', 'QuantityOnSalesOrder', 'CustomFieldBranch', 'CustomBaliPrice']))
+                        @php($item = \App\Models\Item::query()->where('ListID', $sale_item->ListID)->get()->first())
                         @php($itemDesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $item->ListID)->get()->first())
                         @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
                         <div class="" style="width: auto;">
@@ -434,7 +437,7 @@
                 @foreach($popularItems as $popularItem)
                     @if(is_array($popularItem))
                         @if(\App\Models\Item::query()->where('ListID',  $popularItem['itemID'])->exists())
-                            @php($item = \App\Models\Item::query()->where('ListID', $popularItem['itemID'])->get()->first(['ListID', 'Name', 'FullName', 'Description', 'UnitOfMeasureSetRefFullName', 'SalesPrice', 'QuantityOnHand', 'QuantityOnSalesOrder', 'CustomFieldBranch', 'CustomBaliPrice']))
+                            @php($item = \App\Models\Item::query()->where('ListID', $popularItem['itemID'])->get()->first())
                         @endif
                     @else
                         @if(\App\Models\Item::query()->where('ListID',  $popularItem->itemID)->exists())

@@ -41,9 +41,9 @@
             @if(1 == 1)
                 @foreach($items as $item)
                     @if($brand_srch =='' and $unitsearch == '' and $branchsearch == '' and $search_str == '')
-                        @php($item = \App\Models\Item::query()->where('ListID', $item->itemID)->first(['ListID', 'Name', 'FullName', 'Description', 'UnitOfMeasureSetRefFullName', 'SalesPrice', 'QuantityOnHand', 'QuantityOnSalesOrder', 'CustomFieldBranch', 'CustomBaliPrice']))
+                        @php($item = \App\Models\Item::query()->where('ListID', $item->itemID)->get()->first())
                     @else
-                        @php($item = \App\Models\Item::query()->where('ListID', $item->ListID)->first(['ListID', 'Name', 'FullName', 'Description', 'UnitOfMeasureSetRefFullName', 'SalesPrice', 'QuantityOnHand', 'QuantityOnSalesOrder', 'CustomFieldBranch', 'CustomBaliPrice']))
+                        @php($item = \App\Models\Item::query()->where('ListID', $item->ListID)->get()->first())
                     @endif
                         @if($item!= null)
                             @if(\Illuminate\Support\Facades\Auth::user()!= null and \Illuminate\Support\Facades\Auth::user()->users_type_id != 3  or \Illuminate\Support\Facades\Auth::user()!= null and !str_contains($item->FullName, 'INRUIL') and  \Illuminate\Support\Facades\Auth::user()->users_type_id == 3 or \Illuminate\Support\Facades\Auth::user() == null and !str_contains($item->FullName, 'INRUIL'))                            @php($put = 1)
