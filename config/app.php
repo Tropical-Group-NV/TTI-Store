@@ -178,6 +178,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
+        Cornford\Googlmapper\MapperServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
 
     ],
 
@@ -233,6 +235,8 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Mapper' => Cornford\Googlmapper\Facades\MapperFacade::class,
+        'PDF' => Barryvdh\DomPDF\Facade::class,
 
     ],
 

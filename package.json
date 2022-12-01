@@ -34,6 +34,7 @@
         "@inertiajs/progress": "^0.2.7",
         "@vue-hero-icons/outline": "^1.7.2",
         "@vue-hero-icons/solid": "^1.7.2",
+        "insert-text-at-cursor": "^0.3.0",
         "scss": "^0.2.4",
         "vue-axios": "^3.4.1",
         "vue-router": "^4.1.5"

@@ -12,6 +12,7 @@ class Customer extends Model
     protected $table= 'QB_Customer';
 
     protected $primaryKey = 'ListID';
+    public $incrementing = false;
 
     public function findById($id)
     {

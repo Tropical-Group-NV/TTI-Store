@@ -22,7 +22,7 @@
                             <div class="product">
                                 <div class="product__images">
                                     <img style="width: 100%"
-                                         @if(!empty($images))
+                                         @if($imagesExists)
                                              src="https://www.ttistore.com/foto/{{ $images->first()->image_id }}.dat"
                                          @else
                                              src="https://www.ttistore.com/foto/tti-noimage.png"
@@ -33,7 +33,7 @@
                                     />
                                     <div class="product__slider-wrap">
                                         <div class="product__slider">
-                                            @if(!empty($images))
+                                            @if($imagesExists)
                                                 @foreach($images as $i)
 
                                                 @endforeach
