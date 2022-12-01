@@ -7,7 +7,7 @@
     <form onkeydown="return event.key != 'Enter';" wire:submit.prevent="createSalesOrder">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
             <div style="overflow-x: auto" class="items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
-                <div style="overflow-x: auto">
+                <div class="px-4" style="overflow-x: auto">
                     <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3">
                         @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                         <div  >
@@ -93,12 +93,14 @@
         </div>
         <br>
         <div class="bg-white shadow-xl sm:rounded-l">
-            <div style="overflow-x: auto" class="">
-                <div style="overflow-x: auto; width: 100%" class="w-60">
+            <div class="px-8">
+                <div style=" width: 100%" class="w-60">
+                    @if($boEnabled == 1)
                     <span class="text-red-600">The quantity of items that are currently not in stock will automatically be added to backorders</span>
+                    @endif
                     <br>
                     <br>
-                    <div class="overflow-auto">
+                    <div style="overflow-x: auto" class="overflow-auto">
                         <table style="overflow-x: auto; width: 100%" class="sm:rounded-lg">
                             <thead>
                             <tr class="">
@@ -114,10 +116,10 @@
                                 <th class="">
                                     Backordered
                                 </th>
-                                <th class="">
+                                <th class="px-4">
                                     Rate
                                 </th>
-                                <th class="">
+                                <th class="px-4">
                                     Amount
                                 </th>
                             </tr>
@@ -155,7 +157,7 @@
                                                     <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
                                                         <!-- Trigger for Modal -->
                                                         <button type="button"  @click="showModal =  ! showModal">
-                                                            <img class="card-img-top" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="height: 150px; width: auto" alt="Card image cap">
+                                                            <img class="" src="https://www.ttistore.com/foto/{{$image->image_id}}.dat" style="width: 200px" alt="Card image cap">
                                                             {{--                                                        <i class="fa fa-whatsapp active:text-white my-float"></i>--}}
                                                         </button>
 
@@ -202,7 +204,7 @@
                                         </td>
                                         <td>
                                             <div class="flex">
-                                                <input type="number" value="1" wire:loading.attr="disabled" wire:keyup.debounce.500ms="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" style="width: 100%" class="form-control border-indigo-400 w-full rounded-l" id="ordered-{{ $cartItem->id }}" name="qty"/>
+                                                <input type="number" value="1" wire:loading.attr="disabled" wire:keyup.debounce.500ms="changeQuantity( '{{ $cartItem->id }}', document.getElementById('ordered-{{ $cartItem->id }}').value)" style="width:70px" class="form-control border-indigo-400 w-full rounded-l" id="ordered-{{ $cartItem->id }}" name="qty"/>
                                                 <button type="button" onclick="Livewire.emit('updateCart')" wire:loading.attr="disabled" wire:click="removeFromCart('{{$cartItem->id}}')" class="btn btn-danger bg-danger ">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="white" d="M13.299 3.74c-.207-.206-.299-.461-.299-.711 0-.524.407-1.029 1.02-1.029.262 0 .522.1.721.298l3.783 3.783c-.771.117-1.5.363-2.158.726l-3.067-3.067zm3.92 14.84l-.571 1.42h-9.296l-3.597-8.961-.016-.039h9.441c.171-.721.46-1.395.848-2h-14.028v2h.643c.535 0 1.021.304 1.256.784l4.101 10.216h12l1.211-3.015c-.699-.03-1.368-.171-1.992-.405zm-6.518-14.84c.207-.206.299-.461.299-.711 0-.524-.407-1.029-1.02-1.029-.261 0-.522.1-.72.298l-4.701 4.702h2.883l3.259-3.26zm8.799 4.26c-2.484 0-4.5 2.015-4.5 4.5s2.016 4.5 4.5 4.5c2.482 0 4.5-2.015 4.5-4.5s-2.018-4.5-4.5-4.5zm2.5 5h-5v-1h5v1z"/></svg>
                                                 </button>
@@ -210,10 +212,10 @@
                                         </td>
                                         <td>
                                             <div class="flex">
-                                                <input class="form-control border-indigo-400 w-1/4" readonly disabled id="backordered-{{ $cartItem->id }}" name="">
+                                                <input style="width: 70px" class="form-control border-indigo-400 w-1/4" readonly disabled id="backordered-{{ $cartItem->id }}" name="">
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="px-4">
                                             @if($customer_id == '410000-1128694047' or $retail == 1)
                                                 @if(session()->has('currency'))
                                                     <span class="hidemobile">{{session()->get('currency')}}</span> {{number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}
@@ -228,9 +230,15 @@
                                                 @endif
                                             @endif
                                         </td>
-                                        <td class="p-6">
+                                        <td class="px-4">
                                             @if($customer_id == '410000-1128694047' or $retail == 1)
                                                 @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
+                                                    <div wire:init="enableBo">
+                                                    </div>
+                                                    <script>
+                                                        alert('more')
+                                                    </script>
+                                                    @php($boEnabled = 1)
                                                     @if(session()->has('currency'))
                                                         <span class="hidemobile">{{ session()->get('currency') }}</span> {{ number_format((($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice) / session()->get('exchangeRate') , 2)  }}
                                                     @else
@@ -245,6 +253,8 @@
                                                 @endif
                                             @else
                                             @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
+                                                <div wire:init="enableBo">
+                                                </div>
                                                     @if(session()->has('currency'))
                                                         <span class="hidemobile">{{ session()->get('currency') }}</span> {{ number_format((($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice) / session()->get('exchangeRate') , 2)  }}
                                                     @else
@@ -327,7 +337,7 @@
         </div>
         <br>
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-            <div style="overflow-x: auto" class="items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
+            <div style="" class="items-start justify-center py-12 2xl:px-20 md:px-6 px-4">
                 <div style="overflow-x: auto">
                     @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                     <div>
@@ -347,24 +357,27 @@
                         <h2 style="font-family: sflight; font-size: 20px">Memo</h2>
                         <input wire:model="memo" name="memo" id="memo" class="w-full block appearance-none  border border-gray-200 text-gray-700 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" type="text">
                     </div>
-                    <div class="flex float-left">
-                        <div class="p-6">
-                            <a href="{{ route('dashboard') }}">
-                                <button onclick="checkCustomers()" type="button"  style="background-color: gray; color: white; font-family: sfsemibold" class="btn ">
-                                    Keep shopping
-                                </button>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="flex float-right">
+                        <br>
+                        <div class="flex justify-between whitespace-nowrap">
+                            <div class="">
+                                <div class="p-6">
+                                    <a href="{{ route('dashboard') }}">
+                                        <button onclick="checkCustomers()" type="button"  style="background-color: gray; color: white; font-family: sfsemibold" class="btn ">
+                                            Keep shopping
+                                        </button>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="">
 
-                        <div style="" class="p-6">
-                            <button style="right: 0; background-color: #0069AD; color: white; font-family: sfsemibold" class=" btn btn-info">
-                                <img wire:loading wire:target="createSalesOrder" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
-                                Submit order
-                            </button>
+                                <div style="" class="p-6">
+                                    <button style="right: 0; background-color: #0069AD; color: white; font-family: sfsemibold" class=" btn btn-info">
+                                        <img wire:loading wire:target="createSalesOrder" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
+                                        Submit order
+                                    </button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -464,6 +477,9 @@
             });
         </script>
     </form>
-
-
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
 </div>

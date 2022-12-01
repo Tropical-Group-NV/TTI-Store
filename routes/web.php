@@ -15,12 +15,14 @@ use Illuminate\Support\Facades\DB;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
-
 Route::get('/', function ()
 {
    return redirect(\route('home'));
+});
+
+Route::get('/uni5pay-test', function ()
+{
+   return view('test.uni5pay-test');
 });
 
 Route::get('/home', function ()
@@ -159,11 +161,14 @@ Route::resources
         'new-customers' => \App\Http\Controllers\TemporaryUserInfoController::class,
         'upload/ads' => \App\Http\Controllers\AdsController::class,
         'password-reset' => \App\Http\Controllers\PasswordResetController::class,
-        'customer-profile' => \App\Http\Controllers\CustomerProfileController::class
+        'customer-profile' => \App\Http\Controllers\CustomerProfileController::class,
+        'customers' => \App\Http\Controllers\CustomersController::class,
+        'map' => \App\Http\Controllers\MapController::class,
+        'visits' => \App\Http\Controllers\VisitsController::class,
+        'crm' => \App\Http\Controllers\CrmInteractionsController::class,
+        'quotations' => \App\Http\Controllers\QuotationsController::class
     ]
 );
-
-
 
 Route::get('vue/home', function( Request $request)
 {
@@ -181,6 +186,38 @@ Route::get('contact-us', function ()
 }
 )->name('contact-page');
 
+//Route::get('customers', function ()
+//{
+//    return view('customers');
+//}
+//)->name('customers');
 
-
-
+/** API's */
+Route::POST('api/save-customer-location',
+    function( Request $request)
+    {
+        $customer = $_REQUEST['customer'];
+        $location = $_REQUEST['location'];
+        if (\App\Models\CustomerLocation::query()->where('customer_id', $customer)->exists())
+        {
+            $saveLocation = \App\Models\CustomerLocation::query()->where('customer_id', $customer)->update(['loc' => trim($location, '()') ]);
+            if ($saveLocation)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        else
+        {
+            $saveLocation = new \App\Models\CustomerLocation();
+            $saveLocation->customer_id = $customer;
+            $saveLocation->loc = $location;
+            $saveLocation->save();
+            return 1;
+        }
+    }
+    )->name('saveCustomerLocation')->middleware('auth');
+/** End API's */
