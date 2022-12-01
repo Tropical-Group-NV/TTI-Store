@@ -118,18 +118,8 @@
                                         </x-jet-dropdown-link>
                                     @endif
                                     @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 1)
-
                                         <x-jet-dropdown-link href="{{ route('audits') }}">
                                             {{ __('Audit trail') }}
-                                        </x-jet-dropdown-link>
-                                        <x-jet-dropdown-link href="{{ route('crm.index') }}">
-                                            {{ __('CRM') }}
-                                        </x-jet-dropdown-link>
-                                        <x-jet-dropdown-link href="{{ route('customers.index') }}">
-                                            {{ __('Customers') }}
-                                        </x-jet-dropdown-link>
-                                        <x-jet-dropdown-link href="{{ route('visits.index') }}">
-                                            {{ __('Visits') }}
                                         </x-jet-dropdown-link>
                                         <x-jet-dropdown-link href="{{ URL::to('upload/ads')}}">
                                             {{ __('Ads') }}
@@ -559,13 +549,13 @@
                 <button @click="expanded = ! expanded">
                     @if(session()->has('currency'))
                         @if(session()->get('currency') == 'EUR')
-                            EUR <img src="{{ asset('currency/EUR.png') }}" alt="">
+                            EUR🇪🇺
                         @endif
                         @if(session()->get('currency') == 'USD')
-                            USD <img src="{{ asset('currency/USD.png') }}" alt="">
+                            USD🇺🇸
                         @endif
                     @else
-                        SRD<img src="{{ asset('currency/SRD.png') }}" alt="">
+                        SRD🇸🇷
                     @endif
                 </button>
 
@@ -574,21 +564,21 @@
                         @csrf
                         <input name="currency" type="hidden" value="USD">
                         <button class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
-                            USD<img src="{{ asset('currency/USD.png') }}" alt="">
+                            USD🇺🇸
                         </button>
                     </form>
                     <form action="{{ route('setCurrency') }}" method="post">
                         @csrf
                         <input name="currency" type="hidden" value="EUR">
                         <button class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
-                            EUR<img src="{{ asset('currency/EUR.png') }}" alt="">
+                            EUR🇪🇺
                         </button>
                     </form>
                     <form action="{{ route('setCurrency') }}" method="post">
                         @csrf
                         <input name="currency" type="hidden" value="SRD">
                         <button class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">
-                            SRD<img src="{{ asset('currency/SRD.png') }}" alt="">
+                            SRD🇸🇷
                         </button>
                     </form>
                 </div>
@@ -766,10 +756,7 @@
     </script>
     <script>
         window.addEventListener('addedcart', (e) => {
-            toastr.success("Added to Cart");
-        });
-        window.addEventListener('createdTicket', (e) => {
-            toastr.success("Created Ticket")
+            toastr.success("Added to Cart")
         });
         window.addEventListener('Invalid', (e) => {
             toastr.warning("Not a valid value")
