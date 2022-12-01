@@ -76,9 +76,13 @@
                             </div>
                             <div class="py-4 border-b border-gray-200 ">
                                 @if(session()->has('currency'))
-                                    <p class="text-base leading-4 text-gray-800">{!! $itemdesc->english_description !!}  </p>
+                                    @if($itemdesc != null)
+                                        <p class="text-base leading-4 text-gray-800">{!! $itemdesc->english_description !!}  </p>
+                                    @endif
                                 @else
-                                    <p class="text-base leading-4 text-gray-800">{!! $itemdesc->description !!}  </p>
+                                    @if($itemdesc != null)
+                                        <p class="text-base leading-4 text-gray-800">{!! $itemdesc->description !!}  </p>
+                                    @endif
                                 @endif
                                 <div class="flex items-center justify-center">
                                     <p class="text-sm leading-none text-gray-600 dark:text-gray-300 mr-3"></p>
