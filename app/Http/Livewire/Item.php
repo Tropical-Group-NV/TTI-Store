@@ -35,13 +35,11 @@ class Item extends Component
         $item = \App\Models\Item::query()->where('ListID', $id)->first();
         $itemdesc = ItemDescription::query()->where('item_id', $id)->get()->first();
         $images = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $id)->get();
-        $imagesExists = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $id)->exists();
         return view('livewire.item', [
             'id' => $id,
             'item' => $item,
             'itemdesc' => $itemdesc,
-            'images' => $images,
-            'imagesExists' => $imagesExists
+            'images' => $images
         ]);
     }
 

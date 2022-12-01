@@ -40,12 +40,7 @@ class Checkout extends Component
     public $ship4;
     public $ship5;
     public $retail;
-    public $boEnabled;
 
-    public function enableBo()
-    {
-        $this->boEnabled = 1;
-    }
     public function boot()
     {
         if ($this->customer_id != '')
