@@ -22,18 +22,28 @@
                             <div class="product">
                                 <div class="product__images">
                                     <img style="width: 100%"
-                                        src="https://www.ttistore.com/foto/{{ $images->first()->image_id }}.dat"
+                                         @if(!empty($images))
+                                             src="https://www.ttistore.com/foto/{{ $images->first()->image_id }}.dat"
+                                         @else
+                                             src="https://www.ttistore.com/foto/tti-noimage.png"
+                                         @endif
+
                                         class=" w-full"
                                         id="main-image"
                                     />
                                     <div class="product__slider-wrap">
                                         <div class="product__slider">
-                                            @foreach($images as $i)
+                                            @if(!empty($images))
+                                                @foreach($images as $i)
+
+                                                @endforeach
+                                            @else
                                                 <img
-                                                    src="https://www.ttistore.com/foto/{{$i->image_id}}.dat"
+                                                    src="https://www.ttistore.com/foto/tti-noimage.png"
                                                     class="product__image"
                                                 />
-                                            @endforeach
+                                            @endif
+
                                         </div>
                                     </div>
                                 </div>
