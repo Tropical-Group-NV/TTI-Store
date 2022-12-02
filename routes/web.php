@@ -220,4 +220,10 @@ Route::POST('api/save-customer-location',
         }
     }
     )->name('saveCustomerLocation')->middleware('auth');
+
+Route::get('error500', function ()
+{
+    return view('errors.500');
+}
+)->name('error500');
 /** End API's */
