@@ -461,4 +461,5 @@ class Checkout extends Component
             return redirect()->to(route('dashboard') . '?order=' . $sale->id);
         }
     }
+//
 }
