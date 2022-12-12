@@ -1,5 +1,4 @@
 <div>
-
     <div class="flex justify-between">
         <div>
             <div class="">
@@ -139,7 +138,7 @@
                             <br>
                             <br>
                             <!-- Modal inner -->
-                            <div style="padding-top: 100px" class="p-4" @click.away="showModal = false" id="printDiv">
+                            <div @click.away="showModal = false"style="padding-top: 100px" class="p-4" id="printDiv">
                                 <div class="card">
                                     <div class="card-body">
                                         <table width="100%">
@@ -252,7 +251,7 @@
                                                             </td>
                                                         </tr>
                                                     </table>
-                                                    <table width="100%" cellpadding="0" cellspacing="0">
+                                                    <table style="white-space: normal" width="100%" cellpadding="0" cellspacing="0" class="whitespace-normal">
                                                         <thead>
                                                         <tr style="background-color: #DDD">
                                                             <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Item&nbsp;#':'Artikel&nbsp;Code'?></th>
@@ -309,6 +308,43 @@
                                                         </tr>
                                                         </tfoot>
                                                     </table>
+                                                    <hr>
+                                                    <div class="flex justify-end p-4">
+                                                        <div class="flex">
+                                                            <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
+                                                                <!-- Trigger for Modal -->
+                                                                <button @click="showModal =  ! showModal" class="btn btn-success">
+                                                                    Send mail
+                                                                </button>
+                                                                <div  style="z-index: 99999999" x-show="showModal"
+                                                                      class="fixed  inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
+                                                                      x-transition.opacity >
+                                                                    <br>
+                                                                    <br>
+                                                                    <br>
+                                                                    <!-- Modal inner -->
+                                                                    <div @click.away="showModal = false"style="padding-top: 100px" class="p-4" id="printDiv">
+                                                                        <div class="card">
+                                                                            <div class="card-body">
+                                                                                <h1 class="card-header">
+                                                                                   <b class="text-2xl">
+                                                                                       Email quotation for {{ $customer->FullName }}
+                                                                                   </b>
+                                                                                </h1>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <button wire:click="exportPDF('{{$quotation->id}}')" class="btn btn-primary">
+                                                                <img wire:loading wire:target="exportPDF" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
+                                                                <span wire:loading.remove wire:target="exportPDF">
+                                                                    Print
+                                                                </span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         </table>
@@ -317,7 +353,6 @@
                             </div>
                         </div>
                     </div>
-
                 </td>
                 <td class="py-4 px-6" >
                     @if($quotation->is_so == 1)
@@ -326,8 +361,8 @@
                             {{ $SO->RefNumber }}
                         </div>
                     @else
-                        <div class="btn btn-danger" >
-                            No
+                        <div class="btn" style="background-color: #0069ad; color: white">
+                            Create SO
                         </div>
                     @endif
 
@@ -382,7 +417,6 @@
                             </div>
                         </div>
                     @endif
-
                 </td>
             </tr>
             @endforeach

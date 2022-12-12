@@ -309,7 +309,7 @@
                                         @endif
                                             @if($qItem['itemID'] != '520000-1128115782' and $qItem['itemID'] != '530000-1128435487')
                                                 <div class="flex">
-                                                    <input type="number" value="{{ $qItem['qty'] }}" wire:loading.attr="disabled" wire:keyup.debounce.500ms="changeQuantity( '{{ $qItem['itemID'] }}', document.getElementById('ordered-{{ $qItem['itemID'] }}').value)" style="width: 100%" class="form-control border-indigo-400 rounded-l" id="ordered-{{ $qItem['itemID'] }}" name="qty"/>
+                                                    <input type="number" value="{{ $qItem['qty'] }}" wire:loading.attr="disabled" wire:keyup.debounce.500ms="changeQuantity( '{{ $key }}', document.getElementById('ordered-{{ $qItem['itemID'] }}').value)" style="width: 100%" class="form-control border-indigo-400 rounded-l" id="ordered-{{ $qItem['itemID'] }}" name="qty"/>
                                                 </div>
                                             @endif
 
@@ -541,16 +541,10 @@
                     <div class="flex float-right">
 
                         <div style="text-align: right" class="p-6">
-                            <button wire:click="createQuotation" style="right: 0; background-color: #0069AD; color: white; font-family: sfsemibold" class=" btn btn-info">
-                                <img wire:loading wire:target="createSalesOrder" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
-                                Submit quotation
-                            </button>
                             <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
                                 <!-- Trigger for Modal -->
                                 <button type="button" @click="showModal =  ! showModal" style="color: white; background-color: #0069ad" class="btn">
-                                    <i class="fa fa-eye">
-
-                                    </i>
+                                    Submit
                                 </button>
                                 {{--                        <button @click="showModal =  ! showModal" style="background-color: #0069AD; color: white" class="btn ">--}}
                                 {{--                            <b>--}}
@@ -570,7 +564,8 @@
                                                 <table width="100%">
                                                     <tr>
                                                         <td style="padding: 10px">
-                                                            @php($lastQuotation)
+                                                            @php($lastQuotation = \App\Models\Quotation::query()->orderBy('id', 'desc')->first('id'))
+                                                            @php($newQID = ($lastQuotation->id + 1)+ 10617)
                                                             @if(session()->has('currency'))
                                                                 @php($currency = session()->get('curency'))
                                                             @else
@@ -586,12 +581,19 @@
                                                                             </tr>
                                                                             <tr>
                                                                                 <td style="padding-bottom: 5px">Q. No.</td>
-                                                                                <td style="padding-bottom: 5px"><div class="div" style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"></div></td>
+                                                                                <td style="padding-bottom: 5px">
+                                                                                    <div class="div" style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">
+                                                                                        Q-{{$newQID}}
+                                                                                    </div>
+                                                                                </td>
                                                                             </tr>
                                                                             <tr>
                                                                                 <td><?=$currency=='USD'?'Date':'Datum'?></td>
-                                                                                <td><div class="div" style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">
-                                                                                        </div></td>
+                                                                                <td>
+                                                                                    <div class="div" style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">
+                                                                                    {{date('d-m-Y')}}
+                                                                                    </div>
+                                                                                </td>
                                                                             </tr>
                                                                         </table>
                                                                         <hr>
@@ -663,21 +665,25 @@
                                                                             </thead>
                                                                             <tbody>
                                                                             <tr>
-                                                                                <td><div class="div" style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?='&nbsp;'?></div></td>
-                                                                                <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">
+                                                                                <td><div class="div" style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$poNum ?? '&nbsp;'?></div></td>
+                                                                                <td>
+                                                                                    <div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">
+                                                                                        <?='&nbsp;'?>
 {{--                                                                                        {{$model->ShipDate}}--}}
-                                                                                    </div></td>
-                                                                                <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?='&nbsp;'?></div></td>
-{{--                                                                                @php($customer = $selectedCustomer)--}}
-{{--                                                                                <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->SalesRepRefFullName?:'&nbsp;'?></div></td>--}}
-{{--                                                                                <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->CustomFieldKlanttype?:'&nbsp;'?></div></td>--}}
+                                                                                    </div>
+                                                                                </td>
+                                                                                @php($termInfo = \App\Models\Term::query()->where('ListID', $term_id)->first())
+                                                                                <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$termInfo->Name ?? '&nbsp;'?></div></td>
+                                                                                @php($customer = $selectedCustomer)
+                                                                                <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->SalesRepRefFullName??'&nbsp;'?></div></td>
+                                                                                <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->CustomFieldKlanttype??'&nbsp;'?></div></td>
                                                                             </tr>
                                                                             </tbody>
                                                                         </table>
                                                                     </td>
                                                                 </tr>
                                                             </table>
-                                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                            <table style="text-align: left" width="100%" cellpadding="0" cellspacing="0">
                                                                 <thead>
                                                                 <tr style="background-color: #DDD">
                                                                     <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Item&nbsp;#':'Artikel&nbsp;Code'?></th>
@@ -692,24 +698,47 @@
                                                                 @php($total = 0.00000)
 {{--                                                                @php($quotationItems = \App\Models\QuotationItem::query()->where('quotation_id', $quotation->id)->get())--}}
                                                                 @foreach($QItems as $key => $salesOrderItem)
-                                                                    @php($item = \App\Models\Item::query()->where('ListID', $salesOrderItem['itemID'])->first())
-                                                                    <tr>
-                                                                        <td style="padding: 2px;text-align: left;border: 1px solid #ddd;">
-                                                                            {{$item->Name}}
-                                                                        </td>
-                                                                        <td style="padding: 2px;text-align: left;border: 1px solid #ddd;">{{$salesOrderItem['description']}}</td>
-                                                                        <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">
-                                                                            {{$salesOrderItem['qty']}}</td>
-                                                                        <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">{{$item->UnitOfMeasureSetRefFullName}}</td>
-{{--                                                                        <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">--}}
-{{--                                                                            {{$salesOrderItem->SalesOrderLineRatePercent ?--}}
-{{--                                                                            $salesOrderItem->SalesOrderLineRatePercent .'%':--}}
-{{--                                                                            $salesOrderItem->SalesOrderLineRate}} </td>--}}
-                                                                        <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">
-                                                                            {{$salesOrderItem['rate']}} </td>
-                                                                        <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">{{$salesOrderItem['rate'] * $salesOrderItem['qty']}}</td>
-                                                                    </tr>
-                                                                    @php($total = $total + ($salesOrderItem['rate'] * $salesOrderItem['qty']))
+                                                                    @if($salesOrderItem['itemID'] != '530000-1128435487' and $salesOrderItem['itemID'] != '520000-1128115782' )
+                                                                        @php($item = \App\Models\Item::query()->where('ListID', $salesOrderItem['itemID'])->first())
+                                                                        <tr>
+                                                                            <td style="padding: 2px;text-align: left;border: 1px solid #ddd;">
+                                                                                {{$item->Name}}
+                                                                            </td>
+                                                                            <td style="padding: 2px;text-align: left;border: 1px solid #ddd;">{{$salesOrderItem['description']}}</td>
+                                                                            <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">
+                                                                                {{$salesOrderItem['qty']}}</td>
+                                                                            <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">{{$item->UnitOfMeasureSetRefFullName}}</td>
+                                                                            {{--                                                                        <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">--}}
+                                                                            {{--                                                                            {{$salesOrderItem->SalesOrderLineRatePercent ?--}}
+                                                                            {{--                                                                            $salesOrderItem->SalesOrderLineRatePercent .'%':--}}
+                                                                            {{--                                                                            $salesOrderItem->SalesOrderLineRate}} </td>--}}
+                                                                            <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">
+                                                                                {{number_format($salesOrderItem['rate'], 2) }} </td>
+                                                                            <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">{{number_format($salesOrderItem['rate'] * $salesOrderItem['qty'], 2)}}</td>
+                                                                        </tr>
+                                                                        @php($total = $total + ($salesOrderItem['rate'] * $salesOrderItem['qty']))
+                                                                    @endif
+                                                                    @if($salesOrderItem['itemID'] == '520000-1128115782' )
+                                                                        @php($item = \App\Models\Item::query()->where('ListID', $salesOrderItem['itemID'])->first())
+                                                                        <tr>
+                                                                            <td style="padding: 2px;text-align: left;border: 1px solid #ddd;">
+
+                                                                            </td>
+                                                                            <td style="padding: 2px;text-align: left;border: 1px solid #ddd;"> {{$item->Name}}</td>
+                                                                            <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">
+                                                                                {{$salesOrderItem['rate']}}</td>
+                                                                            @if($salesOrderItem['rateType'] == 1)
+                                                                                <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">Amount</td>
+                                                                            @else
+                                                                                <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">Percent</td>
+                                                                            @endif
+                                                                            <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">
+                                                                                -{{number_format($salesOrderItem['rateValue'], 2) }}
+                                                                            </td>
+                                                                            <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">-{{number_format($salesOrderItem['rateValue'], 2)}}</td>
+                                                                        </tr>
+                                                                        @php($total = $total + -($salesOrderItem['rateValue']))
+                                                                    @endif
                                                                 @endforeach
                                                                 </tbody>
                                                                 <tfoot>
@@ -718,24 +747,31 @@
                                                                     @php($qrLogo = asset('tti-email-qr.png'))
                                                                     <td colspan="4" style="text-align: left;padding-top: 5px">
 {{--                                                                         {{ $model->CustomerMsgRefFullName }}--}}
-                                                                        <br>
+{{--                                                                        <br>--}}
 {{--                                                                        <?=$model->Memo?nl2br($model->Memo).'<br>':''?><br><br>--}}
 {{--                                                                        @if($model->signature_id != null)--}}
 {{--                                                                            @php($signature = \App\Models\Signature::query()->where('id', $model->signature_id)->first())--}}
 {{--                                                                            <img class="w-3/4" src="{{ asset('storage/signatures/' . $signature->image) }}" alt="{{ $signature->name }}">--}}
 {{--                                                                        @endif--}}
-                                                                        <?=$currency=='USD'?'Scan the QR code to go to':'Scan de code om direct naar'?><br>
-                                                                        www.ttistore.com <?=$currency=='USD'?'':'te gaan'?>.<br>
-                                                                        <img src="<?= $qrLogo; ?>"><br>
-                                                                        Fabrikant van voedings- en farmaceutische producten.<br>
-                                                                        Manufacturer of Food and Pharmaceutical products.
+{{--                                                                        <?=$currency=='USD'?'Scan the QR code to go to':'Scan de code om direct naar'?><br>--}}
+{{--                                                                        www.ttistore.com <?=$currency=='USD'?'':'te gaan'?>.<br>--}}
+{{--                                                                        <img src="<?= $qrLogo; ?>"><br>--}}
+{{--                                                                        Fabrikant van voedings- en farmaceutische producten.<br>--}}
+{{--                                                                        Manufacturer of Food and Pharmaceutical products.--}}
                                                                     </td>
                                                                     <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Total':'Totaal'?>&nbsp;<?=$currency?></th>
                                                                     <th style="padding: 2px;text-align: right;vertical-align: top">
                                                                         {{number_format($total, 2)}}</th>
+
                                                                 </tr>
                                                                 </tfoot>
                                                             </table>
+                                                            <div class="p-4">
+                                                                <button wire:click="createQuotation" style="right: 0; background-color: #0069AD; color: white; font-family: sfsemibold" class=" btn btn-info">
+                                                                    <img wire:loading wire:target="createQuotation" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
+                                                                    Create quotation
+                                                                </button>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 </table>

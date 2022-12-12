@@ -150,13 +150,14 @@ class CreateQuotation extends Component
         $this->QItems[$key]['rateValue'] = $value;
     }
 
-    public function changeQuantity($prodID, $qty)
+    public function changeQuantity($key, $qty)
     {
-        $key = array_search($prodID, $this->QItems);
-        if(is_int($qty) )
-        {
-            $this->QItems[$key]['qty'] = $qty;
-        }
+//        $key = array_search($prodID, $this->QItems);
+        $this->QItems[$key]['qty'] = $qty;
+//        if(is_int($qty) )
+//        {
+//            $this->QItems[$key]['qty'] = $qty;
+//        }
 
     }
 
@@ -193,22 +194,16 @@ class CreateQuotation extends Component
     }
     public function changeDiscountValue($key, $value)
     {
-//        if (is_float($value))
-//        {
-        try
+        $this->QItems[$key]['rate'] = $value;
+        if ($this->QItems[$key]['rateType'] == 2)
         {
-            $answer = $value+1;
-            $this->QItems[$key]['rate'] = $value;
-//            $this->QItems[$key]['rateValue'] = $value;
-            $this->QItems[$key]['type'] = gettype($value);
-
+            $rate = $this->QItems[$key]['rate'] * ($this->QItems[$key-1]['rate'] / 100);
+            $this->QItems[$key]['rateValue'] = $rate;
         }
-        catch (\Exception $exception)
+        else
         {
-
+            $this->QItems[$key]['rateValue'] = $value;
         }
-
-//        }
     }
     public function changeSubTotalRate($rate, $arrayKey)
     {
