@@ -399,14 +399,12 @@
                                         @endif
                                         @if($qItem['itemID'] == '530000-1128435487')
                                             <div wire:init="changeSubTotalRate('{{ $subTotal }}', '{{ $key }}')">
-
                                             </div>
                                             @if(session()->has('currency'))
                                                 <span class="hidemobile">{{ session()->get('currency') }}</span> {{  number_format($qItem['rate'] / session()->get('exchangeRate') , 2)  }}
                                             @else
                                                 <span class="hidemobile">SRD</span> {{ number_format($qItem['rate'], 2)  }}
                                             @endif
-
                                         @endif
                                         @if($qItem['itemID'] != '520000-1128115782' and $qItem['itemID'] != '530000-1128435487')
                                         @php($subTotal = $subTotal  + ($qItem['qty'] * $item->SalesPrice))
@@ -547,6 +545,205 @@
                                 <img wire:loading wire:target="createSalesOrder" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
                                 Submit quotation
                             </button>
+                            <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
+                                <!-- Trigger for Modal -->
+                                <button type="button" @click="showModal =  ! showModal" style="color: white; background-color: #0069ad" class="btn">
+                                    <i class="fa fa-eye">
+
+                                    </i>
+                                </button>
+                                {{--                        <button @click="showModal =  ! showModal" style="background-color: #0069AD; color: white" class="btn ">--}}
+                                {{--                            <b>--}}
+                                {{--                                <i class="fa fa-pencil"></i>--}}
+                                {{--                            </b>--}}
+                                {{--                        </button>--}}
+                                <div  style="z-index: 99999999" x-show="showModal"
+                                      class="fixed  inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
+                                      x-transition.opacity >
+                                    <br>
+                                    <br>
+                                    <br>
+                                    <!-- Modal inner -->
+                                    <div style="padding-top: 100px" class="p-4" @click.away="showModal = false" id="printDiv">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td style="padding: 10px">
+                                                            @php($lastQuotation)
+                                                            @if(session()->has('currency'))
+                                                                @php($currency = session()->get('curency'))
+                                                            @else
+                                                                @php($currency = 'SRD')
+                                                            @endif
+                                                            <table width="100%" style="border: none;margin-bottom: 2px" cellpadding="0" cellspacing="0">
+                                                                <tbody>
+                                                                <tr>
+                                                                    <td style="border: none; vertical-align: top;">
+                                                                        <table style="border: none;" cellpadding="0" cellspacing="0">
+                                                                            <tr>
+                                                                                <td colspan="2" style="margin: 0px 0px 15px 0px;padding: 0px 0px 15px 0px;"><h1><b><?=$currency=='USD'?'Quotation':'Offerte'?></b></h1></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td style="padding-bottom: 5px">Q. No.</td>
+                                                                                <td style="padding-bottom: 5px"><div class="div" style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"></div></td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td><?=$currency=='USD'?'Date':'Datum'?></td>
+                                                                                <td><div class="div" style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">
+                                                                                        </div></td>
+                                                                            </tr>
+                                                                        </table>
+                                                                        <hr>
+                                                                        <table width="100%" style="border: none;" cellpadding="0" cellspacing="0">
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td style="width: 50%;border: none; vertical-align: top; text-align: left">
+                                                                                    <table width="100%" cellpadding="5" cellspacing="0">
+                                                                                        <tr>
+                                                                                            <td style="height: 25px;font-weight: bold"><?=$currency=='USD'?'Bill To':'Afnemer'?></td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td style="vertical-align: top; text-align: left">
+                                                                                                {{ $selectedCustomer->BillAddressAddr1 ?? '' . ','}}
+                                                                                                <br>
+                                                                                                {{ $selectedCustomer->BillAddressAddr2 ?? '' . ','}}
+                                                                                                <br>
+                                                                                                {{ $selectedCustomer->BillAddressAddr3 ?? '' . ','}}
+                                                                                                <br>
+                                                                                                {{ $selectedCustomer->BillAddressAddr4 ?? '' . ','}}
+                                                                                                <br>
+                                                                                                {{ $selectedCustomer->BillAddressAddr5 ?? '' . ','}}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                                <td style="width: 50%;border: none; vertical-align: top; text-align: left">
+                                                                                    <table width="100%" cellpadding="5" cellspacing="0">
+                                                                                        <tr>
+                                                                                            <td style="height: 25px;font-weight: bold"><?=$currency=='USD'?'Ship To':'Leveringsadres'?></td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td style="vertical-align: top; text-align: left">
+                                                                                                {{ $selectedCustomer->BillAddressAddr1 ?? '' . ','}}
+                                                                                                <br>
+                                                                                                {{ $selectedCustomer->BillAddressAddr2 ?? '' . ','}}
+                                                                                                <br>
+                                                                                                {{ $selectedCustomer->BillAddressAddr3 ?? '' . ','}}
+                                                                                                <br>
+                                                                                                {{ $selectedCustomer->BillAddressAddr4 ?? '' . ','}}
+                                                                                                <br>
+                                                                                                {{ $selectedCustomer->BillAddressAddr5 ?? '' . ','}}
+                                                                                                <br>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                    {{--                                                            <td style="width: 145px;border: none; vertical-align: top"><img src="<?= $logo; ?>" width="145px"></td>--}}
+                                                                </tr>
+                                                                </tbody>
+                                                            </table>
+                                                            <br>
+                                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td style="border: none;padding: 0px; margin: 0px;">
+                                                                        <table style="border: none; margin-bottom: 10px" cellpadding="1" cellspacing="0">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <td style="text-align: center">P.O. No.</td>
+                                                                                <td style="text-align: center"><?=$currency=='USD'?'Ship&nbsp;Date':'Leveringsdatum'?></td>
+                                                                                <td style="text-align: center"><?=$currency=='USD'?'Terms':'Voorwaarde'?></td>
+                                                                                <td style="text-align: center"><?=$currency=='USD'?'Vert.':'Vert.'?></td>
+                                                                                <td style="text-align: center"><?=$currency=='USD'?'Customer&nbsp;Type':'Klanttype'?></td>
+                                                                            </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <td><div class="div" style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?='&nbsp;'?></div></td>
+                                                                                <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">
+{{--                                                                                        {{$model->ShipDate}}--}}
+                                                                                    </div></td>
+                                                                                <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?='&nbsp;'?></div></td>
+{{--                                                                                @php($customer = $selectedCustomer)--}}
+{{--                                                                                <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->SalesRepRefFullName?:'&nbsp;'?></div></td>--}}
+{{--                                                                                <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->CustomFieldKlanttype?:'&nbsp;'?></div></td>--}}
+                                                                            </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table width="100%" cellpadding="0" cellspacing="0">
+                                                                <thead>
+                                                                <tr style="background-color: #DDD">
+                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Item&nbsp;#':'Artikel&nbsp;Code'?></th>
+                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Description':'Omschrijving'?></th>
+                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Quantity':'Aantal'?></th>
+                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Unit&nbsp;of&nbsp;Measure':'Eenheid'?></th>
+                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Rate':'Prijs&nbsp;per&nbsp;stuk'?></th>
+                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Total':'Totaal'?></th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                @php($total = 0.00000)
+{{--                                                                @php($quotationItems = \App\Models\QuotationItem::query()->where('quotation_id', $quotation->id)->get())--}}
+                                                                @foreach($QItems as $key => $salesOrderItem)
+                                                                    @php($item = \App\Models\Item::query()->where('ListID', $salesOrderItem['itemID'])->first())
+                                                                    <tr>
+                                                                        <td style="padding: 2px;text-align: left;border: 1px solid #ddd;">
+                                                                            {{$item->Name}}
+                                                                        </td>
+                                                                        <td style="padding: 2px;text-align: left;border: 1px solid #ddd;">{{$salesOrderItem['description']}}</td>
+                                                                        <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">
+                                                                            {{$salesOrderItem['qty']}}</td>
+                                                                        <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">{{$item->UnitOfMeasureSetRefFullName}}</td>
+{{--                                                                        <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">--}}
+{{--                                                                            {{$salesOrderItem->SalesOrderLineRatePercent ?--}}
+{{--                                                                            $salesOrderItem->SalesOrderLineRatePercent .'%':--}}
+{{--                                                                            $salesOrderItem->SalesOrderLineRate}} </td>--}}
+                                                                        <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">
+                                                                            {{$salesOrderItem['rate']}} </td>
+                                                                        <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">{{$salesOrderItem['rate'] * $salesOrderItem['qty']}}</td>
+                                                                    </tr>
+                                                                    @php($total = $total + ($salesOrderItem['rate'] * $salesOrderItem['qty']))
+                                                                @endforeach
+                                                                </tbody>
+                                                                <tfoot>
+                                                                <tr>
+                                                                    @php($logo = asset('tti-new_email.jpg'))
+                                                                    @php($qrLogo = asset('tti-email-qr.png'))
+                                                                    <td colspan="4" style="text-align: left;padding-top: 5px">
+{{--                                                                         {{ $model->CustomerMsgRefFullName }}--}}
+                                                                        <br>
+{{--                                                                        <?=$model->Memo?nl2br($model->Memo).'<br>':''?><br><br>--}}
+{{--                                                                        @if($model->signature_id != null)--}}
+{{--                                                                            @php($signature = \App\Models\Signature::query()->where('id', $model->signature_id)->first())--}}
+{{--                                                                            <img class="w-3/4" src="{{ asset('storage/signatures/' . $signature->image) }}" alt="{{ $signature->name }}">--}}
+{{--                                                                        @endif--}}
+                                                                        <?=$currency=='USD'?'Scan the QR code to go to':'Scan de code om direct naar'?><br>
+                                                                        www.ttistore.com <?=$currency=='USD'?'':'te gaan'?>.<br>
+                                                                        <img src="<?= $qrLogo; ?>"><br>
+                                                                        Fabrikant van voedings- en farmaceutische producten.<br>
+                                                                        Manufacturer of Food and Pharmaceutical products.
+                                                                    </td>
+                                                                    <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Total':'Totaal'?>&nbsp;<?=$currency?></th>
+                                                                    <th style="padding: 2px;text-align: right;vertical-align: top">
+                                                                        {{number_format($total, 2)}}</th>
+                                                                </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <br>
                             <span class="text-red-500">Please select atleast one item</span>
                         </div>

@@ -23,7 +23,6 @@ class Orders extends Component
         if (isset($_REQUEST['search']))
         {
             $this->search = $_REQUEST['search'];
-
         }
 //        if (Auth::user() != null)
 //        {
@@ -65,7 +64,6 @@ class Orders extends Component
 //        else
 //        {
 //            return view('livewire.orders', ['orders' => $orders]);
-//
 //        }
     }
 

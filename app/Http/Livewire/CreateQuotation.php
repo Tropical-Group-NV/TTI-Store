@@ -180,7 +180,8 @@ class CreateQuotation extends Component
 
     public function selectCustomer($cID)
     {
-        $this->selectedCustomer = QbCustomer::query()->where('ListID', $cID)->first(['ListID', 'BillAddressAddr1', 'BillAddressAddr2', 'BillAddressAddr3', 'BillAddressAddr4', 'BillAddressAddr5', 'TermsRefListID']);
+//        $this->selectedCustomer = QbCustomer::query()->where('ListID', $cID)->first(['ListID', 'BillAddressAddr1', 'BillAddressAddr2', 'BillAddressAddr3', 'BillAddressAddr4', 'BillAddressAddr5', 'TermsRefListID']);
+        $this->selectedCustomer = QbCustomer::query()->where('ListID', $cID)->first();
         $this->selectedCustomerID = $this->selectedCustomer->ListID;
         $this->term_id = $this->selectedCustomer->TermsRefListID;
         $this->customerSearch = $this->selectedCustomer->BillAddressAddr1;
