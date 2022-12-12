@@ -21,21 +21,28 @@
                         <div style="overflow-x: auto" class="w-full">
                             <div class="product">
                                 <div class="product__images">
-                                    <img style="width: 100%"
                                          @if($imagesExists)
+                                        <img style="width: 100%"
                                              src="https://www.ttistore.com/foto/{{ $images->first()->image_id }}.dat"
+                                             class=" w-full"
+                                             id="main-image"
+                                        />
                                          @else
+                                        <img style="width: 100%"
                                              src="https://www.ttistore.com/foto/tti-noimage.png"
+                                             class=" w-full"
+                                             id="main-image"
+                                        />
                                          @endif
 
-                                        class=" w-full"
-                                        id="main-image"
-                                    />
                                     <div class="product__slider-wrap">
                                         <div class="product__slider">
                                             @if($imagesExists)
                                                 @foreach($images as $i)
-                                                    src="https://www.ttistore.com/foto/{{ $i->image_id }}.dat"
+                                                    <img
+                                                        src="https://www.ttistore.com/foto/{{ $i->image_id }}.dat"
+                                                        class="product__image"
+                                                    />
                                                 @endforeach
                                             @else
                                                 <img
@@ -43,7 +50,6 @@
                                                     class="product__image"
                                                 />
                                             @endif
-
                                         </div>
                                     </div>
                                 </div>
@@ -52,15 +58,12 @@
                         <script>
                             const mainImage = document.getElementById("main-image");
                             const images = document.querySelectorAll(".product__image");
-
                             images.forEach((image) => {
                                 image.addEventListener("mouseover", (event) => {
                                     mainImage.src = event.target.src;
-
                                     document
                                         .querySelector(".product__image--active")
                                         .classList.remove("product__image--active");
-
                                     event.target.classList.add("product__image--active");
                                 });
                             });
@@ -181,13 +184,7 @@
                         </div>
                     </div>
                     <br>
-
-
-
-
                 </div>
-
-
             </div>
         </div>
     </div>

@@ -96,12 +96,12 @@
             <div class="px-8">
                 <div style=" width: 100%" class="w-60">
                     @if($boEnabled == 1)
-                    <span class="text-red-600">The quantity of items that are currently not in stock will automatically be added to backorders</span>
+{{--                    <span class="text-red-600">The quantity of items that are currently not in stock will automatically be added to backorders</span>--}}
                     @endif
                     <br>
                     <br>
                     <div style="overflow-x: auto" class="overflow-auto">
-                        <table style="overflow-x: auto; width: 100%" class="sm:rounded-lg">
+                        <table style="overflow-x: auto; width: 100%" class="sm:rounded-lg whitespace-nowrap">
                             <thead>
                             <tr class="">
                                 <th class="">
@@ -143,6 +143,13 @@
                                     @else
                                         @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
                                     @endif
+                                    @endif
+                                    @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
+                                        <tr>
+                                            <td>
+                                                <span class="text-red-600">The quantity of items that are currently not in stock will automatically be added to backorders</span>
+                                            </td>
+                                        </tr>
                                     @endif
                                     <tr class="border-b">
                                         <td class="p-6 hidden 2xl:block"  style="font-family: sfsemibold">
@@ -273,6 +280,7 @@
 
                                         </td>
                                     </tr>
+
                                 @endforeach
                                 @if($saleCustomer != '')
                                     @if($saleCustomer->PriceLevelRefListID == '60000-1139229677')
@@ -371,6 +379,9 @@
                             <div class="">
 
                                 <div style="" class="p-6">
+                                    <a href="{{ route('quotations.create') }}?fromcart=1&customer={{$customer_id}}" style="right: 0; color: white; font-family: sfsemibold" class=" btn btn-success">
+                                        Create quotation
+                                    </a>
                                     <button style="right: 0; background-color: #0069AD; color: white; font-family: sfsemibold" class=" btn btn-info">
                                         <img wire:loading wire:target="createSalesOrder" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
                                         Submit order
