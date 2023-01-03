@@ -534,6 +534,14 @@
                     {{ __('Audit trail') }}
                 </x-jet-responsive-nav-link>
                 @endif
+                @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                <x-jet-responsive-nav-link href="{{ route('quotations.index') }}">
+                    {{ __('Quotations') }}
+                </x-jet-responsive-nav-link>
+{{--                    <x-jet-responsive-nav-link href="{{ route('crm.index') }}">--}}
+{{--                    {{ __('CRM') }}--}}
+{{--                </x-jet-responsive-nav-link>--}}
+                @endif
                 <x-jet-responsive-nav-link target="_blank" href="https://v1.ttistore.com:463 ">
                     {{ __('Go to TTISTORE 1.0') }}
                 </x-jet-responsive-nav-link>

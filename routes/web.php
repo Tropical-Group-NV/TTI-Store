@@ -164,8 +164,8 @@ Route::resources
         'password-reset' => \App\Http\Controllers\PasswordResetController::class,
         'customer-profile' => \App\Http\Controllers\CustomerProfileController::class,
         'customers' => \App\Http\Controllers\CustomersController::class,
-        'map' => \App\Http\Controllers\MapController::class,
-        'visits' => \App\Http\Controllers\VisitsController::class,
+//        'map' => \App\Http\Controllers\MapController::class,
+//        'visits' => \App\Http\Controllers\VisitsController::class,
         'crm' => \App\Http\Controllers\CrmInteractionsController::class,
         'quotations' => \App\Http\Controllers\QuotationsController::class
     ]
@@ -188,11 +188,11 @@ Route::get('contact-us', function ()
 )->name('contact-page');
 
 
-Route::get('salesrep-order-report', function ()
-{
-    return view('reports.salesrep-orders-report');
-}
-)->name('salesrep-order-report');
+//Route::get('salesrep-order-report', function ()
+//{
+//    return view('reports.salesrep-orders-report');
+//}
+//)->name('salesrep-order-report');
 
 
 /** API's */
