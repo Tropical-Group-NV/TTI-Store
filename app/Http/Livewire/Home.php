@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use App\Models\BackOrders;
+use App\Models\Branch;
 use App\Models\CartItem;
 use App\Models\Customer;
 use App\Models\OnSale;
@@ -25,6 +26,7 @@ class Home extends Component
     protected $popularItemsCount = 8;
     public $randomItems;
     public $ads;
+    public $customBranch;
 
     protected $listeners =
         [
@@ -47,7 +49,11 @@ class Home extends Component
         {
             $onSale = OnSale::query()->where('onsale', 1)->limit(4)->inRandomOrder()->get();
         }
-        $restocked = \App\Models\Item::query()->orderBy('TimeModified' , 'DESC')->limit(4)->get();
+        $this->customBranch = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('settings_branch_view_item_on_user')->get();
+        $branchArray = [];
+        foreach ($this->customBranch as $branch)
+            array_push($branchArray, $branch->branch);
+        $restocked = \App\Models\Item::query()->whereNotIn('CustomFieldBranch', $branchArray)->orderBy('TimeModified' , 'DESC')->limit(8)->get();
         return view('livewire.home', ['onSale' => $onSale, 'restocked' => $restocked]);
     }
 

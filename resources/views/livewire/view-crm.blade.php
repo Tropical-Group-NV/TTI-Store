@@ -256,7 +256,7 @@
                 @php($comments = \App\Models\CrmInteractionDetail::query()->where('crm_interactions_id', $crm->id)->get())
                 <tr style="color: black" class="bg-white border-b">
                     <td class="py-4 px-6" >
-                        {{$crm->date_time}}
+                        {{date("d-m-Y H:i:s", strtotime($crm->date_time))}}
                     </td>
                     <td class="py-4 px-6" >
                         @if($user!=null)
@@ -273,7 +273,11 @@
                         {{$crm->description}}
                     </td>
                     <td class="py-4 px-6" >
-                        {{$crm->reminder}}
+                        @if($crm->reminder != null)
+                            {{date("d-m-Y H:i:s", strtotime($crm->reminder))}}
+{{--                            {{$crm->reminder}}--}}
+                        @endif
+
                     </td>
                     <td class="py-4 px-6" >
                         @if($status != null)

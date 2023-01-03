@@ -265,7 +265,7 @@
                                                                             <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Item&nbsp;#':'Artikel&nbsp;Code'?></th>
                                                                             <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Description':'Omschrijving'?></th>
                                                                             <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Quantity':'Aantal'?></th>
-                                                                            <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Unit&nbsp;of&nbsp;Measure':'Eeheid'?></th>
+                                                                            <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Unit&nbsp;of&nbsp;Measure':'Eenheid'?></th>
                                                                             <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Rate':'Prijs&nbsp;per&nbsp;stuk'?></th>
                                                                             <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Total':'Totaal'?></th>
                                                                         </tr>

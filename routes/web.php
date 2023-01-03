@@ -187,11 +187,13 @@ Route::get('contact-us', function ()
 }
 )->name('contact-page');
 
-//Route::get('customers', function ()
-//{
-//    return view('customers');
-//}
-//)->name('customers');
+
+Route::get('salesrep-order-report', function ()
+{
+    return view('reports.salesrep-orders-report');
+}
+)->name('salesrep-order-report');
+
 
 /** API's */
 Route::POST('api/save-customer-location',

@@ -14,7 +14,7 @@
             <div class="flex justify-center pt-5">
                 <span  style="font-family: sfsemibold; font-size: 40px; padding-left: 50px; padding-right: 50px">
             <span class="text-green-600">
-                Your order has been submitted ✅ <a style="color: #0069AD; font-size: 20px" href="{{ route('order', $_REQUEST['order']) }}">Go to Order.</a>
+                Your order has been submitted ✅ <a style="color: #0069AD; font-size: 20px" href="{{ route('orders')}}">Go to orders.</a>
             </span>
             </span>
             </div>

@@ -95,21 +95,41 @@
                                 @if(\Illuminate\Support\Facades\Auth::user() != null and $retail != 1)
 
                                     @if(session()->has('currency'))
-                                        <span>Sales price: {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 30px">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span>
+                                        @if($item->SalesTaxCodeRefFullName != 'Non')
+                                            <span>Sales price: {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 30px">{{ number_format(1.1 * ($item->SalesPrice / session()->get('exchangeRate')), 2) }}</b></span><div class="card bg-green-600 whitespace-nowrap" style="color: white; font-size: 15px; width: 100px; text-align: center">incl. 10% VAT</div><div x-data="{ open : false }"><div @click="open = ! open" class="card bg-green-600 whitespace-nowrap" style="color: white; font-size: 15px; width: 150px; text-align: center; cursor: pointer">incl. 10% VAT <div x-show="open">{{ session()->get('currency') }} {{ number_format(1 *($item->SalesPrice / session()->get('exchangeRate')), 2) }} + {{ session()->get('currency') }} {{ number_format(0.1 *($item->SalesPrice / session()->get('exchangeRate')), 2) }}</div></div></div>
+                                        @else
+                                            <span>Sales price: {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 30px">{{ number_format($item->SalesPrice / session()->get('exchangeRate'), 2) }}</b></span><div class="card bg-primary whitespace-nowrap" style="color: white; font-size: 15px; width: 100px; text-align: center">incl. 0% VAT</div>
+                                        @endif
                                     @else
-                                        <span>Sales price: SRD <b style="color: #0069ad; font-size: 30px">{{ substr($item->SalesPrice, 0, -3) }}</b></span>
+                                        @if($item->SalesTaxCodeRefFullName != 'Non')
+                                            <span>Sales price: SRD <b style="color: #0069ad; font-size: 30px">{{ number_format(1.1 * $item->SalesPrice, 2) }}</b></span><div x-data="{ open : false }"><div @click="open = ! open" class="card bg-green-600 whitespace-nowrap" style="color: white; font-size: 15px; width: 150px; text-align: center; cursor: pointer">incl. 10% BTW <div x-show="open">SRD {{ number_format(1 *($item->SalesPrice), 2) }} + SRD {{ number_format(0.1 *($item->SalesPrice), 2) }}</div></div></div>
+                                        @else
+                                            <span>Sales price: SRD <b style="color: #0069ad; font-size: 30px">{{ number_format($item->SalesPrice, 2) }}</b></span><div class="card bg-primary whitespace-nowrap" style="color: white; font-size: 15px; width: 100px; text-align: center">incl. 0% BTW</div>
+                                        @endif
                                     @endif
                                     <br>
-
                                 @endif
                                 @if(\Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id == '3' and $retail == 1 or \Illuminate\Support\Facades\Auth::user() != null and \Illuminate\Support\Facades\Auth::user()->users_type_id != '3' or \Illuminate\Support\Facades\Auth::user() == null)
                                     @if(session()->has('currency'))
-                                        <span style="padding-top: 10px">Retail price:  {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 20px">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span>
+                                            @if($item->SalesTaxCodeRefFullName != 'Non')
+                                                <span style="padding-top: 10px">Retail price:  {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 20px">{{ number_format(1.1 * ($item->CustomBaliPrice / session()->get('exchangeRate')), 2) }}</b></span><div x-data="{ open : false }"><div @click="open = ! open" class="card bg-green-600 whitespace-nowrap" style="color: white; font-size: 15px; width: 150px; text-align: center; cursor: pointer">incl. 10% VAT <div x-show="open">{{ session()->get('currency') }} {{ number_format(1 *($item->CustomBaliPrice / session()->get('exchangeRate')), 2) }} + {{ session()->get('currency') }} {{ number_format(0.1 *($item->CustomBaliPrice / session()->get('exchangeRate')), 2) }}</div></div></div>
+                                            @else
+                                                <span style="padding-top: 10px">Retail price:  {{ session()->get('currency') }} <b style="color: #0069ad; font-size: 20px">{{ number_format($item->CustomBaliPrice / session()->get('exchangeRate'), 2) }}</b></span><div class="card bg-primary whitespace-nowrap" style="color: white; font-size: 15px; width: 100px; text-align: center">incl. 0% VAT</div>
+                                            @endif
                                     @else
-                                        <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 20px">{{ substr($item->CustomBaliPrice, 0, -3) }}</b></span>
+                                            @if($item->SalesTaxCodeRefFullName != 'Non')
+                                                <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 20px">{{ number_format(1.1 * $item->CustomBaliPrice, 2) }}</b></span><div x-data="{ open : false }"><div @click="open = ! open" class="card bg-green-600 whitespace-nowrap" style="color: white; font-size: 15px; width: 150px; text-align: center; cursor: pointer">incl. 10% BTW <div x-show="open">SRD {{ number_format(1 *($item->CustomBaliPrice), 2) }} +SRD {{ number_format(0.1 *($item->CustomBaliPrice), 2) }}</div></div></div>
+                                            @else
+                                                <span style="padding-top: 10px">Retail price: SRD <b style="color: #0069ad; font-size: 20px">{{ number_format($item->CustomBaliPrice, 2) }}</b></span><div class="card bg-primary whitespace-nowrap" style="color: white; font-size: 15px; width: 100px; text-align: center">incl. 0% BTW</div>
+                                            @endif
                                     @endif
                                     <br>
                                 @endif
+{{--                                    @if($item->SalesTaxCodeRefFullName != 'Non')--}}
+{{--                                        <div class="card bg-green-600 whitespace-nowrap" style="color: white; font-size: 15px; width: 100px; text-align: center">incl. 10% BTW</div>--}}
+{{--                                    @else--}}
+{{--                                        <div class="card bg-primary whitespace-nowrap" style="color: white; font-size: 15px; width: 100px; text-align: center">incl. 0% BTW</div>--}}
+{{--                                    @endif--}}
                             </div>
                             <div class="py-4 border-b border-gray-200">
                                 <span style="padding-top: 10px" class="text-base leading-4">Unit: <b>{{ $item->UnitOfMeasureSetRefFullName }}</b></span>

@@ -38,7 +38,7 @@
                 </div>
                 <div class="justify-center flex dark:text-white">
                     <br>
-                    <a href="{{ route('home') }}">
+                    <a href="{{ session()->get('_previous')['url'] }}">
                         <button class="btn" style="background-color: #0069ad; color: white; font-size: 20px">Go Back</button>
                     </a>
                 </div>

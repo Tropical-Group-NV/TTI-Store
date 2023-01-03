@@ -75,9 +75,9 @@
                 @php($qItems = \App\Models\QuotationItem::query()->where('quotation_id', $quotation->id)->get())
                 @php($qItemsCount = count($qItems))
 
-            <tr style="color: black" class="bg-white border-b">
+            <tr id="row-{{$quotation->id}}" style="color: black" class="bg-white border-b">
                 <td class="py-4 px-6" >
-                    {{$quotation->TxnDate ?? ''}}
+                    {{date("d-m-Y", strtotime($quotation->TxnDate))}}
                 </td>
                 <td class="py-4 px-6" >
                     {{$quotation->RefNumber ?? ''}}
@@ -112,6 +112,10 @@
                     {{$user->name ?? '' . $user->last_name ?? ''}}
                 </td>
                 <td>
+                    @php($lastMail = \App\Models\QuotationMail::query()->where('quotation_id', $quotation->id)->first())
+                    @if($lastMail != null)
+                        {{date("d-m-Y H:i:s", strtotime( $lastMail->datetime_sent))}}
+                    @endif
                 </td>
                 <td class="py-4 px-6" >
 {{--                    <button class="btn" style="color: white; background-color: #0069ad">--}}
@@ -133,7 +137,7 @@
                         {{--                        </button>--}}
                         <div  style="z-index: 99999999" x-show="showModal"
                               class="fixed  inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
-                              x-transition.opacity >
+                              x-transition.opacity x-transition:leave>
                             <br>
                             <br>
                             <br>
@@ -165,7 +169,7 @@
                                                                     <tr>
                                                                         <td><?=$currency=='USD'?'Date':'Datum'?></td>
                                                                         <td><div class="div" style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">
-                                                                            {{ $quotation->TxnDate}}</div></td>
+                                                                                {{date("d-m-Y", strtotime( $quotation->TxnDate))}}</div></td>
                                                                     </tr>
                                                                 </table>
                                                                 <hr>
@@ -240,7 +244,7 @@
                                                                     <tr>
                                                                         <td><div class="div" style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$model->PONumber?:'&nbsp;'?></div></td>
                                                                         <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">
-                                                                            {{$model->ShipDate}}</div></td>
+                                                                                {{date("d-m-Y", strtotime( $model->ShipDate))}}</div></td>
                                                                         <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$model->TermsRefFullName?:'&nbsp;'?></div></td>
                                                                         @php($customer = \App\Models\Customer::query()->where('ListID', $quotation->CustomerRefListID)->first())
                                                                         <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->SalesRepRefFullName?:'&nbsp;'?></div></td>
@@ -258,12 +262,13 @@
                                                             <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Description':'Omschrijving'?></th>
                                                             <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Quantity':'Aantal'?></th>
                                                             <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Unit&nbsp;of&nbsp;Measure':'Eenheid'?></th>
-                                                            <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Rate':'Prijs&nbsp;per&nbsp;stuk'?></th>
-                                                            <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Total':'Totaal'?></th>
+                                                            <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Rate':'Prijs&nbsp;p/eenheid'?></th>
+                                                            <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Total excl. VAT':'Totaal excl. BTW'?></th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
                                                         @php($total = 0.00000)
+                                                        @php($btwTotal = 0.00000)
                                                         @php($quotationItems = \App\Models\QuotationItem::query()->where('quotation_id', $quotation->id)->get())
 
                                                         @foreach($quotationItems as $salesOrderItem)
@@ -273,18 +278,40 @@
                                                                     {{$item->Name}}</td>
                                                                 <td style="padding: 2px;text-align: left;border: 1px solid #ddd;">{{$salesOrderItem->SalesOrderLineDesc}}</td>
                                                                 <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">
-                                                                    {{$salesOrderItem->SalesOrderLineQuantity}}</td>
+                                                                    {{number_format($salesOrderItem->SalesOrderLineQuantity, 2)}}</td>
                                                                 <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">{{$item->UnitOfMeasureSetRefFullName}}</td>
                                                                 <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">
                                                                     {{$salesOrderItem->SalesOrderLineRatePercent ?
-                                                                    $salesOrderItem->SalesOrderLineRatePercent .'%':
-                                                                    $salesOrderItem->SalesOrderLineRate}} </td>
+                                                                     number_format($salesOrderItem->SalesOrderLineRatePercent, 2)
+                                                                     .'%':
+                                                                     number_format($salesOrderItem->SalesOrderLineRate, 2)
+                                                                    }} </td>
                                                                 <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">{{$salesOrderItem->SalesOrderLineAmount}}</td>
                                                             </tr>
-                                                            @php($total = $total + $salesOrderItem->SalesOrderLineAmount)
+                                                            @if($item->SalesTaxCodeRefFullName != 'Non')
+                                                                @php($total = $total + $salesOrderItem->SalesOrderLineAmount)
+                                                                @php($btwTotal = $btwTotal + ( 0.1 * ($salesOrderItem->SalesOrderLineAmount)))
+                                                            @else
+                                                                @php($total = $total + $salesOrderItem->SalesOrderLineAmount)
+                                                            @endif
+
                                                         @endforeach
                                                         </tbody>
                                                         <tfoot>
+                                                        <tr>
+                                                            <td colspan="4" style="text-align: left;padding-top: 5px">
+                                                            </td>
+                                                            <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Subtotal':'Subtotaal'?>&nbsp;<?=$currency?></th>
+                                                            <th style="padding: 2px;text-align: right;vertical-align: top">
+                                                                {{number_format($total, 2)}}</th>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" style="text-align: left;padding-top: 5px">
+                                                            </td>
+                                                            <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Total VAT(10.0%)':'Totaal BTW(10.0 %)'?>&nbsp;<?=$currency?></th>
+                                                            <th style="padding: 2px;text-align: right;vertical-align: top">
+                                                                {{number_format($btwTotal, 2)}}</th>
+                                                        </tr>
                                                         <tr>
                                                             @php($logo = asset('tti-new_email.jpg'))
                                                             @php($qrLogo = asset('tti-email-qr.png'))
@@ -302,14 +329,17 @@
                                                                 Fabrikant van voedings- en farmaceutische producten.<br>
                                                                 Manufacturer of Food and Pharmaceutical products.
                                                             </td>
-                                                            <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Total':'Totaal'?>&nbsp;<?=$currency?></th>
+                                                            <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Total incl. VAT':'Totaal incl. BTW'?>&nbsp;<?=$currency?></th>
                                                             <th style="padding: 2px;text-align: right;vertical-align: top">
-                                                                {{number_format($total, 2)}}</th>
+                                                                {{number_format($total + $btwTotal, 2)}}</th>
                                                         </tr>
                                                         </tfoot>
                                                     </table>
                                                     <hr>
-                                                    <div class="flex justify-end p-4">
+                                                    <div class="flex justify-between p-4">
+                                                        <div>
+                                                            <button @click="showModal = false" class="btn btn-danger">Cancel</button>
+                                                        </div>
                                                         <div class="flex">
                                                             <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">
                                                                 <!-- Trigger for Modal -->
@@ -318,19 +348,49 @@
                                                                 </button>
                                                                 <div  style="z-index: 99999999" x-show="showModal"
                                                                       class="fixed  inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
-                                                                      x-transition.opacity >
+                                                                      x-transition.opacity x-transition:leave>
                                                                     <br>
                                                                     <br>
                                                                     <br>
                                                                     <!-- Modal inner -->
                                                                     <div @click.away="showModal = false"style="padding-top: 100px" class="p-4" id="printDiv">
                                                                         <div class="card">
+                                                                            <h1 class="card-header">
+                                                                                <b class="text-2xl">
+                                                                                    Email quotation for {{ $customer->FullName }}
+                                                                                </b>
+                                                                            </h1>
                                                                             <div class="card-body">
-                                                                                <h1 class="card-header">
-                                                                                   <b class="text-2xl">
-                                                                                       Email quotation for {{ $customer->FullName }}
-                                                                                   </b>
-                                                                                </h1>
+                                                                                <div class="">
+                                                                                    <label for=""><b class="">Reply to</b></label>
+                                                                                    @php($adUser = \Illuminate\Support\Facades\DB::connection('tgncloud')->table('users')->where('username', \Illuminate\Support\Facades\Auth::user()->username)->first())
+                                                                                        <input value="{{ $adUser->email }}" id="from-{{$quotation->id}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                                                                </div>
+                                                                                <div class="">
+                                                                                    <label for=""><b class="">To email</b></label>
+                                                                                        <input value="{{ $customer->Email }}" id="to-{{$quotation->id}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                                                                </div>
+                                                                                <div class="">
+                                                                                    <label for=""><b class="">Cc email</b></label>
+                                                                                        <input value="verkoop@tropicalgroupnv.com" id="cc-{{$quotation->id}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                                                                </div>
+                                                                                <div class="">
+                                                                                    <label for=""><b class="">Subject</b></label>
+                                                                                        <input value="ttistore.com Quotation {{ $quotation->RefNumber }}" id="subject-{{$quotation->id}}" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                                                                                </div>
+                                                                                <label class="" for=""><b>Description</b></label>
+                                                                                <textarea name="" id="textArea-{{$quotation->id}}" cols="30"
+                                                                                          rows="10" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"></textarea>
+                                                                                <br>
+                                                                                <select onchange="changeDescription('description-{{$quotation->id}}', 'textArea-{{$quotation->id}}')" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" name="" id="description-{{$quotation->id}}">
+                                                                                    <option value="">Choose default description</option>
+                                                                                    <option value="1">Beste heer/mevrouw</option>
+                                                                                    <option value="2">Dear Mr/Mrs</option>
+                                                                                </select>
+                                                                                <div class="py-3 flex justify-between">
+                                                                                    <button @click="showModal = false" class="btn btn-danger">Cancel</button>
+                                                                                    <button @click="showModal = false" wire:click="sendMail(document.getElementById('from-{{$quotation->id}}').value,document.getElementById('to-{{$quotation->id}}').value,document.getElementById('cc-{{$quotation->id}}').value,document.getElementById('subject-{{$quotation->id}}').value,document.getElementById('textArea-{{$quotation->id}}').value, '{{$quotation->id}}')" class="btn btn-primary">Send</button>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -356,13 +416,17 @@
                 </td>
                 <td class="py-4 px-6" >
                     @if($quotation->is_so == 1)
-                        @php($SO = \App\Models\SalesOrder::query()->where('id', $quotation->so_id)->first('RefNumber'))
+{{--                        @php($SO = \App\Models\SalesOrder::query()->where('id', $quotation->so_id)->first('RefNumber'))--}}
                         <div class="btn btn-success" >
-                            {{ $SO->RefNumber }}
+{{--                            {{ $SO->RefNumber }}--}}
+                            TTI-{{$quotation->so_id}}
                         </div>
                     @else
-                        <div class="btn" style="background-color: #0069ad; color: white">
-                            Create SO
+                        <div wire:click="createSo('{{ $quotation->id }}')" class="btn" style="background-color: #0069ad; color: white">
+                            <img wire:loading wire:target="createSo('{{ $quotation->id }}')" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
+                            <span wire:loading.remove wire:target="createSo('{{ $quotation->id }}')">
+                                Create SO
+                            </span>
                         </div>
                     @endif
 
@@ -383,7 +447,7 @@
                             {{--                        </button>--}}
                             <div  style="z-index: 99999999" x-show="showModal"
                                   class="fixed  inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"
-                                  x-transition.opacity  >
+                                  x-transition.opacity  x-transition:leave>
                                 <!-- Modal inner -->
                                 <div x-show="showModal"
                                      class="px-6 py-4 text-left bg-white border rounded-lg shadow-lg"
@@ -408,7 +472,7 @@
                                             <button @click="showModal = false" class="btn btn-secondary">
                                                 Cancel
                                             </button>
-                                            <button @click="showModal = false" wire:click="delete('{{ $quotation->id }}')" class="btn btn-danger">
+                                            <button @click="showModal = false" wire:click="delete('{{ $quotation->id }}')" onclick="document.getElementById('row-{{$quotation->id}}').remove()" class="btn btn-danger">
                                                 Delete
                                             </button>
                                         </div>
@@ -435,6 +499,38 @@
         <br>
         <br>
     </div>
+    <script>
+        @if(session()->has('Q1'))
+            toastr.success("{{ session()->get('Q1') }}");
+
+        @endif
+        window.addEventListener('createdSo', (e) => {
+            toastr.success("Successfully created sales order");
+        });
+        window.addEventListener('sentMail', (e) => {
+            toastr.success("Successfully sent email");
+        });
+        window.addEventListener('failedMail', (e) => {
+            toastr.warning("Failed to send email");
+        });
+        window.addEventListener('failedSo', (e) => {
+            toastr.warning("Failed to create sales order because some items are not in stock.");
+        });
+    </script>
+    <script>
+        function changeDescription(elId, descId)
+        {
+            if (document.getElementById(elId).value === '1')
+                {
+                    document.getElementById(descId).value = 'Beste heer/mevrouw,\r\n\r\nHartelijk dank voor uw aanvraag.\r\nHierbij doen wij u de offerte voor de aangevraagde producten toekomen\r\nU kunt mij terugbellen of e-mailen als ik u nog ergens mee van dienst kan zijn.\r\nWij hopen u hiermee een passende offerte te hebben gedaan en kijken uit naar uw bevestiging.'
+                }
+            if (document.getElementById(elId).value === '2')
+                {
+                    document.getElementById(descId).value = 'Dear Mr / Mrs,\r\n\r\nThank you for your inquiry,\r\nPlease find attached the quotation for the requested products.\r\nIf there is anything else we can help you with, please don’t hesitate to call or email me.\r\nWe hope this quotation meets your expectation and look forward to your confirmation.'
+                }
+
+        }
+    </script>
 </div>
 
 

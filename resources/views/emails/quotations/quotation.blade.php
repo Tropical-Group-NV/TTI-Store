@@ -1,19 +1,25 @@
-
+<?php
+    /** @var $message */
+?>
 <head>
     <link rel="stylesheet" href="{{ asset('css/fonts.css') }}">
 </head>
-<div style="padding-top: 100px; font-family: sfsemibold" class="p-4" id="printDiv">
+<p>
+    {{$desc}}
+</p>
+<div style="padding-top: 100px; font-family: sfsemibold" id="printDiv">
     <div class="card">
         <div class="card-body">
             <table width="100%">
                 <tr>
                     <td style="padding: 10px">
-                        @php($model = $quotation)
-                        @if(session()->has('currency'))
-                            @php($currency = session()->get('currency'))
-                        @else
-                            @php($currency = 'SRD')
-                        @endif
+{{--                        @php($model = $quotation)--}}
+{{--                        @if(session()->has('currency'))--}}
+{{--                            @php($currency = session()->get('currency'))--}}
+{{--                        @else--}}
+{{--                            @php($currency = 'SRD')--}}
+{{--                        @endif--}}
+                        @php($currency = 'SRD')
                         <table width="100%" style="border: none;margin-bottom: 2px" cellpadding="0" cellspacing="0">
                             <tbody>
                             <tr>
@@ -82,6 +88,7 @@
                                         </tbody>
                                     </table>
                                 </td>
+                                <td style="width: 180px;border: none; vertical-align: top"><img src="<?= $message->embed($logo); ?>" style="width:180px"></td>
                                 {{--                                                            <td style="width: 145px;border: none; vertical-align: top"><img src="<?= $logo; ?>" width="145px"></td>--}}
                             </tr>
                             </tbody>
@@ -98,6 +105,8 @@
                                             <td style="text-align: center"><?=$currency=='USD'?'Terms':'Voorwaarde'?></td>
                                             <td style="text-align: center"><?=$currency=='USD'?'Vert.':'Vert.'?></td>
                                             <td style="text-align: center"><?=$currency=='USD'?'Customer&nbsp;Type':'Klanttype'?></td>
+                                            <td style="text-align: center"></td>
+                                            <td style="text-align: center">FIN</td>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -109,6 +118,8 @@
                                             @php($customer = \App\Models\Customer::query()->where('ListID', $quotation->CustomerRefListID)->first())
                                             <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->SalesRepRefFullName?:'&nbsp;'?></div></td>
                                             <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->CustomFieldKlanttype?:'&nbsp;'?></div></td>
+                                            <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->CustomFieldROUTE?:'&nbsp;'?></div></td>
+                                            <td><div class="div" style="width: auto;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">2000005993</div></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -122,12 +133,13 @@
                                 <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Description':'Omschrijving'?></th>
                                 <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Quantity':'Aantal'?></th>
                                 <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Unit&nbsp;of&nbsp;Measure':'Eenheid'?></th>
-                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Rate':'Prijs&nbsp;per&nbsp;stuk'?></th>
+                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Rate':'Prijs&nbsp;p/eenheid'?></th>
                                 <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Total':'Totaal'?></th>
                             </tr>
                             </thead>
                             <tbody>
                             @php($total = 0.00000)
+                            @php($btwTotal = 0.00000)
                             @php($quotationItems = \App\Models\QuotationItem::query()->where('quotation_id', $quotation->id)->get())
 
                             @foreach($quotationItems as $salesOrderItem)
@@ -137,21 +149,40 @@
                                         {{$item->Name}}</td>
                                     <td style="padding: 2px;text-align: left;border: 1px solid #ddd;">{{$salesOrderItem->SalesOrderLineDesc}}</td>
                                     <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">
-                                        {{$salesOrderItem->SalesOrderLineQuantity}}</td>
+                                        {{number_format($salesOrderItem->SalesOrderLineQuantity, 2)}}</td>
                                     <td style="padding: 2px;text-align: center;border: 1px solid #ddd;">{{$item->UnitOfMeasureSetRefFullName}}</td>
                                     <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">
                                         {{$salesOrderItem->SalesOrderLineRatePercent ?
-                                        $salesOrderItem->SalesOrderLineRatePercent .'%':
-                                        $salesOrderItem->SalesOrderLineRate}} </td>
+                                                                     number_format($salesOrderItem->SalesOrderLineRatePercent, 2)
+                                                                     .'%':
+                                                                     number_format($salesOrderItem->SalesOrderLineRate, 2)
+                                                                    }} </td>
                                     <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">{{$salesOrderItem->SalesOrderLineAmount}}</td>
                                 </tr>
-                                @php($total = $total + $salesOrderItem->SalesOrderLineAmount)
+                                @if($item->SalesTaxCodeRefFullName != 'Non')
+                                    @php($total = $total + $salesOrderItem->SalesOrderLineAmount)
+                                    @php($btwTotal = $btwTotal + ( 0.1 * ($salesOrderItem->SalesOrderLineAmount)))
+                                @else
+                                    @php($total = $total + $salesOrderItem->SalesOrderLineAmount)
+                                @endif
                             @endforeach
                             </tbody>
                             <tfoot>
                             <tr>
-                                @php($logo = asset('tti-new_email.jpg'))
-                                @php($qrLogo = public_path('tti-email-qr.png'))
+                                <td colspan="4" style="text-align: left;padding-top: 5px">
+                                </td>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Subtotal':'Subtotaal'?>&nbsp;<?=$currency?></th>
+                                <th style="padding: 2px;text-align: right;vertical-align: top">
+                                    {{number_format($total, 2)}}</th>
+                            </tr>
+                            <tr>
+                                <td colspan="4" style="text-align: left;padding-top: 5px">
+                                </td>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Total VAT(10.0%)':'Totaal BTW(10.0%)'?>&nbsp;<?=$currency?></th>
+                                <th style="padding: 2px;text-align: right;vertical-align: top">
+                                    {{number_format($btwTotal, 2)}}</th>
+                            </tr>
+                            <tr>
                                 <td colspan="4" style="text-align: left;padding-top: 5px">
                                     {{ $model->CustomerMsgRefFullName }}
                                     <br>
@@ -162,14 +193,14 @@
                                     @endif
                                     <?=$currency=='USD'?'Scan the QR code to go to':'Scan de code om direct naar'?><br>
                                     www.ttistore.com <?=$currency=='USD'?'':'te gaan'?>.<br>
-                                    <img src="<?= $qrLogo; ?>">
+                                    <img src="<?= $message->embed($qrLogo); ?>">
                                     <br>
                                     Fabrikant van voedings- en farmaceutische producten.<br>
                                     Manufacturer of Food and Pharmaceutical products.
                                 </td>
-                                <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Total':'Totaal'?>&nbsp;<?=$currency?></th>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Total incl. VAT':'Totaal incl. BTW'?>&nbsp;<?=$currency?></th>
                                 <th style="padding: 2px;text-align: right;vertical-align: top">
-                                    {{number_format($total, 2)}}</th>
+                                    {{number_format($total + $btwTotal, 2)}}</th>
                             </tr>
                             </tfoot>
                         </table>

@@ -215,11 +215,6 @@ class CreateQuotation extends Component
     public function createQuotation()
     {
         $this->validate();
-//        if (empty($this->QItems))
-//        {
-//            $this->itemError = 'Please select at least one item';
-//            return false;
-//        }
         $term = Term::query()->where('ListID', $this->term_id)->first();
         $quotation = new Quotation();
         $quotation->CustomerRefListID = $this->selectedCustomer->ListID;
@@ -262,6 +257,7 @@ class CreateQuotation extends Component
                     $quotationItem->SalesOrderLineItemRefListID = $item['itemID'];
                     $quotationItem->SalesOrderLineDesc = $prod->Description;
                     $quotationItem->SalesOrderLineRatePercent = -$item['rate'];
+                    $quotationItem->SalesOrderLineRate = $discount;
                     $quotationItem->SalesOrderLineAmount = -$discount;
                     $quotationItem->save();
                 }
@@ -271,7 +267,7 @@ class CreateQuotation extends Component
                     $quotationItem = new QuotationItem();
                     $quotationItem->quotation_id = $quotation->id;
                     $quotationItem->SalesOrderLineItemRefListID = $item['itemID'];
-                    $quotationItem->SalesOrderLineDesc = $item['description'];
+                    $quotationItem->SalesOrderLineDesc = $prod->Description;
                     $quotationItem->SalesOrderLineRate = -$item['rate'];
                     $quotationItem->SalesOrderLineAmount = -$discount;
                     $quotationItem->save();
@@ -290,8 +286,8 @@ class CreateQuotation extends Component
                 $quotationItem->save();
             }
         }
-
-        return $this->redirect(route('quotations.index'));
+        session()->flash('Q1', 'Succesfully created quotation Q-' . 10617 + $quotation->id);
+        return redirect(route('quotations.index'));
     }
     public function setDefaultMemoTemplate()
     {

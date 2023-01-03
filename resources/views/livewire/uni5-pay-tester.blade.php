@@ -6,6 +6,7 @@
     <br>
     <br>
     <div style="text-align: center">
-        <h1>Response: {{ $response  }}</h1>
+        <button class="btn btn-primary" wire:click="makePayment">Create test order</button>
     </div>
+    {{ $response }}
 </div>

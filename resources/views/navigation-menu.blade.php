@@ -117,6 +117,11 @@
                                             {{ __('Customer Near Me') }}
                                         </x-jet-dropdown-link>
                                     @endif
+                                    @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
+                                        <x-jet-dropdown-link href="{{ route('quotations.index') }}">
+                                            {{ __('Quotations') }}
+                                        </x-jet-dropdown-link>
+                                    @endif
                                     @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 1)
                                         <x-jet-dropdown-link href="{{ route('audits') }}">
                                             {{ __('Audit trail') }}
@@ -219,14 +224,9 @@
                     class="flex items-center gap-2 bg-white px-5 py-2.5 rounded-md shadow"
                 >
                     @if(session()->has('currency'))
-                        @if(session()->get('currency') == 'EUR')
-                            EUR🇪🇺
-                        @endif
-                            @if(session()->get('currency') == 'USD')
-                            USD🇺🇸
-                        @endif
+                        {{ session()->get('currency') }}<img src="{{ asset('currency/' . session()->get('currency') .  '.png') }}" alt="">
                     @else
-                        SRD🇸🇷
+                        SRD<img src="{{ asset('currency/SRD.png') }}" alt="">
                     @endif
 
 
@@ -534,7 +534,7 @@
                     {{ __('Audit trail') }}
                 </x-jet-responsive-nav-link>
                 @endif
-                <x-jet-responsive-nav-link target="_blank" href="https://v1.ttistore.com:463">
+                <x-jet-responsive-nav-link target="_blank" href="https://v1.ttistore.com:463 ">
                     {{ __('Go to TTISTORE 1.0') }}
                 </x-jet-responsive-nav-link>
             @else

@@ -9,6 +9,9 @@ use App\Models\CartItem;
 use App\Models\CustomerMessage;
 use App\Models\QbCustomer;
 use App\Models\SalesOrderItem;
+use App\Models\TempBoItem;
+use App\Models\TempSO;
+use App\Models\TempSoItem;
 use App\Models\UserCustomer;
 use Illuminate\Http\Request;
 use App\Models\Customer;
@@ -16,6 +19,7 @@ use App\Models\SalesOrder;
 use App\Models\Term;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 use Livewire\Component;
 use phpDocumentor\Reflection\Types\This;
@@ -165,6 +169,23 @@ class Checkout extends Component
         $this->saleCustomer = QbCustomer::where('ListID',$cID)->first();
     }
 
+    public function selectPayment($paymentId)
+    {
+        $this->paymentMethod = $paymentId;
+    }
+
+    public function pay()
+    {
+        if ($this->paymentMethod == 1)
+        {
+            $this->Uni5PayPayment();
+        }
+        if ($this->paymentMethod == 2)
+        {
+            $this->createSalesOrder(null);
+        }
+    }
+
     public function createSalesOrder(Request $request)
     {
 
@@ -218,6 +239,7 @@ class Checkout extends Component
             $sale->ShipDate = $this->date;
             $sale->Memo = $this->memo;
             $sale->save();
+
             foreach ($cartItems as $cartItem)
             {
                 $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->first();
@@ -460,5 +482,108 @@ class Checkout extends Component
             }
             return redirect()->to(route('dashboard') . '?order=' . $sale->id);
         }
+    }
+
+    public function Uni5PayPayment()
+    {
+        $cartItems = CartItem::query()->where('uid', Auth::user()->id)->get();
+//        $sale = new TempSO();
+//        $sale->customerListID = $this->customer_id;
+//        $sale->userID = Auth::user()->id;
+//        if ($this->memo != null)
+//        {
+//            $sale->memo = '1';
+//        }
+//        else
+//        {
+//            $sale->memo = '1';
+//        }
+//        $sale->date = date('Y-m-d');
+//        $sale->save();
+        $totalAmount = 0;
+
+        foreach ($cartItems as $cartItem)
+        {
+            $item = \App\Models\Item::query()->where('ListID', $cartItem->prod_id)->get()->first();
+//            if($cartItem->qty > ($item->QuantityOnHand - $item->QuantityOnSalesOrder))
+//            {
+//                if ($this->customer_id == '410000-1128694047' or $this->retail == 1)
+//                {
+//                    $saleItem = new TempSoItem();
+//                    $saleItem->tempSoID = 1;
+//                    $saleItem->prodID = $item->ListID;
+//                    $saleItem->qty = ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
+//                    $saleItem->rate = $item->CustomBaliPrice;
+//                    $saleItem->amount = ($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice;
+//                    $saleItem->save();
+//                }
+//                else
+//                {
+//                    $saleItem = new TempSoItem();
+//                    $saleItem->tempSoID = 1;
+//                    $saleItem->prodID = $item->ListID;
+//                    $saleItem->qty = ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
+//                    $saleItem->rate = $item->SalesPrice;
+//                    $saleItem->amount = ($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice;
+//                    $saleItem->save();
+//                }
+//
+//
+//                $bo = new TempBoItem();
+//                $bo->tempSoID = 1;
+//                $bo->prodID = $item->ListID;
+//                $bo->qty = $cartItem->qty - ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
+//                $bo->save();
+//                $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
+//                $saveItem->QuantityOnSalesOrder = $saveItem->QuantityOnSalesOrder + ($item->QuantityOnHand - $item->QuantityOnSalesOrder);
+//                $saveItem->save();
+//            }
+            if($cartItem->qty <= ($item->QuantityOnHand - $item->QuantityOnSalesOrder))
+            {
+                if ($this->customer_id == '410000-1128694047' or $this->retail == 1)
+                {
+//                    $saleItem = new TempSoItem();
+//                    $saleItem->tempSoID =1;
+//                    $saleItem->prodID = $item->ListID;
+//                    $saleItem->qty = $cartItem->qty;
+//                    $saleItem->rate = $item->CustomBaliPrice;
+//                    $saleItem->amount = $cartItem->qty * $item->CustomBaliPrice;
+//                    $saleItem->save();
+                }
+                else
+                {
+//                    $saleItem = new TempSoItem();
+//                    $saleItem->tempSoID = 1;
+//                    $saleItem->prodID = $item->ListID;
+//                    $saleItem->qty = $cartItem->qty;
+//                    $saleItem->rate = $item->SalesPrice;
+//                    $saleItem->amount = $cartItem->qty * $item->SalesPrice;
+//                    $saleItem->save();
+
+//                    $saleItem = DB::table('temp_so_item')->insert(['tempSoID' => 1, 'prodID' => 50, 'qty' => 50, 'rate' => 50, 'amount' => $cartItem->qty * $item->SalesPrice]);
+                }
+
+                $totalAmount = $totalAmount +  $cartItem->qty * $item->SalesPrice;
+                $saveItem = \App\Models\Item::query()->where('ListID', $item->ListID)->first();
+                $saveItem->QuantityOnSalesOrder = $saveItem->QuantityOnSalesOrder + $cartItem->qty;
+                $saveItem->save();
+            }
+
+        }
+        $response = Http::withHeaders([ 'ApiKey' => 'c23d0927-85d3-42ee-9f59-a665eb138649'])->post('https://payment.uni5pay.sr/v1/qrcode_online',
+            [
+                'mchtOrderNo' => '271222',
+                'payment_desc' => $this->customer_id . '-' . date('dmYHis'),
+                'amount' => number_format($totalAmount, 2),
+                'currency' => '968',
+                'terminalId' => 'TGN',
+                'url_success' => 'https://dev.ttistore.com',
+                'url_failure' => 'https://dev.ttistore.com',
+                'url_notify' => 'https://dev.ttistore.com'
+            ]);
+        $responseArray = json_decode($response, true);
+        $paymentLink = 'https://payment.uni5pay.sr/' . $responseArray['id'];
+        return redirect($paymentLink);
+
     }
 }

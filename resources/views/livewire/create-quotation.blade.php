@@ -232,6 +232,7 @@
                             </thead>
                             <tbody class="border" style="overflow-y: auto; height: 300px">
                             @php($subTotal = 0)
+                            @php($totalBtw = 0)
                             @foreach($QItems as $key => $qItem)
                                 @php($item = \App\Models\Item::query()->where('ListID', $qItem['itemID'])->first(['SalesPrice', 'Description', 'FullName']))
 {{--                                @php($itemdesc = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_description')->where('item_id', $qItem['itemID'])->get()->first())--}}
@@ -407,12 +408,29 @@
                                             @endif
                                         @endif
                                         @if($qItem['itemID'] != '520000-1128115782' and $qItem['itemID'] != '530000-1128435487')
-                                        @php($subTotal = $subTotal  + ($qItem['qty'] * $item->SalesPrice))
+                                                @php($item = \App\Models\Item::query()->where('ListID',$qItem['itemID'])->first())
+{{--                                        @php($subTotal = $subTotal  + ($qItem['qty'] * $item->SalesPrice))--}}
                                         @if(session()->has('currency'))
                                             <span class="hidemobile">{{ session()->get('currency') }}</span> {{ number_format(($qItem['qty'] * $item->SalesPrice) / session()->get('exchangeRate') , 2)  }}
                                         @else
                                             <span class="hidemobile">SRD</span> {{ number_format($qItem['qty'] * $item->SalesPrice, 2)  }}
                                         @endif
+                                                @if($item->SalesTaxCodeRefFullName != 'Non')
+                                                    @if(isset($QItems[$key + 1]) and $QItems[$key + 1]['itemID'] == '520000-1128115782')
+                                                        @php($subTotal = $total + ($qItem['rate'] * $qItem['qty']))
+                                                        @php($totalBtw = $totalBtw + ( 0.1 * (($qItem['rate'] * $qItem['qty']) - $QItems[$key + 1]['rateValue'])))
+                                                    @else
+                                                        @if(isset($QItems[$key + 1]) and $QItems[$key + 1]['itemID'] == '530000-1128435487')
+                                                            @php($subTotal = $subTotal + ($qItem['rate'] * $qItem['qty']))
+                                                            @php($totalBtw = $totalBtw + ( 0.1 * ($qItem['rate'] * $qItem['qty'])))
+                                                        @else
+                                                            @php($subTotal = $subTotal + ($qItem['rate'] * $qItem['qty']))
+                                                            @php($totalBtw = $totalBtw + ( 0.1 * ($qItem['rate'] * $qItem['qty'])))
+                                                        @endif
+                                                    @endif
+                                                @else
+                                                    @php($subTotal = $subTotal + ($qItem['rate'] * $qItem['qty']))
+                                                @endif
                                         @endif
 
                                     </td>
@@ -459,9 +477,48 @@
                             <tfoot>
                             <tr>
                                 <td class="p-6">
-                                    Total
                                 </td>
                                 <td >
+                                </td>
+                                {{--                                <td class="">--}}
+                                {{--                                </td>--}}
+                                <td class="hidden 2xl:block">
+                                </td>
+                                <td class="p-6 border-l border-b">
+                                    Subtotaal Excl. BTW
+                                </td>
+{{--                                {{ $total }}--}}
+                                <td colspan="2" class="p-6 border-b border-r">
+                                    @if(session()->has('currency'))
+                                        <span class="hidemobile">{{session()->get('currency')}}</span> {{ number_format($subTotal / session()->get('exchangeRate'), 2) }}
+                                    @else
+                                        <span class="hidemobile">SRD</span> {{ number_format($subTotal, 2) }}
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-6">
+                                </td>
+                                <td >
+                                </td>
+                                {{--                                <td class="">--}}
+                                {{--                                </td>--}}
+                                <td class="hidden 2xl:block">
+                                </td>
+                                <td class="p-6 border-l border-b">
+                                    Total BTW (10.0%)
+                                </td>
+{{--                                {{ $total }}--}}
+                                <td colspan="2" class="p-6 border-b border-r">
+                                    @if(session()->has('currency'))
+                                        <span class="hidemobile">{{session()->get('currency')}}</span> {{ number_format($totalBtw / session()->get('exchangeRate'), 2) }}
+                                    @else
+                                        <span class="hidemobile">SRD</span> {{ number_format($totalBtw, 2) }}
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-6">
                                 </td>
                                 <td>
                                 </td>
@@ -469,12 +526,15 @@
                                 {{--                                </td>--}}
                                 <td class="hidden 2xl:block">
                                 </td>
+                                <td class="p-6 border-l border-b">
+                                    Total incl. BTW
+                                </td>
 {{--                                {{ $total }}--}}
-                                <td class="p-6">
+                                <td colspan="2" class="p-6 border-b border-r">
                                     @if(session()->has('currency'))
-                                        <span class="hidemobile">{{session()->get('currency')}}</span> {{ number_format($subTotal / session()->get('exchangeRate'), 2) }}
+                                        <span class="hidemobile">{{session()->get('currency')}}</span> {{ number_format(($subTotal + $totalBtw) / session()->get('exchangeRate'), 2) }}
                                     @else
-                                        <span class="hidemobile">SRD</span> {{ number_format($subTotal, 2) }}
+                                        <span class="hidemobile">SRD</span> {{ number_format($subTotal + $totalBtw, 2) }}
                                     @endif
                                 </td>
                             </tr>
@@ -510,7 +570,7 @@
                             <option value="2">Prices ex-Warehouse Tropical Trade</option>
                         </select>
                         <br>
-                        <textarea wire:model="memo" readonly style="width: 500px; font-family: sflight; font-size: 20px" class="w-full block appearance-none  border border-gray-200 bg-gray-50 text-gray-700 rounded leading-tight focus:outline-none focus:border-gray-500" name="memoText" id="memoText" cols="30" rows="6"></textarea>
+                        <textarea wire:model="memo" style="width: 500px; font-family: sflight; font-size: 20px" class="w-full block appearance-none  border border-gray-200 bg-gray-50 text-gray-700 rounded leading-tight focus:outline-none focus:border-gray-500" name="memoText" id="memoText" cols="30" rows="6"></textarea>
 
                     </div>
                         <br>
@@ -661,6 +721,8 @@
                                                                                 <td style="text-align: center"><?=$currency=='USD'?'Terms':'Voorwaarde'?></td>
                                                                                 <td style="text-align: center"><?=$currency=='USD'?'Vert.':'Vert.'?></td>
                                                                                 <td style="text-align: center"><?=$currency=='USD'?'Customer&nbsp;Type':'Klanttype'?></td>
+                                                                                <td style="text-align: center"></td>
+                                                                                <td style="text-align: center">FIN</td>
                                                                             </tr>
                                                                             </thead>
                                                                             <tbody>
@@ -677,6 +739,8 @@
                                                                                 @php($customer = $selectedCustomer)
                                                                                 <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->SalesRepRefFullName??'&nbsp;'?></div></td>
                                                                                 <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->CustomFieldKlanttype??'&nbsp;'?></div></td>
+                                                                                <td><div class="div" style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->CustomFieldROUTE??'&nbsp;'?></div></td>
+                                                                                <td><div class="div whitespace-nowrap" style="width: auto;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">2000005993</div></td>
                                                                             </tr>
                                                                             </tbody>
                                                                         </table>
@@ -690,12 +754,13 @@
                                                                     <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Description':'Omschrijving'?></th>
                                                                     <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Quantity':'Aantal'?></th>
                                                                     <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Unit&nbsp;of&nbsp;Measure':'Eenheid'?></th>
-                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Rate':'Prijs&nbsp;per&nbsp;stuk'?></th>
-                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Total':'Totaal'?></th>
+                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Rate':'Prijs&nbsp;p/eenheid'?></th>
+                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency=='USD'?'Total excl. VAT':'Totaal excl. BTW'?></th>
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
                                                                 @php($total = 0.00000)
+                                                                @php($btwTotal = 0.00000)
 {{--                                                                @php($quotationItems = \App\Models\QuotationItem::query()->where('quotation_id', $quotation->id)->get())--}}
                                                                 @foreach($QItems as $key => $salesOrderItem)
                                                                     @if($salesOrderItem['itemID'] != '530000-1128435487' and $salesOrderItem['itemID'] != '520000-1128115782' )
@@ -713,10 +778,25 @@
                                                                             {{--                                                                            $salesOrderItem->SalesOrderLineRatePercent .'%':--}}
                                                                             {{--                                                                            $salesOrderItem->SalesOrderLineRate}} </td>--}}
                                                                             <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">
-                                                                                {{number_format($salesOrderItem['rate'], 2) }} </td>
+                                                                                {{number_format($salesOrderItem['rate'], 2) }}{{ ($item->SalesTaxCodeRefFullName != 'Non'? 'T':'') }} </td>
                                                                             <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">{{number_format($salesOrderItem['rate'] * $salesOrderItem['qty'], 2)}}</td>
+                                                                            @if($item->SalesTaxCodeRefFullName != 'Non')
+                                                                                @if(isset($QItems[$key + 1]) and $QItems[$key + 1]['itemID'] == '520000-1128115782')
+                                                                                    @php($total = $total + ($salesOrderItem['rate'] * $salesOrderItem['qty']))
+                                                                                    @php($btwTotal = $btwTotal + ( 0.1 * (($salesOrderItem['rate'] * $salesOrderItem['qty']) - $QItems[$key + 1]['rateValue'])))
+                                                                                @else
+                                                                                    @if(isset($QItems[$key + 1]) and $QItems[$key + 1]['itemID'] == '520000-1128115782')
+                                                                                        @php($total = $total + ($salesOrderItem['rate'] * $salesOrderItem['qty']))
+                                                                                        @php($btwTotal = $btwTotal + ( 0.1 * ($salesOrderItem['rate'] * $salesOrderItem['qty'])))
+                                                                                    @else
+                                                                                        @php($total = $total + ($salesOrderItem['rate'] * $salesOrderItem['qty']))
+                                                                                        @php($btwTotal = $btwTotal + ( 0.1 * ($salesOrderItem['rate'] * $salesOrderItem['qty'])))
+                                                                                    @endif
+                                                                                @endif
+                                                                                @else
+                                                                                @php($total = $total + ($salesOrderItem['rate'] * $salesOrderItem['qty']))
+                                                                            @endif
                                                                         </tr>
-                                                                        @php($total = $total + ($salesOrderItem['rate'] * $salesOrderItem['qty']))
                                                                     @endif
                                                                     @if($salesOrderItem['itemID'] == '520000-1128115782' )
                                                                         @php($item = \App\Models\Item::query()->where('ListID', $salesOrderItem['itemID'])->first())
@@ -738,39 +818,62 @@
                                                                             <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">-{{number_format($salesOrderItem['rateValue'], 2)}}</td>
                                                                         </tr>
                                                                         @php($total = $total + -($salesOrderItem['rateValue']))
+
                                                                     @endif
                                                                 @endforeach
                                                                 </tbody>
                                                                 <tfoot>
+                                                                <tr>
+                                                                    <td colspan="4" style="text-align: left;padding-top: 5px">
+                                                                    </td>
+                                                                    <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Total':'Subtotaal'?>&nbsp;<?=$currency?></th>
+                                                                    <th style="padding: 2px;text-align: right;vertical-align: top">
+                                                                        {{number_format($total, 2)}}</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    @php($logo = asset('tti-new_email.jpg'))
+                                                                    @php($qrLogo = asset('tti-email-qr.png'))
+                                                                    <td colspan="4" style="text-align: left;padding-top: 5px">
+                                                                    </td>
+                                                                    <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Total':'Totaal BTW(10.0%)'?>&nbsp;<?=$currency?></th>
+                                                                    <th style="padding: 2px;text-align: right;vertical-align: top">
+                                                                        {{number_format($btwTotal, 2)}}</th>
+                                                                </tr>
                                                                 <tr>
                                                                     @php($logo = asset('tti-new_email.jpg'))
                                                                     @php($qrLogo = asset('tti-email-qr.png'))
                                                                     <td colspan="4" style="text-align: left;padding-top: 5px">
 {{--                                                                         {{ $model->CustomerMsgRefFullName }}--}}
 {{--                                                                        <br>--}}
-{{--                                                                        <?=$model->Memo?nl2br($model->Memo).'<br>':''?><br><br>--}}
-{{--                                                                        @if($model->signature_id != null)--}}
+                                                                        {{ $memo }}<br><br>
+{{--                                                                        @if($signature != null)--}}
 {{--                                                                            @php($signature = \App\Models\Signature::query()->where('id', $model->signature_id)->first())--}}
 {{--                                                                            <img class="w-3/4" src="{{ asset('storage/signatures/' . $signature->image) }}" alt="{{ $signature->name }}">--}}
 {{--                                                                        @endif--}}
-{{--                                                                        <?=$currency=='USD'?'Scan the QR code to go to':'Scan de code om direct naar'?><br>--}}
-{{--                                                                        www.ttistore.com <?=$currency=='USD'?'':'te gaan'?>.<br>--}}
-{{--                                                                        <img src="<?= $qrLogo; ?>"><br>--}}
-{{--                                                                        Fabrikant van voedings- en farmaceutische producten.<br>--}}
-{{--                                                                        Manufacturer of Food and Pharmaceutical products.--}}
+                                                                        <?=$currency=='USD'?'Scan the QR code to go to':'Scan de code om direct naar'?><br>
+                                                                        www.ttistore.com <?=$currency=='USD'?'':'te gaan'?>.<br>
+                                                                        <img src="<?= $qrLogo; ?>"><br>
+                                                                        Fabrikant van voedings- en farmaceutische producten.<br>
+                                                                        Manufacturer of Food and Pharmaceutical products.
                                                                     </td>
-                                                                    <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Total':'Totaal'?>&nbsp;<?=$currency?></th>
+                                                                    <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency=='USD'?'Total':'Totaal incl. BTW'?>&nbsp;<?=$currency?></th>
                                                                     <th style="padding: 2px;text-align: right;vertical-align: top">
-                                                                        {{number_format($total, 2)}}</th>
-
+                                                                        {{number_format($total + $btwTotal, 2)}}</th>
                                                                 </tr>
                                                                 </tfoot>
                                                             </table>
-                                                            <div class="p-4">
-                                                                <button wire:click="createQuotation" style="right: 0; background-color: #0069AD; color: white; font-family: sfsemibold" class=" btn btn-info">
-                                                                    <img wire:loading wire:target="createQuotation" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
-                                                                    Create quotation
-                                                                </button>
+                                                            <div class="flex justify-between">
+                                                                <div class="p-4">
+                                                                    <button @click="showModal = false" style="right: 0;color: white; font-family: sfsemibold" class=" btn btn-danger">
+                                                                        Cancel
+                                                                    </button>
+                                                                </div>
+                                                                <div class="p-4">
+                                                                    <button wire:click="createQuotation" style="right: 0; background-color: #0069AD; color: white; font-family: sfsemibold" class=" btn btn-info">
+                                                                        <img wire:loading wire:target="createQuotation" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
+                                                                        Create quotation
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </td>
                                                     </tr>

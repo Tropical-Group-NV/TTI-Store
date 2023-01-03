@@ -28,7 +28,7 @@
                 <div style="z-index: 5; overflow-y: auto;max-height: 375px; overflow-x: hidden">
                     <hr>
                     <br>
-                    <table class="sm:rounded-lg table-auto border border-spacing-2 w-full">
+                    <table class="sm:rounded-lg table-auto border border-spacing-2 w-full whitespace-nowrap">
                         <thead>
                         <tr class="border border-slate-600 border-spacing-2">
                             <th class="border-collapse: separate  border border-slate-600">
@@ -47,15 +47,32 @@
                                 @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
                                 @if($retail != 1)
                                     @if(session()->has('currency'))
-                                        @php($subTotal = ($subTotal + ($cartItem->qty * $item->SalesPrice)) / session()->get('exchangeRate'))
+                                        @if($item->SalesTaxCodeRefFullName != 'Non')
+                                            @php($subTotal = ($subTotal + (1.1 *($cartItem->qty * $item->SalesPrice))) / session()->get('exchangeRate'))
+                                        @else
+                                            @php($subTotal = ($subTotal + ($cartItem->qty * $item->SalesPrice)) / session()->get('exchangeRate'))
+                                        @endif
                                     @else
-                                        @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
+                                        @if($item->SalesTaxCodeRefFullName != 'Non')
+                                            @php($subTotal = $subTotal + (1.1 * ($cartItem->qty * $item->SalesPrice)))
+                                        @else
+                                            @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
+                                        @endif
                                     @endif
                                 @else
                                     @if(session()->has('currency'))
-                                        @php($subTotal = ($subTotal + ($cartItem->qty * $item->CustomBaliPrice)) / session()->get('exchangeRate'))
+                                        @if($item->SalesTaxCodeRefFullName != 'Non')
+                                            @php($subTotal = ($subTotal + (1.1 *($cartItem->qty * $item->CustomBaliPrice))) / session()->get('exchangeRate'))
+                                        @else
+                                            @php($subTotal = ($subTotal + (($cartItem->qty * $item->CustomBaliPrice))) / session()->get('exchangeRate'))
+                                        @endif
                                     @else
-                                        @php($subTotal = $subTotal + ($cartItem->qty * $item->CustomBaliPrice))
+                                        @if($item->SalesTaxCodeRefFullName != 'Non')
+                                            @php($subTotal = $subTotal + (1.1 *($cartItem->qty * $item->CustomBaliPrice)))
+                                        @else
+                                            @php($subTotal = $subTotal + ($cartItem->qty * $item->CustomBaliPrice))
+                                        @endif
+
                                     @endif
                                 @endif
 
@@ -87,15 +104,31 @@
                                     <td class="border-collapse: separate border-slate-600">
                                         @if($retail != 1)
                                             @if(session()->has('currency'))
-                                                {{session()->get('currency')}} {{ number_format(($cartItem->qty * $item->SalesPrice) / session()->get('exchangeRate'), 2) }}
+                                                @if($item->SalesTaxCodeRefFullName != 'Non')
+                                                    {{session()->get('currency')}} {{ number_format((1.1 * ($cartItem->qty * $item->SalesPrice) / session()->get('exchangeRate')), 2) }}
+                                                @else
+                                                    {{session()->get('currency')}} {{ number_format(($cartItem->qty * $item->SalesPrice) / session()->get('exchangeRate'), 2) }}
+                                                @endif
                                             @else
-                                                SRD {{ number_format(($cartItem->qty * $item->SalesPrice), 2) }}
+                                                @if($item->SalesTaxCodeRefFullName != 'Non')
+                                                    SRD {{ number_format((1.1 * ($cartItem->qty * $item->SalesPrice)), 2) }}
+                                                @else
+                                                    SRD {{ number_format(($cartItem->qty * $item->SalesPrice), 2) }}
+                                                @endif
                                             @endif
                                         @else
                                             @if(session()->has('currency'))
-                                                {{session()->get('currency')}} {{ number_format(($cartItem->qty * $item->CustomBaliPrice) / session()->get('exchangeRate'), 2) }}
+                                                @if($item->SalesTaxCodeRefFullName != 'Non')
+                                                    {{session()->get('currency')}} {{ number_format(1.1 * (($cartItem->qty * $item->CustomBaliPrice) / session()->get('exchangeRate')), 2) }}
+                                                @else
+                                                    {{session()->get('currency')}} {{ number_format(($cartItem->qty * $item->CustomBaliPrice) / session()->get('exchangeRate'), 2) }}
+                                                @endif
                                             @else
-                                                SRD {{ number_format(($cartItem->qty * $item->CustomBaliPrice), 2) }}
+                                                @if($item->SalesTaxCodeRefFullName != 'Non')
+                                                    SRD {{ number_format(1.1 * ($cartItem->qty * $item->CustomBaliPrice), 2) }}
+                                                @else
+                                                    SRD {{ number_format(($cartItem->qty * $item->CustomBaliPrice), 2) }}
+                                                @endif
                                             @endif
                                         @endif
 
