@@ -21,14 +21,14 @@ class BTWCalculator extends Component
     }
     public function calculate($retailPrice, $perc)
     {
-        $this->retail = $retailPrice;
-        $this->percentageRet = $perc;
+        $this->retail = number_format($retailPrice, 2) ;
+        $this->percentageRet = number_format($perc, 2);
         $this->invoicePrice =  number_format((0.1 * $this->retail) + $this->retail, 2) ;
         $this->retailBtw =  number_format((0.1 * $this->retail), 2);
         $this->priceRet =  number_format(($this->percentageRet/100) * ($this->retail) + ($this->retail), 2);
         $this->btwRet = number_format(0.1 * (($this->percentageRet/100) * ($this->retail) + ($this->retail)), 2) ;
         $this->pricePerTray = number_format((0.1 * ((($this->percentageRet/100) * ($this->retail)) + ($this->retail))) + (($this->percentageRet/100) * ($this->retail) + ($this->retail)) , 2)  ;
-        $this->pricePerBottle = number_format((((0.1 * ((($this->percentageRet/100) * ($this->retail)) + ($this->retail))) + (($this->percentageRet/100) * ($this->retail) + ($this->retail)))/ 6), 2);
+        $this->pricePerBottle = number_format((((0.1 * ((($this->percentageRet/100) * ($this->retail)) + ($this->retail))) + (($this->percentageRet/100) * ($this->retail) + ($this->retail))) / 6), 2);
 //        $this->invoicePrice = number_format(((0.1 * $this->retail) + $this->retail) * ($this->percatageRate/100) + ((0.1 * $this->retail) + $this->retail), 2);
     }
     public function render()
