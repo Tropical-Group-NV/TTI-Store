@@ -6,14 +6,14 @@ use Livewire\Component;
 
 class BTWCalculator extends Component
 {
-    public $retail;
-    public $retailBtw;
-    public $invoicePrice;
-    public $percentageRet;
-    public $priceRet;
-    public $btwRet;
-    public $pricePerTray;
-    public $pricePerBottle;
+    public $retail = 0;
+    public $retailBtw= 0;
+    public $invoicePrice= 0;
+    public $percentageRet= 0;
+    public $priceRet= 0;
+    public $btwRet= 0;
+    public $pricePerTray= 0;
+    public $pricePerBottle= 0;
 
     public function boot()
     {
@@ -21,14 +21,14 @@ class BTWCalculator extends Component
     }
     public function calculate($retailPrice, $perc)
     {
-        $this->retail = $retailPrice;
-        $this->percentageRet = $perc;
+        $this->retail = number_format($retailPrice, 2) ;
+        $this->percentageRet = number_format($perc, 2);
         $this->invoicePrice =  number_format((0.1 * $this->retail) + $this->retail, 2) ;
         $this->retailBtw =  number_format((0.1 * $this->retail), 2);
-        $this->priceRet =  number_format(($this->percentageRet/100) * ($this->retail) + $this->retail, 2);
-        $this->btwRet =  number_format(0.1 * $this->priceRet, 2);
-        $this->pricePerTray =  number_format(($this->btwRet) + ($this->priceRet), 2);
-        $this->pricePerBottle =  number_format($this->pricePerTray/ 6, 2);
+        $this->priceRet =  number_format(($this->percentageRet/100) * ($this->retail) + ($this->retail), 2);
+        $this->btwRet = number_format(0.1 * (($this->percentageRet/100) * ($this->retail) + ($this->retail)), 2) ;
+        $this->pricePerTray = number_format((0.1 * ((($this->percentageRet/100) * ($this->retail)) + ($this->retail))) + (($this->percentageRet/100) * ($this->retail) + ($this->retail)) , 2)  ;
+        $this->pricePerBottle = number_format((((0.1 * ((($this->percentageRet/100) * ($this->retail)) + ($this->retail))) + (($this->percentageRet/100) * ($this->retail) + ($this->retail))) / 6), 2);
 //        $this->invoicePrice = number_format(((0.1 * $this->retail) + $this->retail) * ($this->percatageRate/100) + ((0.1 * $this->retail) + $this->retail), 2);
     }
     public function render()

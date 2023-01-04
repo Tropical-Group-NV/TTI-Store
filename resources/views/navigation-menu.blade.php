@@ -121,6 +121,9 @@
                                         <x-jet-dropdown-link href="{{ route('quotations.index') }}">
                                             {{ __('Quotations') }}
                                         </x-jet-dropdown-link>
+                                        <x-jet-dropdown-link href="{{ route('btw-calculator') }}">
+                                            {{ __('BTW Calculator') }}
+                                        </x-jet-dropdown-link>
                                     @endif
                                     @if(\Illuminate\Support\Facades\Auth::user()->users_type_id == 1)
                                         <x-jet-dropdown-link href="{{ route('audits') }}">
@@ -537,6 +540,10 @@
                 @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)
                 <x-jet-responsive-nav-link href="{{ route('quotations.index') }}">
                     {{ __('Quotations') }}
+                </x-jet-responsive-nav-link>
+
+                    <x-jet-responsive-nav-link href="{{ route('btw-calculator') }}">
+                    {{ __('BTW Calculator') }}
                 </x-jet-responsive-nav-link>
 {{--                    <x-jet-responsive-nav-link href="{{ route('crm.index') }}">--}}
 {{--                    {{ __('CRM') }}--}}
