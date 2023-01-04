@@ -187,6 +187,12 @@ Route::get('contact-us', function ()
 }
 )->name('contact-page');
 
+Route::get('btw-calculator', function ()
+{
+    return view('calculator.btw-calculator');
+}
+)->name('btw-calculator');
+
 
 //Route::get('salesrep-order-report', function ()
 //{
@@ -223,4 +229,19 @@ Route::POST('api/save-customer-location',
         }
     }
     )->name('saveCustomerLocation')->middleware('auth');
+
+Route::get('api/order-confirm/{customer_id}/{id}', function( Request $request)
+{
+    \App\Models\Item::query()->where('id', $request->id)->update(['write_to_quickbook'=> null]);
+    \App\Jobs\SendFirstOrderMail::dispatch($request->customer_id, \Illuminate\Support\Facades\Auth::user()->id);
+        if (session()->has('currency'))
+        {
+            \App\Jobs\Import_Sales_Order_To_QB::dispatch($request->id, session()->get('currency'), session()->get('exchangeRate'));
+        }
+        else
+        {
+            \App\Jobs\Import_Sales_Order_To_QB::dispatch($request->id, 'SRD', 1);
+        }
+    return redirect(\route('home'));
+})->name('confirm-order');
 /** End API's */
