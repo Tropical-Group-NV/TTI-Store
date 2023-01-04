@@ -45,7 +45,7 @@
                     @else
                         @php($item = \App\Models\Item::query()->where('ListID', $item->ListID)->get()->first())
                     @endif
-                    @if($item!= null)
+                    @if($item!= null and $item->Type == 'ItemInventory')
                         @if(\Illuminate\Support\Facades\Auth::user()!= null and \Illuminate\Support\Facades\Auth::user()->users_type_id != 3  or \Illuminate\Support\Facades\Auth::user()!= null and !str_contains($item->FullName, 'INRUIL') and  \Illuminate\Support\Facades\Auth::user()->users_type_id == 3 or \Illuminate\Support\Facades\Auth::user() == null and !str_contains($item->FullName, 'INRUIL'))
                             @php($put = 1)
                             @php($currentPrivateBranch = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('settings_branch_view_item_on_user')->where('branch', $item->CustomFieldBranch)->get())
