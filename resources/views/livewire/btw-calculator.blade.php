@@ -78,13 +78,20 @@
                             <td colspan="2" class="py-4 px-6 ">
                                 {{ $pricePerTray }}
                             </td>
-                        </tr>
-                        <tr>
+                        </tr><tr>
                             <td class="py-4 px-6" >
                                 Consumentenprijs per fles
                             </td>
+                            <td colspan="2" class="py-4 px-6 ">
+                                {{ $pricePerTray }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="py-4 px-6" >
+                                Af te dragen BTW winkelier
+                            </td>
                             <td class="py-4 px-6 ">
-                                {{ $pricePerBottle }}
+                                {{ $btwRet }} - {{ $retailBtw }} = {{ number_format($btwRet - $retailBtw , 2) }}
                             </td>
                             <td class="py-4 px-6 ">
                                 <button wire:click="calculate(document.getElementById('retail-input').value,document.getElementById('perc-input').value)" class="btn btn-primary">
