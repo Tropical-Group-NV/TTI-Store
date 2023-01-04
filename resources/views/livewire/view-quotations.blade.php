@@ -286,7 +286,7 @@
                                                                      .'%':
                                                                      number_format($salesOrderItem->SalesOrderLineRate, 2)
                                                                     }} </td>
-                                                                <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">{{$salesOrderItem->SalesOrderLineAmount}}</td>
+                                                                <td style="padding: 2px;text-align: right;border: 1px solid #ddd;">{{$salesOrderItem->SalesOrderLineAmount}}{{ ($item->SalesTaxCodeRefFullName != 'Non'? 'T':'') }}</td>
                                                             </tr>
                                                             @if($item->SalesTaxCodeRefFullName != 'Non')
                                                                 @php($total = $total + $salesOrderItem->SalesOrderLineAmount)
