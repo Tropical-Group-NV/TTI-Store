@@ -43,7 +43,7 @@ class AuthServiceProvider extends ServiceProvider
                     {
                         $user = User::query()->where('username', $request->username)->first();
                         $findCustomer = DB::connection('qb_sales')->table('users_customer')->where('user_id', $user->id)->exists();
-                        if ($findCustomer)
+                        if ($findCustomer or $user->users_type_id == 3)
                         {
 //                            if ($user->active == 1)
 //                            {
