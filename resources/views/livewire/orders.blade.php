@@ -14,23 +14,7 @@
             $rate = 1;
         }
     @endphp
-
-    {{--    <div class="bg-white shadow-xl sm:rounded-lg">--}}
-    {{--        <div style="" class="py-12 md:px-6  2xl:px-20 ">--}}
-    {{--            <form class="" id="searchform" action="{{ route('orders') }}">--}}
-    {{--                <ul class="flex">--}}
-    {{--                    <input onkeyup="searchItem2()" style="height:50px;" id="search_input2" placeholder="Search..." name="search" class="w-full rounded-md flex-shrink-0" autocomplete="false" type="search">--}}
-    {{--                    <button class="btn w-full" style="background-color: #0069AD; height: 50px">--}}
-    {{--                        <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">--}}
-    {{--                    </button>--}}
-    {{--                </ul>--}}
-    {{--            </form>--}}
-    {{--        </div>--}}
-    {{--    </div>--}}
     <div class="bg-white shadow-xl sm:rounded-lg">
-
-
-
         <div style="overflow-x: auto" >
             <div class="  py-12 2xl:px-20 md:px-6 px-4">
                 <form action="{{ route('orders') }}">
@@ -97,7 +81,7 @@
                             @php($items = \App\Models\SalesOrderItem::query()->where('sales_order_id', $order->id)->get())
                             <tr style="color: black" class="bg-white border-b">
                                 <td class="py-4 px-6" >
-                                    {{ $order->TxnDate }}
+                                    {{date("d-m-Y", strtotime($order->TxnDate))}}
                                 </td>
                                 <th style="color: #0069ad" scope="row" class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap">
                                     <b>{{ $order->RefNumber }}</b>
@@ -115,8 +99,14 @@
                                     @php($itemQty = 0)
                                     @php($subTotal = 0)
                                     @foreach($items as $item)
-                                        @php($itemQty = $itemQty + $item->SalesOrderLineQuantity)
-                                        @php($subTotal = $subTotal + $item->SalesOrderLineAmount)
+                                        @php($itemdesc = \App\Models\Item::query()->where('ListID', $item->SalesOrderLineItemRefListID)->first('SalesTaxCodeRefFullName'))
+                                    @if($itemdesc->SalesTaxCodeRefFullName != 'Non')
+                                            @php($itemQty = $itemQty + $item->SalesOrderLineQuantity)
+                                            @php($subTotal = $subTotal + (1.1 * $item->SalesOrderLineAmount))
+                                        @else
+                                            @php($itemQty = $itemQty + $item->SalesOrderLineQuantity)
+                                            @php($subTotal = $subTotal + $item->SalesOrderLineAmount)
+                                    @endif
                                     @endforeach
                                     {{ $itemQty }}
                                 </td>
@@ -124,7 +114,7 @@
                                     @if(session()->has('currency'))
                                         {{ session()->get('currency') }} {{ number_format($subTotal / $rate, 2) }}
                                     @else
-                                        SRD {{ $subTotal }}
+                                        SRD {{ number_format($subTotal, 2)  }}
                                     @endif
                                 </td>
                                 <td class="py-4 px-6">
@@ -154,7 +144,7 @@
                                     </td>
                                     <td class="py-4 px-6">
                                         @if($order->datetime_to_quickbook != null)
-                                            {{ date('Y-m-d', strtotime($order->datetime_to_quickbook)) }}
+                                            {{date("d-m-Y", strtotime($order->datetime_to_quickbook))}}
                                         @endif
                                     </td>
                                 @endif
@@ -227,7 +217,7 @@
                                                                                             </tr>
                                                                                             <tr>
                                                                                                 <td style="width: 80px"><?=$currency!='SRD'?'Date':'Datum'?></td>
-                                                                                                <td><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?php echo $order->TxnDate ?></div></td>
+                                                                                                <td><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">{{date("d-m-Y", strtotime($order->TxnDate))}}</div></td>
                                                                                             </tr>
                                                                                         </table>
                                                                                         <hr>
@@ -311,7 +301,7 @@
                                                                                             <tbody>
                                                                                             <tr>
                                                                                                 <td><div style="width: 150px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$order->PONumber?:'&nbsp;'?></div></td>
-                                                                                                <td><div style="border-radius: 25px;padding: 5px;border: 1px solid #ddd"><?php echo $order->ShipDate?></div></td>
+                                                                                                <td><div style="border-radius: 25px;padding: 5px;border: 1px solid #ddd">{{date("d-m-Y", strtotime($order->ShipDate))}}</div></td>
                                                                                                 <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$order->TermsRefFullName?:'&nbsp;'?></div></td>
                                                                                                 <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->SalesRepRefFullName?:'&nbsp;'?></div></td>
                                                                                                 <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->CustomFieldKlanttype?:'&nbsp;'?></div></td>
@@ -326,29 +316,63 @@
                                                                                     <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Item&nbsp;#':'Artikel&nbsp;Code'?></th>
                                                                                     <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Description':'Omschrijving'?></th>
                                                                                     <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Quantity':'Aantal'?></th>
-                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Unit&nbsp;of&nbsp;Measure':'Eeheid'?></th>
+                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Unit&nbsp;of&nbsp;Measure':'Eenheid'?></th>
                                                                                     <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Rate':'Prijs&nbsp;per&nbsp;stuk'?></th>
                                                                                     <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Total':'Totaal'?></th>
+{{--                                                                                    <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Total':'Totaal(incl BTW)'?></th>--}}
                                                                                 </tr>
                                                                                 </thead>
                                                                                 <tbody>
                                                                                 <?php
                                                                                 $total = 0.00000;
+                                                                                $totalBtw = 0;
                                                                                 $salesOrderItems = \App\Models\SalesOrderItem::query()->where('sales_order_id', $model->id)->get();
                                                                                 foreach ($salesOrderItems as $salesOrderItem)
+
                                                                                 {
                                                                                     $item = \App\Models\Item::query()->where('ListID', $salesOrderItem->SalesOrderLineItemRefListID)->first();
+                                                                                    if ($item->SalesTaxCodeRefFullName != 'Non')
+                                                                                        {
+                                                                                            $salesOrderItemAmountBTW = 1.1 *  $salesOrderItem->SalesOrderLineAmount;
+                                                                                        }
+                                                                                    else
+                                                                                        {
+                                                                                            $salesOrderItemAmountBTW = $salesOrderItem->SalesOrderLineAmount;
+                                                                                        }
                                                                                     echo '<tr><td style="padding: 2px;text-align: left;border: 1px solid #ddd;">'.$item->Name.'</td>'.
                                                                                         '<td style="padding: 2px;text-align: left;border: 1px solid #ddd;">'.$salesOrderItem->SalesOrderLineDesc.'</td>'.
-                                                                                        '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'.$salesOrderItem->SalesOrderLineQuantity.'</td>'.
+                                                                                        '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'. number_format($salesOrderItem->SalesOrderLineQuantity, 2).'</td>'.
                                                                                         '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'.$item->UnitOfMeasureSetRefFullName.'</td>'.
                                                                                         '<td style="padding: 2px;text-align: right;border: 1px solid #ddd;">'. number_format((float)$currency!='SRD'?$salesOrderItem->SalesOrderLineRate / $rate: $salesOrderItem->SalesOrderLineRate, 2, '.', '').'</td>'.
                                                                                         '<td style="padding: 2px;text-align: right;border: 1px solid #ddd">' . number_format((float)$currency!='SRD'?$salesOrderItem->SalesOrderLineAmount / $rate: $salesOrderItem->SalesOrderLineAmount, 2, '.', '')  . '</td></tr>';
-                                                                                    $total = $total + $salesOrderItem->SalesOrderLineAmount;
+//                                                                                        '<td style="padding: 2px;text-align: right;border: 1px solid #ddd">' . number_format((float)$currency!='SRD'?$salesOrderItemAmountBTW / $rate: $salesOrderItemAmountBTW, 2, '.', '')  . '</td></tr>';
+                                                                                    if ($item->SalesTaxCodeRefFullName != 'Non')
+                                                                                    {
+                                                                                        $total = $total + $salesOrderItem->SalesOrderLineAmount;
+                                                                                        $totalBtw = $totalBtw + (0.1 * $salesOrderItem->SalesOrderLineAmount);
+                                                                                    }
+                                                                                    else
+                                                                                    {
+                                                                                        $total = $total + $salesOrderItem->SalesOrderLineAmount;
+                                                                                    }
                                                                                 }
                                                                                 ?>
                                                                                 </tbody>
                                                                                 <tfoot>
+                                                                                <tr>
+                                                                                    <td colspan="4" style="text-align: left;padding-top: 5px">
+
+                                                                                    </td>
+                                                                                    <th style="padding: 2px;text-align: right;vertical-align: top">Subtotaal&nbsp;<?=$currency?></th>
+                                                                                    <th style="padding: 2px;text-align: right;vertical-align: top"><?php echo number_format((float)($total / $rate) , 2, '.', '');?></th>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td colspan="4" style="text-align: left;padding-top: 5px">
+
+                                                                                    </td>
+                                                                                    <th style="padding: 2px;text-align: right;vertical-align: top">Totaal BTW(10.0%)&nbsp;<?=$currency?></th>
+                                                                                    <th style="padding: 2px;text-align: right;vertical-align: top"><?php echo number_format((float)($totalBtw / $rate) , 2, '.', '');?></th>
+                                                                                </tr>
                                                                                 <tr>
                                                                                     <td colspan="4" style="text-align: left;padding-top: 5px">
                                                                                         <?=$model->CustomerMsgRefListID?\app\models\QbCustomerMsg::findOne($model->CustomerMsgRefListID)->Name.'<br>':''?>
@@ -360,8 +384,8 @@
                                                                                         Fabrikant van voedings- en farmaceutische producten.<br>
                                                                                         Manufacturer of Food and Pharmaceutical products.
                                                                                     </td>
-                                                                                    <th style="padding: 2px;text-align: right;vertical-align: top">Totaal&nbsp;<?=$currency?></th>
-                                                                                    <th style="padding: 2px;text-align: right;vertical-align: top"><?php echo number_format((float)($total / $rate) , 2, '.', '');?></th>
+                                                                                    <th style="padding: 2px;text-align: right;vertical-align: top">Totaal incl. BTW&nbsp;<?=$currency?></th>
+                                                                                    <th style="padding: 2px;text-align: right;vertical-align: top"><?php echo number_format((float)($total + $totalBtw / $rate) , 2, '.', '');?></th>
                                                                                 </tr>
                                                                                 </tfoot>
                                                                             </table>
@@ -386,9 +410,6 @@
                                 </td>
                             </tr>
                         @endforeach
-
-
-
                         </tbody>
                     </table>
                 </div>

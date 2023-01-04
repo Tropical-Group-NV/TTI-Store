@@ -48,52 +48,64 @@ class Import_Sales_Order_To_QB implements ShouldQueue
     public function handle()
     {
 
-        if (ImportSoInProcess::query()->count() == 0)
+        $model = SalesOrder::query()->where('id', $this->sales_order_id)->first();
+        $c = QbCustomer::query()->where('ListID', $model->CustomerRefListID)->first();
+        $logo = asset('tti-new_email');
+        $qrLogo = asset('tti-email-qr');
+        $currency = 'SRD';
+//                DB::connection('qb_sales')->update( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $this->sales_order_id. '; SET NOCOUNT ON;');
+        if ($c->Email != '' or $c->Email != null)
         {
-            $in_process = new ImportSoInProcess();
-            $in_process->in_process = 1;
-            $in_process->save();
-            try
-            {
-                $model = SalesOrder::query()->where('id', $this->sales_order_id)->first();
-                $c = QbCustomer::query()->where('ListID', $model->CustomerRefListID)->first();
-                $logo = asset('tti-new_email');
-                $qrLogo = asset('tti-email-qr');
-                $currency = 'SRD';
-                DB::connection('qb_sales')->update( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $this->sales_order_id. '; SET NOCOUNT ON;');
-                if ($c->Email != '' or $c->Email != null)
-                {
-                    Mail::to($c->Email)->send(new OrderNew($this->sales_order_id, $this->currency, $this->currencyRate));
-                }
-                ImportSoInProcess::query()->delete();
-            }
-            catch (\Exception $e)
-            {
+            Mail::to($c->Email)->send(new OrderNew($this->sales_order_id, $this->currency, $this->currencyRate));
+        }
+
+//
+//        if (ImportSoInProcess::query()->count() == 0)
+//        {
+////            $in_process = new ImportSoInProcess();
+////            $in_process->in_process = 1;
+////            $in_process->save();
+//            try
+//            {
 //                $model = SalesOrder::query()->where('id', $this->sales_order_id)->first();
 //                $c = QbCustomer::query()->where('ListID', $model->CustomerRefListID)->first();
-//                $admins = AdminEmail::all();
-//                $newUser = TemporaryUserInfo::query()->where('id', $c)->first();
-//                foreach ($admins as $admin)
+//                $logo = asset('tti-new_email');
+//                $qrLogo = asset('tti-email-qr');
+//                $currency = 'SRD';
+////                DB::connection('qb_sales')->update( "EXEC [dbo].[sp_insert_sales_order_to_quickbook] @sales_order_id = " . $this->sales_order_id. '; SET NOCOUNT ON;');
+//                if ($c->Email != '' or $c->Email != null)
 //                {
-//
-//                    $mail = Mail::raw('Failed to import order "' . $this->sales_order_id . '" to Quickbooks please inspect this error.',
-//                        function($msg)
-//                        {
-//                            $model = SalesOrder::query()->where('id', $this->sales_order_id)->first();
-//                            $customer = QbCustomer::query()->where('ListID',  $model->CustomerRefListID)->first();
-//                            $msg->to($admin->email)->subject('Failed Sales Order Import');
-//                        });
+//                    Mail::to($c->Email)->send(new OrderNew($this->sales_order_id, $this->currency, $this->currencyRate));
 //                }
-                $this->release(5);
-                ImportSoInProcess::query()->delete();
-            }
-
-
-        }
-        else
-        {
-            Import_Sales_Order_To_QB::dispatch($this->sales_order_id, $this->currency, $this->currencyRate)->delay(now()->addMinutes(5));
-        }
+////                ImportSoInProcess::query()->delete();
+//            }
+//            catch (\Exception $e)
+//            {
+////                $model = SalesOrder::query()->where('id', $this->sales_order_id)->first();
+////                $c = QbCustomer::query()->where('ListID', $model->CustomerRefListID)->first();
+////                $admins = AdminEmail::all();
+////                $newUser = TemporaryUserInfo::query()->where('id', $c)->first();
+////                foreach ($admins as $admin)
+////                {
+////
+////                    $mail = Mail::raw('Failed to import order "' . $this->sales_order_id . '" to Quickbooks please inspect this error.',
+////                        function($msg)
+////                        {
+////                            $model = SalesOrder::query()->where('id', $this->sales_order_id)->first();
+////                            $customer = QbCustomer::query()->where('ListID',  $model->CustomerRefListID)->first();
+////                            $msg->to($admin->email)->subject('Failed Sales Order Import');
+////                        });
+////                }
+//                $this->release(5);
+//                ImportSoInProcess::query()->delete();
+//            }
+//
+//
+//        }
+//        else
+//        {
+//            Import_Sales_Order_To_QB::dispatch($this->sales_order_id, $this->currency, $this->currencyRate)->delay(now()->addMinutes(5));
+//        }
 
 
     }

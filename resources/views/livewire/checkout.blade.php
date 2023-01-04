@@ -96,12 +96,12 @@
             <div class="px-8">
                 <div style=" width: 100%" class="w-60">
                     @if($boEnabled == 1)
-                    <span class="text-red-600">The quantity of items that are currently not in stock will automatically be added to backorders</span>
+{{--                    <span class="text-red-600">The quantity of items that are currently not in stock will automatically be added to backorders</span>--}}
                     @endif
                     <br>
                     <br>
                     <div style="overflow-x: auto" class="overflow-auto">
-                        <table style="overflow-x: auto; width: 100%" class="sm:rounded-lg">
+                        <table style="overflow-x: auto; width: 100%" class="sm:rounded-lg whitespace-nowrap">
                             <thead>
                             <tr class="">
                                 <th class="">
@@ -117,14 +117,15 @@
                                     Backordered
                                 </th>
                                 <th class="px-4">
-                                    Rate
+                                    Rate(excl. BTW)
                                 </th>
                                 <th class="px-4">
-                                    Amount
+                                    Amount(excl. BTW)
                                 </th>
                             </tr>
                             </thead>
                             <tbody class="border" style="overflow-y: auto; height: 300px">
+                            @php($totalBtw = 0)
                             @php($subTotal = 0)
                             @if($cartItemExist)
                                 @foreach($cartItems as $cartItem)
@@ -133,20 +134,50 @@
                                     @php($image = \Illuminate\Support\Facades\DB::connection('qb_sales')->table('item_images')->where('item_id', $item->ListID)->get()->first())
                                     @if($customer_id == '410000-1128694047' or $retail == 1)
                                         @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
-                                            @php($subTotal = $subTotal + (($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice))
+                                            @if($item->SalesTaxCodeRefFullName != 'Non')
+                                                @php($subTotal = $subTotal + ((($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice)))
+                                                @php($totalBtw = $totalBtw + (0.1 * (($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice)))
+                                            @else
+                                                @php($subTotal = $subTotal + (($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->CustomBaliPrice))
+                                            @endif
                                         @else
-                                            @php($subTotal = $subTotal + ($cartItem->qty * $item->CustomBaliPrice))
+                                            @if($item->SalesTaxCodeRefFullName != 'Non')
+                                                @php($subTotal = $subTotal + (($cartItem->qty * $item->CustomBaliPrice)))
+                                                @php($totalBtw = $totalBtw + (0.1 * ($cartItem->qty * $item->CustomBaliPrice)))
+                                            @else
+                                                @php($subTotal = $subTotal + ($cartItem->qty * $item->CustomBaliPrice))
+                                            @endif
                                         @endif
                                     @else
                                     @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
-                                        @php($subTotal = $subTotal + (($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice))
+                                        @if($item->SalesTaxCodeRefFullName != 'Non')
+                                            @php($subTotal = $subTotal + ( (($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice)))
+                                            @php($totalBtw = $totalBtw + (0.1 * (($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice)))
+                                        @else
+                                            @php($subTotal = $subTotal + (($item->QuantityOnHand - $item->QuantityOnSalesOrder) * $item->SalesPrice))
+                                        @endif
                                     @else
-                                        @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
+                                        @if($item->SalesTaxCodeRefFullName != 'Non')
+                                            @php($subTotal = $subTotal + (($cartItem->qty * $item->SalesPrice)))
+                                            @php($totalBtw = $totalBtw + (0.1 * ($cartItem->qty * $item->SalesPrice)))
+                                        @else
+                                            @php($subTotal = $subTotal + ($cartItem->qty * $item->SalesPrice))
+                                        @endif
                                     @endif
+                                    @endif
+                                    @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
+                                        <tr>
+
+                                        </tr>
                                     @endif
                                     <tr class="border-b">
                                         <td class="p-6 hidden 2xl:block"  style="font-family: sfsemibold">
                                     <span>
+                                        @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
+                                        <div class="whitespace-normal" style="white-space: normal">
+                                                <span class="text-red-600">The quantity of items that are currently not in stock will automatically be added to backorders</span>
+                                            </div>
+                                        @endif
                                         {{ $item->FullName }}
                                     </span>
                                         </td>
@@ -230,6 +261,7 @@
                                                 @endif
                                             @endif
                                         </td>
+
                                         <td class="px-4">
                                             @if($customer_id == '410000-1128694047' or $retail == 1)
                                                 @if($cartItem->qty > $item->QuantityOnHand - $item->QuantityOnSalesOrder)
@@ -269,10 +301,8 @@
                                             @endif
                                             @endif
                                         </td>
-                                        <td>
-
-                                        </td>
                                     </tr>
+
                                 @endforeach
                                 @if($saleCustomer != '')
                                     @if($saleCustomer->PriceLevelRefListID == '60000-1139229677')
@@ -311,17 +341,18 @@
                             <tfoot>
                             <tr>
                                 <td class="p-6">
-                                    Total
-                                </td>
-                                <td >
+
                                 </td>
                                 <td>
                                 </td>
-                                <td class="">
+                                <td>
                                 </td>
                                 <td class="hidden 2xl:block">
                                 </td>
-                                <td class="p-6">
+                                <td class="px-4 border-l border-b">
+                                    Subtotal
+                                </td>
+                                <td class="px-4 border-b border-r">
                                     @if(session()->has('currency'))
                                         <span class="hidemobile">{{session()->get('currency')}}</span> {{ number_format($subTotal / session()->get('exchangeRate'), 2) }}
                                     @else
@@ -329,8 +360,52 @@
                                     @endif
                                 </td>
                             </tr>
+                            <tr>
+                                <td class="p-6">
+
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td class="hidden 2xl:block">
+                                </td>
+                                <td class="px-4 border-l border-b">
+                                    Total BTW(10.0%)
+                                </td>
+                                <td class="px-4 border-b border-r">
+                                    @if(session()->has('currency'))
+                                        <span class="hidemobile">{{session()->get('currency')}}</span> {{ number_format($totalBtw / session()->get('exchangeRate'), 2) }}
+                                    @else
+                                        <span class="hidemobile">SRD</span> {{ number_format($totalBtw, 2) }}
+                                    @endif
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="p-6">
+
+                                </td>
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                                <td class="hidden 2xl:block">
+                                </td>
+                                <td class="px-4 border-l border-b">
+                                    Total incl. BTW
+                                </td>
+                                <td class="px-4 border-r border-b">
+                                    @if(session()->has('currency'))
+                                        <span class="hidemobile">{{session()->get('currency')}}</span> {{ number_format($subTotal + $totalBtw / session()->get('exchangeRate'), 2) }}
+                                    @else
+                                        <span class="hidemobile">SRD</span> {{ number_format($subTotal + $totalBtw, 2) }}
+                                    @endif
+                                </td>
+                            </tr>
                             </tfoot>
                         </table>
+                        <br>
+                        <br>
                     </div>
                 </div>
             </div>
@@ -375,6 +450,80 @@
                                         <img wire:loading wire:target="createSalesOrder" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">
                                         Submit order
                                     </button>
+{{--                                    @if(\Illuminate\Support\Facades\Auth::user()->users_type_id != 3)--}}
+{{--                                        <a href="{{ route('quotations.create') }}?fromcart=1&customer={{$customer_id}}" style="right: 0; color: white; font-family: sfsemibold" class=" btn btn-success">--}}
+{{--                                            Create quotation--}}
+{{--                                        </a>--}}
+{{--                                        <button style="right: 0; background-color: #0069AD; color: white; font-family: sfsemibold" class=" btn btn-info">--}}
+{{--                                            <img wire:loading wire:target="createSalesOrder" style="width: 20px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif">--}}
+{{--                                            Submit order--}}
+{{--                                        </button>--}}
+{{--                                        @else--}}
+{{--                                        <div x-data="{ 'showModal': false }" @keydown.escape="showModal = false" @close.stop="showModal = false">--}}
+{{--                                            <!-- Trigger for Modal -->--}}
+{{--                                            <button style="right: 0; background-color: #0069AD; color: white; font-family: sfsemibold" class="btn btn-info" type="button"  @click="showModal =  ! showModal">--}}
+{{--                                                Submit order--}}
+{{--                                            </button>--}}
+
+{{--                                            <!-- Whatsapp Modal -->--}}
+{{--                                            <div x-show="showModal"--}}
+{{--                                                 class="fixed inset-0 z-30 flex items-center justify-center overflow-auto bg-black bg-opacity-50"--}}
+{{--                                                 x-transition.opacity x-transition:leave.duration.500ms >--}}
+{{--                                                <!-- Modal inner -->--}}
+{{--                                                <div x-show="showModal" x-transition:enter.duration.500ms--}}
+{{--                                                     x-transition:leave.duration.400ms--}}
+{{--                                                     class="max-w-3xl px-6 py-4 mx-auto text-left bg-white border rounded shadow-lg"--}}
+{{--                                                     @click.away="showModal = false"--}}
+{{--                                                >--}}
+{{--                                                    <!-- Title / Close-->--}}
+{{--                                                    <div class="flex items-center justify-between">--}}
+{{--                                                        <button type="button" class="z-50 cursor-pointer" @click="showModal = false">--}}
+{{--                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#25D366" stroke="currentColor">--}}
+{{--                                                                <path fill="#25D366" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />--}}
+{{--                                                            </svg>--}}
+{{--                                                        </button>--}}
+{{--                                                        <br>--}}
+
+{{--                                                    </div>--}}
+{{--                                                    <!-- content -->--}}
+{{--                                                    <div>--}}
+{{--                                                        <div class="flex justify-center">--}}
+{{--                                                            <h1 style="font-family: sfsemibold">--}}
+{{--                                                                <b style="text-align: center">Select payment option.</b>--}}
+{{--                                                            </h1>--}}
+{{--                                                        </div>--}}
+{{--                                                        <div class="flex justify-between">--}}
+{{--                                                            <div class="p-5">--}}
+{{--                                                                <div @if($paymentMethod != 1)wire:click="selectPayment('1')" @endif class="card bg-gray-100 @if($paymentMethod == 1)border-blue-400 @else cursor-pointer @endif">--}}
+{{--                                                                    <img wire:loading.remove wire:target="selectPayment('1')" style="width: 100px" src="{{ asset('Uni5Pay+/Logo.png') }}" alt="">--}}
+{{--                                                                    <img wire:loading wire:target="selectPayment('1')" style="width: 100px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif" alt="">--}}
+{{--                                                                </div>--}}
+{{--                                                                <div class="card-title">--}}
+{{--                                                                    Uni5Pay+--}}
+{{--                                                                </div>--}}
+{{--                                                            </div>--}}
+{{--                                                            <div class="p-5">--}}
+{{--                                                                <div @if($paymentMethod != 2)wire:click="selectPayment('2')" @endif class="card bg-gray-100 @if($paymentMethod == 2)border-blue-400 @else cursor-pointer @endif">--}}
+{{--                                                                    <img wire:loading.remove wire:target="selectPayment('2')" style="width: 100px" src="{{ asset('Icons/cash1.png') }}" alt="">--}}
+{{--                                                                    <img wire:loading wire:target="selectPayment('2')" style="width: 100px" src="https://upload.wikimedia.org/wikipedia/commons/a/ad/YouTube_loading_symbol_3_%28transparent%29.gif" alt="">--}}
+{{--                                                                </div>--}}
+{{--                                                                <div class="card-title">--}}
+{{--                                                                    Cash--}}
+{{--                                                                </div>--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                        <br>--}}
+{{--                                                        @if($paymentMethod != null)--}}
+{{--                                                            <div class="flex justify-end">--}}
+{{--                                                                <button class="btn " type="button" wire:click="pay" style="color: white; background-color: #0069ad">Create Order</button>--}}
+{{--                                                            </div>--}}
+{{--                                                        @endif--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+{{--                                    @endif--}}
+
                                 </div>
                             </div>
                         </div>

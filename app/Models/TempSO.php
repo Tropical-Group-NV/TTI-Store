@@ -8,5 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class TempSO extends Model
 {
     use HasFactory;
-    protected $table = 'temporary_salesorder';
+    protected $connection = 'sqlsrv';
+    protected $table = 'temp_so';
 }

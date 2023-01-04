@@ -3,6 +3,12 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        {{--        <meta name="csrf-token" content="{{ csrf_token() }}">--}}
+
+        <title>{{ config('app.name', 'Laravel') }}</title>
+{{--        <link rel="icon" href="{{ asset('Logo-04.ico') }}">--}}
+        <!-- Fonts -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
         <title>@yield('title')</title>
 
@@ -16,18 +22,25 @@
             }
         </style>
     </head>
-    <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
+    <body  class="antialiased">
+        <div style=" background-image: url('{{ asset('babies/baby3.jpg') }}'); background-repeat: no-repeat; background-size: cover" class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center sm:pt-0">
             <div class="max-w-xl mx-auto sm:px-6 lg:px-8">
                 <div class="flex items-center pt-8 sm:justify-start sm:pt-0">
                     <div class="px-4 text-lg text-gray-500 border-r border-gray-400 tracking-wider">
                         @yield('code')
                     </div>
 
-                    <div class="ml-4 text-lg text-gray-500 uppercase tracking-wider">
+                    <div style="font-size: 30px;" class="ml-4 text-lg dark:text-white uppercase tracking-wider">
                         @yield('message')
                     </div>
-                    <img style="height: 100px" src="{{ asset('logo/tp-mascott.png') }}" alt="">
+{{--                    <img style="height: 300px" src="{{ asset('babies/baby1.jpg') }}" alt="">--}}
+{{--                    <img style="height: 300px" src="{{ asset('logo/tp-mascott.png') }}" alt="">--}}
+                </div>
+                <div class="justify-center flex dark:text-white">
+                    <br>
+                    <a href="{{ session()->get('_previous')['url'] }}">
+                        <button class="btn" style="background-color: #0069ad; color: white; font-size: 20px">Go Back</button>
+                    </a>
                 </div>
             </div>
         </div>

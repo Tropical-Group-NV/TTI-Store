@@ -90,7 +90,7 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                         </tbody>
                                     </table>
                                 </td>
-                                <td style="width: 180px;border: none; vertical-align: top"><img src="<?= $message->embed($logo); ?>" style="width:180px"></td>
+                                <td style="width: 180px;border: none; vertical-align: top"><img src="<?= $message->embed($logo); ?>" style="width:140px"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -107,6 +107,8 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                             <td style="text-align: center"><?=$currency!='SRD'?'Terms':'Voorwaarde'?></td>
                                             <td style="text-align: center"><?=$currency!='SRD'?'Vert.':'Vert.'?></td>
                                             <td style="text-align: center"><?=$currency!='SRD'?'Customer&nbsp;Type':'Klanttype'?></td>
+                                            <td style="text-align: center"></td>
+                                            <td style="text-align: center">FIN</td>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -116,6 +118,8 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                             <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$model->TermsRefFullName?:'&nbsp;'?></div></td>
                                             <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->SalesRepRefFullName?:'&nbsp;'?></div></td>
                                             <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->CustomFieldKlanttype?:'&nbsp;'?></div></td>
+                                            <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center"><?=$customer->CustomFieldROUTE?:'&nbsp;'?></div></td>
+                                            <td><div style="width: 100px;border-radius: 25px;padding: 5px;border: 1px solid #ddd;text-align: center">2000005993</div></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -127,29 +131,58 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                 <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Item&nbsp;#':'Artikel&nbsp;Code'?></th>
                                 <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Description':'Omschrijving'?></th>
                                 <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Quantity':'Aantal'?></th>
-                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Unit&nbsp;of&nbsp;Measure':'Eeheid'?></th>
-                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Rate':'Prijs&nbsp;per&nbsp;stuk'?></th>
-                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Total':'Totaal'?></th>
+                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Unit&nbsp;of&nbsp;Measure':'Eenheid'?></th>
+                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Rate':'Prijs&nbsp;p/eenheid'?></th>
+                                <th style="border: 1px solid #ddd;padding: 2px;"><?=$currency!='SRD'?'Total excl. VAT':'Totaal excl. BTW'?></th>
                             </tr>
                             </thead>
                             <tbody>
                             <?php
                             $total = 0.00000;
+                            $btwTotal = 0;
                             $salesOrderItems = \App\Models\SalesOrderItem::query()->where('sales_order_id', $model->id)->get();
-                                foreach ($salesOrderItems as $salesOrderItem)
+                            foreach ($salesOrderItems as $salesOrderItem)
+
+                            {
+                                $item = \App\Models\Item::query()->where('ListID', $salesOrderItem->SalesOrderLineItemRefListID)->first();
+                                if ($item->SalesTaxCodeRefFullName != 'Non')
                                 {
-                                    $item = \App\Models\Item::query()->where('ListID', $salesOrderItem->SalesOrderLineItemRefListID)->first();
-                                    echo '<tr><td style="padding: 2px;text-align: left;border: 1px solid #ddd;">'.$item->Name.'</td>'.
-                                        '<td style="padding: 2px;text-align: left;border: 1px solid #ddd;">'.$salesOrderItem->SalesOrderLineDesc.'</td>'.
-                                        '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'.$salesOrderItem->SalesOrderLineQuantity.'</td>'.
-                                        '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'.$item->UnitOfMeasureSetRefFullName.'</td>'.
-                                        '<td style="padding: 2px;text-align: right;border: 1px solid #ddd;">'. number_format((float)$currency!='SRD'?$salesOrderItem->SalesOrderLineRate / $rate: $salesOrderItem->SalesOrderLineRate, 2, '.', '').'</td>'.
-                                        '<td style="padding: 2px;text-align: right;border: 1px solid #ddd">' . number_format((float)$currency!='SRD'?$salesOrderItem->SalesOrderLineAmount / $rate: $salesOrderItem->SalesOrderLineAmount, 2, '.', '')  . '</td></tr>';
-                                        $total = $total + $salesOrderItem->SalesOrderLineAmount;
+                                    $btwTotal = $btwTotal + (0.1 * $salesOrderItem->SalesOrderLineAmount);
+
                                 }
+                                else
+                                {
+
+                                }
+                                echo '<tr><td style="padding: 2px;text-align: left;border: 1px solid #ddd;">'.$item->Name.'</td>'.
+                                    '<td style="padding: 2px;text-align: left;border: 1px solid #ddd;">'.$salesOrderItem->SalesOrderLineDesc.'</td>'.
+                                    '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'. number_format($salesOrderItem->SalesOrderLineQuantity, 2).'</td>'.
+                                    '<td style="padding: 2px;text-align: center;border: 1px solid #ddd;">'.$item->UnitOfMeasureSetRefFullName.'</td>'.
+                                    '<td style="padding: 2px;text-align: right;border: 1px solid #ddd;">'. number_format((float)$currency!='SRD'?$salesOrderItem->SalesOrderLineRate / $rate: $salesOrderItem->SalesOrderLineRate, 2, '.', '') . '</td>'.
+                                    '<td style="padding: 2px;text-align: right;border: 1px solid #ddd">' . number_format((float)$currency!='SRD'?$salesOrderItem->SalesOrderLineAmount / $rate: $salesOrderItem->SalesOrderLineAmount, 2, '.', '') . ($salesOrderItem->SalesTaxCodeRefFullName!='Non'?'T':'') . '</td></tr>';
+                                    $total = $total + $salesOrderItem->SalesOrderLineAmount;
+                            }
                             ?>
                             </tbody>
                             <tfoot>
+                            <tr>
+                                <td colspan="3" style="text-align: left;padding-top: 5px"></td>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"></th>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency!='SRD'?'Subtotal':'Subtotaal'?>&nbsp;<?=$currency?></th>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"><?php echo number_format((float)$total / $rate, 2, '.', '');?></th>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="text-align: left;padding-top: 5px"></td>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"></th>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency!='SRD'?'Total BTW(10.0%)':'Totaal BTW(10.0%)'?>&nbsp;<?=$currency?></th>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"><?php echo number_format((float)$btwTotal / $rate, 2, '.', '');?></th>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="text-align: left;padding-top: 5px"></td>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"></th>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"><?=$currency!='SRD'?'Total incl. BTW':'Totaal incl. BTW'?>&nbsp;<?=$currency?></th>
+                                <th style="padding: 2px;text-align: right;vertical-align: top"><?php echo number_format((float)($total + $btwTotal) / $rate, 2, '.', '');?></th>
+                            </tr>
                             <tr>
                                 <td colspan="4" style="text-align: left;padding-top: 5px">
                                     <?=$model->CustomerMsgRefListID?\app\models\QbCustomerMsg::findOne($model->CustomerMsgRefListID)->Name.'<br>':''?>
@@ -161,8 +194,9 @@ Voor vragen kunt u contact opnemen met onze klantenservice op WhatsApp +597 8691
                                     Fabrikant van voedings- en farmaceutische producten.<br>
                                     Manufacturer of Food and Pharmaceutical products.
                                 </td>
-                                <th style="padding: 2px;text-align: right;vertical-align: top">Totaal&nbsp;<?=$currency?></th>
-                                <th style="padding: 2px;text-align: right;vertical-align: top"><?php echo number_format((float)$total / $rate, 2, '.', '');?></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
                             </tr>
                             </tfoot>
                         </table>
