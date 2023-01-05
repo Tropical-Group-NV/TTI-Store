@@ -73,7 +73,7 @@
                         {{ $chinese == 0? 'De verkoopprijs per stuk is' : '每件售价为'}} SRD <span class="text-red-500"><b><span id="pricePerUnit">0.00</span></b></span>
                         <br>
                         <br>
-                        {{ $chinese == 0? 'Ik moet' : '我必须在增值税中支付'}}  SRD <span class="text-red-500"><b id="totalBtw">0.00</b></span> {{ $chinese == 0? 'Ik moet' : 'afdragen aan BTW'}}
+                        {{ $chinese == 0? 'Ik moet' : '我必须在增值税中支付'}}  SRD <span class="text-red-500"><b id="totalBtw">0.00</b></span> {{ $chinese == 0? 'afdragen aan BTW' : ''}}
                     </div>
                 </div>
             </div>
