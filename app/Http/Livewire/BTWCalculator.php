@@ -16,6 +16,7 @@ class BTWCalculator extends Component
     public $pricePerBottle= 0;
     public $stuks;
     public $priceType;
+    public $chinese = 0;
 
     public function boot()
     {
@@ -36,5 +37,14 @@ class BTWCalculator extends Component
     public function render()
     {
         return view('livewire.btw-calculator');
+    }
+
+    public function chineseOn()
+    {
+        $this->chinese = 1;
+    }
+    public function chineseOff()
+    {
+        $this->chinese = 0;
     }
 }
