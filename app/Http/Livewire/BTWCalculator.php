@@ -14,6 +14,8 @@ class BTWCalculator extends Component
     public $btwRet= 0;
     public $pricePerTray= 0;
     public $pricePerBottle= 0;
+    public $stuks;
+    public $priceType;
 
     public function boot()
     {
@@ -21,8 +23,8 @@ class BTWCalculator extends Component
     }
     public function calculate($retailPrice, $perc)
     {
-        $this->retail = number_format($retailPrice, 2) ;
-        $this->percentageRet = number_format($perc, 2);
+        $this->retail = $retailPrice ;
+        $this->percentageRet = $perc;
         $this->invoicePrice =  number_format((0.1 * $this->retail) + $this->retail, 2) ;
         $this->retailBtw =  number_format((0.1 * $this->retail), 2);
         $this->priceRet =  number_format(($this->percentageRet/100) * ($this->retail) + ($this->retail), 2);

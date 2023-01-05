@@ -18,115 +18,87 @@
         <div style="overflow-x: auto" >
             <div style="overflow-x: auto">
                 <div style="overflow-x: auto">
-                    <table style="font-family: sflight" class="w-full text-sm text-left text-gray-500 whitespace-nowrap " id="dataTable">
-                        <thead style="background-color: #0069ad; color: white; opacity: 0.8" class="text-xs text-gray-700 uppercase bg-gray-50">
-                        <tr>
-                            <th class="py-3 px-6" colspan="5">
-
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td class="py-4 px-6" >
-                                Retailprijs zonder BTW
-                            </td>
-                            <td colspan="2" class="py-4 border-l">
-                                <input class="rounded justify-content-end border border-gray-100 pl-3" id="retail-input" wire:model="retail" type="text">
-                            </td>
-                        </tr>
-                        <tr class="">
-                            <td class="py-4 px-6 " >
-                                BTW 10%
-                            </td>
-                            <td class="py-4 px-6 border-b border-l">
-                                {{ $retailBtw }}
-                            </td>
-                            <td class="border-b"><b class="text-2xl">+</b></td>
-                        </tr>
-                        <tr class="border-b">
-                            <td class="py-4 px-6" >
-                                Factuurprijs
-                            </td>
-                            <td colspan="2" class="py-4 px-6 border-l" style="border-bottom-width: medium; border-bottom-color: black">
-                                {{ $invoicePrice }}
-                            </td>
-
-                        </tr>
-                        <tr class="border-t">
-                            <td class="pt-16 px-6" >
-                                Prijs Winkelier Retailprijs
-                            </td>
-                            <td class="pt-16 px-6 border-l" >
-                                {{ $priceRet }}
-                            </td>
-                            <td colspan="2" class="pt-16 px-6" >
-                                <input placeholder="%" id="perc-input" class="rounded border-gray-300" style="text-align: center" type="text" wire:model="percentageRet"><span style="margin-left:-20px;">%</span>
-                            </td>
-                        </tr>
-                        <tr class="border-b">
-                            <td class="py-4 px-6" >
-                                BTW 10%
-                            </td>
-                            <td class="py-4 px-6 border-l">
-                                {{ $btwRet }}
-                            </td>
-                            <td>
-                                <b class="text-2xl">
-                                    +
-                                </b>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="py-4 px-6" >
-                                Consumentenprijs per Tray
-                            </td>
-                            <td colspan="2" style="border-bottom-width: medium; border-bottom-color: black" class="py-4 px-6 border-l border-b b">
-                                {{ $pricePerTray }}
-                            </td>
-                        </tr><tr>
-                            <td class="py-4 px-6" >
-                                Consumentenprijs per fles
-                            </td>
-                            <td colspan="2" class="py-4 px-6 border-l">
-                                {{ $pricePerBottle }}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="py-4 px-6" >
-                                Winkelier af te dragen BTW
-                            </td>
-                            <td class="py-4 px-6 border-l">
-                                <b>
-                                    {{ $btwRet }} - {{ $retailBtw }} = {{ number_format($btwRet - $retailBtw , 2) }}
-                                </b>
-                            </td>
-                            <td class="py-4 px-6 ">
-{{--                                <button wire:click="calculate(document.getElementById('retail-input').value,document.getElementById('perc-input').value)" class="btn btn-primary">--}}
-{{--                                    Calculate--}}
-{{--                                </button>--}}
-                            </td>
-                        </tr>
-                        </tbody>
-                        <tfoot>
-
-                        </tfoot>
-
-                    </table>
+                    <div class="p-4 text-sm sm:text-xl" style="font-family: sfsemibold">
+                        <div class="py-6">
+                            Ik heb <span>SRD</span><input class="rounded border-gray-300" id="retail" style="text-align: center" type="text" value="0">
+                            <select name="" id="priceType" class="rounded border-gray-300">
+                                <option value="1"> excl. BTW</option>
+                                <option value="2"> incl. BTW</option>
+                            </select> betaald.
+                            <br>
+                            <br>
+                            voor een tray van
+                            <select name="" id="quantity" class="rounded border-gray-300">
+                                <option value="1">1</option>
+                                <option value="6">6</option>
+                                <option value="12">12</option>
+                            </select>
+                             stuk(s).
+                        </div>
+                        en heb <input placeholder="" id="discount" class="rounded border-gray-300" style="text-align: center" type="text"><span style="margin-left:-20px;">%</span> <span style="padding-left: 12px"></span>korting.
+                        <br>
+                        <br>
+                        Mijn winstmarge is <input id="profit" placeholder="" class="rounded border-gray-300" style="text-align: center" type="text"><span style="margin-left:-20px;">%</span>
+                        <br>
+                        <br>
+                        De verkoopprijs per stuk is SRD <span class="text-red-500"><b><span id="pricePerUnit">0.00</span></b></span>
+                        <br>
+                        <br>
+                        Ik moet SRD <span class="text-red-500"><b id="totalBtw">0.00</b></span> afdragen aan BTW
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="p-4 flex justify-end">
-        <button wire:click="calculate(document.getElementById('retail-input').value,document.getElementById('perc-input').value)" style="background-color: #0069ad; color: white" class="btn">
-            Calculate
+        <button onclick="calculate()" style="background-color: #0069ad; color: white" class="btn">
+            Calculeer
         </button>
     </div>
 
     <br>
     <br>
     <script>
-        document.getElementById().value
+        function calculate()
+        {
+
+            let retail = document.getElementById('retail').value;
+            let priceType = document.getElementById('priceType').value;
+            let quantity = document.getElementById('quantity').value;
+            let discount = document.getElementById('discount').value;
+            let profitPercent = document.getElementById('profit').value;
+            let perUnit = document.getElementById('pricePerUnit');
+            let totalBtw = document.getElementById('totalBtw');
+
+                if (priceType == 1)
+                {
+                    var price = +retail - ((discount/100) * retail);
+                    var priceBtw = 0.1 * price
+                    var priceFull = 1.1 * price;
+                    var profit = ((+profitPercent + 100) / 100) * price;
+                    var profitBtw = 0.1 * profit;
+                    var profitFull = 1.1 * profit;
+                    var pricePerUnit = profitFull / +quantity;
+                    var totalBtwToGive = profitBtw - priceBtw;
+                    perUnit.innerText = pricePerUnit.toFixed(2);
+                    totalBtw.innerText = totalBtwToGive.toFixed(2);
+                }
+                if (priceType == 2)
+                {
+                    var priceAndDiscount = (10/11) * retail;
+                    var priceDiscount = (discount/100) * priceAndDiscount;
+                    var price = +priceAndDiscount - ((discount/100) * priceAndDiscount);
+                    var priceBtw = 0.1 * price;
+                    var priceFull = +price;
+                    var profit = ((+profitPercent + 100) / 100) * priceAndDiscount;
+                    var profitBtw = 0.1 * profit;
+                    var profitFull = 1.1 * profit;
+                    var pricePerUnit = profitFull / +quantity;
+                    var totalBtwToGive = profitBtw - priceBtw;
+                    perUnit.innerText = pricePerUnit.toFixed(2);
+                    totalBtw.innerText = totalBtwToGive.toFixed(2);
+                }
+        }
     </script>
     <br>
     <br>
