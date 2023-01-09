@@ -2,12 +2,16 @@
 
 namespace App\Http\Livewire;
 
+use App\Mail\CrmMail;
+use App\Mail\OrderNew;
 use App\Models\CrmInteraction;
 use App\Models\CrmInteractionStatus;
+use App\Models\QbCustomer;
 use App\Models\ViewQBCustomer;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Session\Store;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -27,6 +31,7 @@ class ViewCrm extends Component
     public $statusID;
     public $customerSearch;
     public $statuses;
+    public $sendMail;
 
     protected $rules =
         [
@@ -76,6 +81,15 @@ class ViewCrm extends Component
         $this->customerID = '';
         $this->customerSearch = '';
         $this->dispatchBrowserEvent('createdTicket');
+        if ($this->sendMail == 1)
+        {
+
+            $crm = CrmInteraction::query()->where('id', $ticket->id)->first();
+
+            $customer = QbCustomer::query()->where('ListID', $crm->customer_ListID)->first();
+
+            Mail::to($customer->Email)->send(new CrmMail($ticket->subject, $ticket->description));
+        }
 
 
     }
@@ -92,9 +106,28 @@ class ViewCrm extends Component
         $this->customerSearch = $cust->FullName;
     }
 
-    public function updateCrm($crmID, $dt, $subject, $desc, $reminder, $status)
+    public function updateCrm($crmID, $dt, $subject, $desc, $reminder, $status, $mail)
     {
-        CrmInteraction::query()->where('id', $crmID)->update(['date_time' => str_replace('T', ' ', $dt ?? null) , 'subject' => $subject, 'description' => $desc, 'reminder' => str_replace('T', ' ', $reminder ?? null) ?? null, 'status_id' => $status]);
+        if ($reminder != null)
+        {
+            CrmInteraction::query()->where('id', $crmID)->update(['date_time' => str_replace('T', ' ', $dt ?? null) , 'subject' => $subject, 'description' => $desc, 'reminder' => str_replace('T', ' ', $reminder ?? null) ?? null, 'status_id' => $status]);
+        }
+        else
+        {
+            CrmInteraction::query()->where('id', $crmID)->update(['date_time' => str_replace('T', ' ', $dt ?? null) , 'subject' => $subject, 'description' => $desc, 'status_id' => $status]);
+
+        }
+        if ($mail == true)
+        {
+
+             $crm = CrmInteraction::query()->where('id', $crmID)->first();
+
+            $customer = QbCustomer::query()->where('ListID', $crm->customer_ListID)->first();
+
+            Mail::to($customer->Email)->send(new CrmMail($subject, $desc));
+        }
+        $this->dispatchBrowserEvent('savedTicket');
+
     }
 
     public function exportJson()

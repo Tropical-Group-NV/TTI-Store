@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\QbCustomer;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -232,7 +234,7 @@ Route::POST('api/save-customer-location',
 
 Route::get('api/order-confirm/{customer_id}/{id}', function( Request $request)
 {
-    \App\Models\Item::query()->where('id', $request->id)->update(['write_to_quickbook'=> null]);
+    \App\Models\SalesOrder::query()->where('id', $request->id)->update(['write_to_quickbook'=> null]);
     \App\Jobs\SendFirstOrderMail::dispatch($request->customer_id, \Illuminate\Support\Facades\Auth::user()->id);
         if (session()->has('currency'))
         {
@@ -244,4 +246,14 @@ Route::get('api/order-confirm/{customer_id}/{id}', function( Request $request)
         }
     return redirect(\route('home'));
 })->name('confirm-order');
+
+Route::get('api/payment-confirmed/{id}', function( Request $request)
+{
+    \App\Jobs\SendFirstOrderMail::dispatch('8000150C-1652181187', \Illuminate\Support\Facades\Auth::user()->id);
+    $mail = Mail::raw('Order TTI-' . $request->id .' has successfully been paid for with Uni5Pay+',
+        function($msg)
+        {
+            $msg->to('jamil.kasan@tropicalgroupnv.com')->subject('Payment has been made with Uni5Pay+');
+        });
+})->name('payment-confirmed');
 /** End API's */
