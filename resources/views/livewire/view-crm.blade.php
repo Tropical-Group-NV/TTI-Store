@@ -59,7 +59,7 @@
                                                             <span  x-show="open" x-transition>
                                                                     <div id="users" class="appearance-none block w-full text-gray-700 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white">
                                                                         @foreach($customers as $customer1)
-                                                                            <a wire:click="setCustomerID('{{$customer1->ListID}}')" class="list-none text-apple-blue-bold cursor-pointer">{{ $customer1->FullName }}</a>
+                                                                            <a @click="open = false" wire:click="setCustomerID('{{$customer1->ListID}}')" class="list-none text-apple-blue-bold cursor-pointer">{{ $customer1->FullName }}</a>
                                                                             <br>
                                                                         @endforeach
                                                                     </div>
@@ -71,21 +71,23 @@
                                             <div class="px-4">
                                                 <label for="">
                                                     Subject
-                                                    <input wire:model="subject" style="width: 400px" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Select date">
+                                                    <input wire:model="subject" style="width: 400px" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5">
                                                     @error('subject') <span class="text-red-500">{{ $message }}</span> @enderror
                                                 </label>
                                             </div>
-                                            <div class="px-4">
-                                                <label for="">
-                                                    Default description
-                                                    <select style="width: 400px" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5">
-                                                    </select>
-                                                </label>
-                                            </div>
+{{--                                            <div class="px-4">--}}
+{{--                                                <label for="">--}}
+{{--                                                    Default description--}}
+{{--                                                    <select onchange="defaultDescription()" id="description-default-create" style="width: 400px" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5">--}}
+{{--                                                        <option value="0"></option>--}}
+{{--                                                        <option value="1">Backorder canceled</option>--}}
+{{--                                                    </select>--}}
+{{--                                                </label>--}}
+{{--                                            </div>--}}
                                             <div class="px-4">
                                                 <label for="">
                                                     Description
-                                                    <textarea wire:model="description" style="width: 400px" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5" placeholder="Select date"></textarea>
+                                                    <textarea id="description-create" wire:model="description" style="width: 400px" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5"></textarea>
                                                     @error('description') <span class="text-red-500">{{ $message }}</span> @enderror
                                                 </label>
                                             </div>
@@ -113,7 +115,7 @@
                                             <div class="px-4">
                                                 <label for="">
 
-                                                    <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500">
+                                                    <input wire:model="sendMail" id="" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500">
                                                     Send email to client? <i>Subject and description are send to email.</i>
                                                 </label>
                                             </div>
@@ -193,13 +195,13 @@
                                     CSV
                                 </a>
 
-{{--                                <a href="#" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">--}}
-{{--                                    Edit Task--}}
-{{--                                </a>--}}
+                                {{--                                <a href="#" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">--}}
+                                {{--                                    Edit Task--}}
+                                {{--                                </a>--}}
 
-{{--                                <a href="#" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">--}}
-{{--                                    <span class="text-red-600">Delete Task</span>--}}
-{{--                                </a>--}}
+                                {{--                                <a href="#" class="flex items-center gap-2 w-full first-of-type:rounded-t-md last-of-type:rounded-b-md px-4 py-2.5 text-left text-sm hover:bg-gray-50 disabled:text-gray-500">--}}
+                                {{--                                    <span class="text-red-600">Delete Task</span>--}}
+                                {{--                                </a>--}}
                             </div>
                         </div>
                     </div>
@@ -275,7 +277,7 @@
                     <td class="py-4 px-6" >
                         @if($crm->reminder != null)
                             {{date("d-m-Y H:i:s", strtotime($crm->reminder))}}
-{{--                            {{$crm->reminder}}--}}
+                            {{--                            {{$crm->reminder}}--}}
                         @endif
 
                     </td>
@@ -452,13 +454,13 @@
                                         <div class="px-4">
                                             <label for="">
 
-                                                <input id="sendMail-{{ $crm->info }}" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500">
+                                                <input id="sendMail-{{ $crm->id }}" type="checkbox" value="1" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500">
                                                 Send email to client? <i>Subject and description are send to email.</i>
                                             </label>
                                         </div>
                                         <br>
                                         <div class="float-right">
-                                            <button wire:click="updateCrm('{{ $crm->id }}', document.getElementById('datetime-{{ $crm->id }}').value,document.getElementById('subject-{{ $crm->id }}').value,document.getElementById('desc-{{ $crm->id }}').value,document.getElementById('reminder-{{ $crm->id }}').value,document.getElementById('status-{{ $crm->id }}').value)" @click="showModal = false" class="btn" style="color: white; background-color: #0069ad">Save</button>
+                                            <button wire:click="updateCrm('{{ $crm->id }}', document.getElementById('datetime-{{ $crm->id }}').value,document.getElementById('subject-{{ $crm->id }}').value,document.getElementById('desc-{{ $crm->id }}').value,document.getElementById('reminder-{{ $crm->id }}').value,document.getElementById('status-{{ $crm->id }}').value, document.getElementById('sendMail-{{ $crm->id }}').checked)" @click="showModal = false" class="btn" style="color: white; background-color: #0069ad">Save</button>
                                         </div>
                                     </div>
                                 </div>
@@ -477,6 +479,29 @@
             window.addEventListener('createdTicket', (e) => {
                 document.getElementById('closeTicketModal').click();
             });
+            window.addEventListener('savedTicket', (e) => {
+                toastr.success('Successfully saved ticket');
+            });
+        </script>
+
+        <script>
+
+            function defaultDescription()
+            {
+                const descriptionCreate = document.getElementById('description-create');
+                const descriptionDefaultCreate = document.getElementById('description-default-create').value;
+                if (descriptionDefaultCreate === 1)
+                {
+                    descriptionCreate.innerText = 'Beste [klantnaam], \r\nDeze e-mail dient als bevestiging dat jij je backorder hebt geannuleerd. \r\nAls jij je bestelling opnieuw wilt doen neem dan contact op met onze klantenservice op WhatsApp +597 8691600 of bellen naar +597 458666.';
+                    @this.description = 'Beste [klantnaam], \r\nDeze e-mail dient als bevestiging dat jij je backorder hebt geannuleerd. \r\nAls jij je bestelling opnieuw wilt doen neem dan contact op met onze klantenservice op WhatsApp +597 8691600 of bellen naar +597 458666.';
+
+                }
+                else
+                {
+
+                }
+            }
+
         </script>
         <br>
         <br>
