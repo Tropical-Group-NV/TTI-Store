@@ -18,9 +18,9 @@ class VisitsCustomerList extends Component
     public $search;
     public function mount()
     {
-        if ($this->search == '')
+        if (isset($_REQUEST['search']))
         {
-            $this->search = '';
+            $this->search = $_REQUEST['search'];
         }
         if (isset($_REQUEST['customerSearch']))
         {
@@ -30,17 +30,33 @@ class VisitsCustomerList extends Component
 
     public function render()
     {
-        if (Auth::user()->users_ype_id == 2)
+        if (Auth::user()->users_type_id == 2)
         {
             $salesRep = SalesRepUser::query()->where('user_id', Auth::user()->id)->first();
-            $customers = ViewQBCustomer::query()->whereNot('location', null)->where('SalesRepRefListID', $salesRep->salesRep_ListID)->get(['ListID','FullName', 'location', 'visits_frequency', 'last_visit', 'last_order', 'flag']);
+
+            if ($this->search != null)
+            {
+                $customers = ViewQBCustomer::query()->where('FullName', 'LIKE', '%' . $this->search . '%')->where('SalesRepRefListID', $salesRep->salesRep_ListID)->whereNot('location', null)->orWhere('BillAddressBlockAddr2', 'LIKE', '%' . $this->search . '%')->where('SalesRepRefListID', $salesRep->salesRep_ListID)->whereNot('location', null)->orderBy('last_visit', 'DESC')->paginate(10);
+            }
+            else
+            {
+                $customers = ViewQBCustomer::query()->whereNot('location', null)->where('SalesRepRefListID', $salesRep->salesRep_ListID)->orderBy('last_visit', 'DESC')->paginate(10);
+            }
 //            return view('visits.visits', compact('customers'));
-            return view('livewire.visits-customer-list', ['customers' => ViewQBCustomer::query()->whereNot('location', null)->where('SalesRepRefListID', $salesRep->salesRep_ListID)->orderBy('last_visit', "DESC")->paginate(10)]);
+            return view('livewire.visits-customer-list', ['customers' => ViewQBCustomer::query()->whereNot('location', null)->where('SalesRepRefListID', $salesRep->salesRep_ListID)->orderBy('last_visit', "DESC")->orderBy('last_visit', 'DESC')->paginate(10)]);
         }
         else
         {
-            $customers = ViewQBCustomer::query()->whereNot('location', null)->get(['ListID','FullName', 'location', 'visits_frequency', 'last_visit', 'last_order', 'flag']);
-            return view('livewire.visits-customer-list', ['customers' => ViewQBCustomer::query()->whereNot('location', null)->orderBy('last_visit', "DESC")->paginate(10)]);
+            if ($this->search != null)
+            {
+                $customers = ViewQBCustomer::query()->where('FullName', 'LIKE', '%' . $this->search . '%')->whereNot('location', null)->orWhere('BillAddressBlockAddr2', 'LIKE', '%' . $this->search . '%')->whereNot('location', null)->orderBy('last_visit', 'DESC')->paginate();
+            }
+            else
+            {
+                $customers = ViewQBCustomer::query()->whereNot('location', null)->orderBy('last_visit', 'DESC')->paginate(10);
+
+            }
+            return view('livewire.visits-customer-list', ['customers' => $customers]);
 
         }
     }
