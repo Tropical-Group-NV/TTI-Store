@@ -167,7 +167,7 @@ Route::resources
         'customer-profile' => \App\Http\Controllers\CustomerProfileController::class,
         'customers' => \App\Http\Controllers\CustomersController::class,
 //        'map' => \App\Http\Controllers\MapController::class,
-//        'visits' => \App\Http\Controllers\VisitsController::class,
+        'visits' => \App\Http\Controllers\VisitsController::class,
         'crm' => \App\Http\Controllers\CrmInteractionsController::class,
         'quotations' => \App\Http\Controllers\QuotationsController::class
     ]

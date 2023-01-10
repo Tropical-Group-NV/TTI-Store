@@ -10,6 +10,7 @@ use App\Models\Quotation;
 use App\Models\QuotationItem;
 use App\Models\SalesOrder;
 use App\Models\SalesOrderItem;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -19,10 +20,27 @@ use Livewire\WithPagination;
 class ViewQuotations extends Component
 {
     use WithPagination;
+    public $search;
+
+    public function mount()
+    {
+        if (isset($_REQUEST['search']))
+        {
+            $this->search = $_REQUEST['search'];
+        }
+    }
 
     public function render()
     {
-        $quotations = Quotation::query()->orderBy('id', 'DESC')->paginate(20);
+        if ($this->search != null)
+        {
+            $users = User::query()->where('name', 'LIKE', '%' . $this->search . '%')->orWhere('last_name', 'LIKE', '%' . $this->search . '%')->orderBy('name', 'ASC')->pluck('id')->toArray();
+            $quotations = Quotation::query()->orderBy('id', 'DESC')->where('RefNumber', 'LIKE', '%' . $this->search . '%')->orWhere('BillAddressAddr1', 'LIKE', '%' . $this->search . '%')->orWhere('BillAddressAddr2', 'LIKE', '%' . $this->search . '%')->orWhere('PONumber', 'LIKE', '%' . $this->search . '%')->orWhere('TermsRefFullName', 'LIKE', '%' . $this->search . '%')->orWhereIn('uid', $users)->paginate(20);
+        }
+        else
+        {
+            $quotations = Quotation::query()->orderBy('id', 'DESC')->paginate(20);
+        }
         return view('livewire.view-quotations', ['quotations'=> $quotations]);
     }
 

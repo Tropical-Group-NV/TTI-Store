@@ -7,6 +7,8 @@ use App\Mail\OrderNew;
 use App\Models\CrmInteraction;
 use App\Models\CrmInteractionStatus;
 use App\Models\QbCustomer;
+use App\Models\SalesRep;
+use App\Models\User;
 use App\Models\ViewQBCustomer;
 use Barryvdh\DomPDF\PDF;
 use Illuminate\Session\Store;
@@ -44,8 +46,8 @@ class ViewCrm extends Component
 
     public function mount()
     {
-        if (isset($_REQUEST['search_crm'])) {
-            $this->search = $_REQUEST['search_crm'];
+        if (isset($_REQUEST['search'])) {
+            $this->search = $_REQUEST['search'];
         }
         $this->dateTime = date('Y-m-d H:i');
 
@@ -55,7 +57,16 @@ class ViewCrm extends Component
 
     public function render()
     {
-        return view('livewire.view-crm', ['crms' => CrmInteraction::query()->orderBy('id', 'DESC')->paginate(20)]);
+        if ($this->search != null) {
+            $customers = QbCustomer::query()->where('Name', 'LIKE', '%' . $this->search . '%')->orderBy('Name', 'ASC')->limit(10)->pluck('ListID')->toArray();
+            $users = User::query()->where('name', 'LIKE', '%' . $this->search . '%')->orWhere('last_name', 'LIKE', '%' . $this->search . '%')->orderBy('Name', 'ASC')->limit(10)->pluck('id')->toArray();
+            $tickets = CrmInteraction::query()->orderBy('id', 'DESC')->whereIn('customer_ListID', $customers)->orWhereIn('rep_user_id', $users)->orWhere('subject', 'LIKE', '%' . $this->search . '%')->orWhere('description', 'LIKE', '%' . $this->search . '%')->paginate(20);
+        }
+        else
+        {
+            $tickets = CrmInteraction::query()->orderBy('id', 'DESC')->paginate(20);
+        }
+        return view('livewire.view-crm', ['crms' => $tickets]);
     }
 
     public function createTicket()
