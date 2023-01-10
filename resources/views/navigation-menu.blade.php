@@ -140,7 +140,6 @@
                                 <!-- Authentication -->
                                 <form method="POST" action="{{ route('logout') }}" x-data>
                                     @csrf
-
                                     <x-jet-dropdown-link href="{{ route('logout') }}"
                                                          @click.prevent="$root.submit();">
                                         {{ __('Log Out') }}
@@ -172,7 +171,7 @@
             <div>
                 <form class="" id="searchform" action="{{ route('dashboard') }}">
                     <ul class="flex">
-                        <input onkeyup="searchItem4()" style="height:50px; width: 100%" id="search_input4" placeholder="Search..." name="search" @isset($_REQUEST['search']) value="{{ $_REQUEST['search'] }}" @endisset class="w-96 rounded-md" autocomplete="false" type="search">
+                        <input onkeyup="searchItem4()" style="height:50px; width: 100%" id="search_input4" placeholder="Search ttistore.com..." name="search" @isset($_REQUEST['search']) value="{{ $_REQUEST['search'] }}" @endisset class="w-96 rounded-md" autocomplete="false" type="search">
                         <button class="btn " style="background-color: #0069AD; height: 50px">
                             <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
                         </button>
@@ -492,7 +491,7 @@
             <div>
                 <form class="" id="searchform" action="{{ route('dashboard') }}">
                     <ul class="flex">
-                        <input onkeyup="searchItem3()" style="height:50px; width: 100%" id="search_input3" placeholder="Search..." name="search" class="w-96 rounded-md" autocomplete="false" type="search">
+                        <input onkeyup="searchItem3()" style="height:50px; width: 100%" id="search_input3" placeholder="Search ttistore.com..." name="search" class="w-96 rounded-md" autocomplete="false" type="search">
                         <button class="btn " style="background-color: #0069AD; height: 50px">
                             <img style="width: 40px; height: 40px" src="{{ asset('search_glass.svg') }}" alt="">
                         </button>
@@ -545,9 +544,9 @@
                     <x-jet-responsive-nav-link href="{{ route('btw-calculator') }}">
                     {{ __('BTW Calculator') }}
                 </x-jet-responsive-nav-link>
-{{--                    <x-jet-responsive-nav-link href="{{ route('crm.index') }}">--}}
-{{--                    {{ __('CRM') }}--}}
-{{--                </x-jet-responsive-nav-link>--}}
+                    <x-jet-responsive-nav-link href="{{ route('crm.index') }}">
+                    {{ __('CRM') }}
+                </x-jet-responsive-nav-link>
                 @endif
                 <x-jet-responsive-nav-link target="_blank" href="https://v1.ttistore.com:463 ">
                     {{ __('Go to TTISTORE 1.0') }}
